@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Cotizaciones</title>
+</head>
+<body>
+    <h1>Lista de Cotizaciones</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Subtotal</th>
+            <th>Impuesto</th>
+            <th>Total</th>
+            <th>Acciones</th>
+        </tr>
+        {% for cotizacion in cotizaciones %}
+        <tr>
+            <td>{{ cotizacion.id }}</td>
+            <td>{{ cotizacion.cliente }}</td>
+            <td>{{ cotizacion.subtotal }}</td>
+            <td>{{ cotizacion.impuesto }}</td>
+            <td>{{ cotizacion.total }}</td>
+            <td><a href="/cotizacion/{{ cotizacion.id }}">Ver Productos</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
