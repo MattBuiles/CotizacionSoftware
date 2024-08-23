@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Cotización</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+        }
+        .form-container {
+            max-width: 800px;
+            margin: auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .form-group button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Formulario de Cotización</h1>
+        <form action="/crear_cotizacion" method="post">
+            <div class="form-group">
+                <label for="cliente">Nombre del Cliente:</label>
+                <input type="text" id="cliente" name="cliente" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="producto1">Descripción del Producto 1:</label>
+                <input type="text" id="producto1" name="productos[0][descripcion]" required>
+            </div>
+            <div class="form-group">
+                <label for="cantidad1">Cantidad:</label>
+                <input type="number" id="cantidad1" name="productos[0][cantidad]" required>
+            </div>
+            <div class="form-group">
+                <label for="precio1">Precio Unitario:</label>
+                <input type="number" step="0.01" id="precio1" name="productos[0][precio]" required>
+            </div>
+
+            <!-- Puedes añadir más productos repitiendo las secciones anteriores -->
+
+            <div class="form-group">
+                <button type="submit">Generar Cotización</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

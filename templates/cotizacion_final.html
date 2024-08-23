@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotización Final</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+        }
+        .cotizacion-container {
+            max-width: 800px;
+            margin: auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #000;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        .totales {
+            text-align: right;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="cotizacion-container">
+        <h1>Cotización Final</h1>
+        <h2>Empresa XYZ</h2>
+
+        <p><strong>Cliente:</strong> {{ cliente }}</p>
+        <p><strong>Fecha:</strong> {{ current_time }}</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Descripción</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                <tr>
+                    <td>{{ producto.descripcion }}</td>
+                    <td>{{ producto.cantidad }}</td>
+                    <td>${{ producto.precio_unitario }}</td>
+                    <td>${{ producto.total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="totales">
+            <p><strong>Subtotal:</strong> ${{ subtotal }}</p>
+            <p><strong>Impuesto (15%):</strong> ${{ impuesto }}</p>
+            <p><strong>Total:</strong> ${{ total }}</p>
+        </div>
+    </div>
+</body>
+</html>

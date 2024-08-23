@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de la Cotización</title>
+</head>
+<body>
+    <h1>Detalles de la Cotización #{{ cotizacion.id }}</h1>
+    <p><strong>Cliente:</strong> {{ cotizacion.cliente }}</p>
+    <p><strong>Subtotal:</strong> {{ cotizacion.subtotal }}</p>
+    <p><strong>Impuesto:</strong> {{ cotizacion.impuesto }}</p>
+    <p><strong>Total:</strong> {{ cotizacion.total }}</p>
+
+    <h2>Productos</h2>
+    <table border="1">
+        <tr>
+            <th>Descripción</th>
+            <th>Cantidad</th>
+            <th>Precio Unitario</th>
+            <th>Total</th>
+        </tr>
+        {% for producto in productos %}
+        <tr>
+            <td>{{ producto.descripcion }}</td>
+            <td>{{ producto.cantidad }}</td>
+            <td>{{ producto.precio_unitario }}</td>
+            <td>{{ producto.total }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="/cotizaciones">Volver a la lista de cotizaciones</a>
+</body>
+</html>
