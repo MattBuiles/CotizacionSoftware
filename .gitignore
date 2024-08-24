@@ -4,4 +4,3 @@ instance/
 .env
 venv/
 *.db
-Cotizacion/
