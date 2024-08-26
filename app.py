@@ -4,18 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-
-# Código para que puedan ver la interfaz, importante adaptar luego a la extructura de teo:
-
-@app.route("/")
-def home():
-    return render_template("index.html")
-
-
-@app.route("/create-quote")
-def create_quote():
-    return render_template("create_quote.html")
-
 # Ruta Absoluta para evitar problemas de acceso
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
@@ -25,12 +13,29 @@ db = SQLAlchemy(app)
 
 
 class Cotizacion(db.Model):
+    #Atributos base
     id = db.Column(db.Integer, primary_key=True)
+    fecha = db.Column(db.Date, default=db.func.current_date())
+    ciudad = db.Column(db.String(100), nullable=False)
+    empresa = db.Column(db.String(100), nullable=False)
     cliente = db.Column(db.String(100), nullable=False)
-    subtotal = db.Column(db.Float, nullable=False)
-    impuesto = db.Column(db.Float, nullable=False)
-    total = db.Column(db.Float, nullable=False)
-
+    celular = db.Column(db.Integer, nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    proyecto = db.Column(db.String(100), nullable=False)
+    plazo = db.Column(db.Integer, nullable=False)
+    entrega = db.Column(db.Integer, nullable=False)
+    anticipo = db.Column(db.Integer, nullable=False)
+    p_acta = db.Column(db.Integer, nullable=False)
+    f_acta= db.Column(db.Integer, nullable=False)
+    consecutivo = db.Column(db.Integer, nullable=False)
+    # Relación auto-referencial para versiones
+    version_padre_id = db.Column(db.Integer, db.ForeignKey('cotizacion.id'), nullable=True)
+    versiones = db.relationship('Cotizacion', backref=db.backref('version_padre', remote_side=[id]), lazy=True)
+    #Atributos definibles por el usuario
+    producto = db.relationship('Producto', back_populates='cotizacion')
+    servicio = db.relationship('Servicio', back_populates='cotizacion')
+    def __repr__(self):
+        return f'<Cotizacion {self.id} - Cliente: {self.cliente} - Empresa: {self.empresa}>'
 
 class Producto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -46,16 +51,42 @@ class Producto(db.Model):
 Cotizacion.productos = db.relationship(
     'Producto', order_by=Producto.id, back_populates='cotizacion')
 
+# Código para que puedan ver la interfaz, importante adaptar luego a la extructura de teo:
 
-@app.route('/')
+@app.route("/")
 def index():
-    return render_template('cotizacion.html')
+    return render_template("index.html")
 
 
-@app.route('/crear_cotizacion', methods=['POST'])
+@app.route("/crear_cotizacion", methods=['POST'])
+def create_quote():
+    return render_template("crear_cotizacion.html")
+
+
+@app.route('/ver_cotizacion', methods=['POST'])
 def crear_cotizacion():
-    cliente = request.form['cliente']
+    ciudad = request.form['ciudad']
+    empresa = request.form['empresa_cliente_nombre']
+    cliente = request.form['cliente_nombre']
+    celular = request.form['cliente_celular']
+    email = request.form['cliente_correo']
+    proyecto = request.form['nombre_proyecto']
+    plazo = request.form['plazo_oferta']
+    entrega = request.form['tiempo_entrega']
+    anticipo = request.form['porcentaje_anticipo']
+    p_acta = request.form['porcentaje_primera_acta']
+    f_acta = request.form['porcentaje_acta_final']
+    consecutivo = request.form['1']
 
+    opcion = request.form.get('producto_servicio')
+    if opcion == 'producto':
+        
+    elif opcion == 'servicio':
+        # Lógica para la opción 'servicio'
+        return "Seleccionaste Servicio"
+
+    #! Código de los productos a modificar
+    """
     productos = []
     for i in range(1, 5):
         descripcion = request.form.get(f'productos[{i-1}][descripcion]')
@@ -70,13 +101,9 @@ def crear_cotizacion():
                 'precio_unitario': precio,
                 'total': total_producto
             })
+    """
 
-    subtotal = sum(p['total'] for p in productos)
-    impuesto = subtotal * 0.15
-    total = subtotal + impuesto
-
-    cotizacion = Cotizacion(
-        cliente=cliente, subtotal=subtotal, impuesto=impuesto, total=total)
+    cotizacion = Cotizacion()
     db.session.add(cotizacion)
     db.session.commit()
 
