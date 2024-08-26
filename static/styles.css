@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+
+body {
+    font-family: 'Open Sans', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #004080; 
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+header .logo {
+    height: 80px;
+}
+
+h1 {
+    margin: 10px 0 0;
+    font-size: 2rem;
+}
+
+.container {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 1200px;
+}
+
+.section {
+    width: 30%;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #004080; 
+}
+
+p {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.btn {
+    display: block;
+    margin: 15px 0;
+    padding: 10px 15px;
+    background-color: #004080; 
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #003366; /* Un poco más oscuro al pasar el mouse */
+}
+
+footer {
+    background-color: #004080; 
+    color: white;
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+.support-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.support-link:hover {
+    text-decoration: underline;
+}
+
+/* ====> create_quote.html */
+
+.consignation-form {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #004080;
+}
+
+.form-group input {
+    width: 97%;
+    padding: 8px;
+    border: 0.3px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+.form-group select {
+    width: 100%;
+    padding: 8px;
+    border: 0.3px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+button.btn {
+    width: 100%;
+    padding: 10px; 
+    font-size: 1rem;
+    background-color: #004080;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.btn:hover {
+    background-color: #003366;
+}
+
+/* Estilos adicionales para la presentación condicional de campos */
+
+#additional-fields {
+    margin-top: 20px;
+}
+
+.form-group #producto-group,
+.form-group #servicio-group {
+    display: none; 
+}
+
