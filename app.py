@@ -4,6 +4,18 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
+
+# Código para que puedan ver la interfaz, importante adaptar luego a la extructura de teo:
+
+@app.route("/")
+def home():
+    return render_template("index.html")
+
+
+@app.route("/create-quote")
+def create_quote():
+    return render_template("create_quote.html")
+
 # Ruta Absoluta para evitar problemas de acceso
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
