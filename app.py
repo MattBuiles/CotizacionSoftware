@@ -58,7 +58,7 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/crear_cotizacion", methods=['POST'])
+@app.route("/crear_cotizacion")
 def create_quote():
     return render_template("crear_cotizacion.html")
 
@@ -127,7 +127,7 @@ def crear_cotizacion():
 
     return render_template('cotizacion_final.html', cotizacion=cotizacion)
 
-@app.route('/cotizaciones')
+@app.route('/lista_cotizaciones')
 def listar_cotizaciones():
     cotizaciones = Cotizacion.query.all()
     return render_template('lista_cotizaciones.html', cotizaciones=cotizaciones)
