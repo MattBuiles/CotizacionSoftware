@@ -1,6 +1,7 @@
 import os
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import func
 
 app = Flask(__name__)
 
@@ -15,7 +16,7 @@ db = SQLAlchemy(app)
 class Cotizacion(db.Model):
     #Atributos base
     id = db.Column(db.Integer, primary_key=True)
-    fecha = db.Column(db.Date, default=db.func.current_date())
+    fecha = db.Column(db.Date, default=func.current_date())
     ciudad = db.Column(db.String(100), nullable=False)
     empresa = db.Column(db.String(100), nullable=False)
     cliente = db.Column(db.String(100), nullable=False)
@@ -103,7 +104,7 @@ def crear_cotizacion():
             })
     """
 
-    cotizacion = Cotizacion(ciudad=ciudad, empresa=empresa, cliente=cliente, celular=celular, email=email, proyecto=proyecto, plazo=plazo, entrega=entrega, anticipo=anticipo, p_acta=p_acta, f_acta=f_acta, consecutivo=consecutivo, productos=producto_seleccionado, servicio=servicio_ingresado)
+    cotizacion = Cotizacion(ciudad=ciudad, empresa=empresa, cliente=cliente, celular=celular, email=email, proyecto=proyecto, plazo=plazo, entrega=entrega, anticipo=anticipo, p_acta=p_acta, f_acta=f_acta, consecutivo=consecutivo, servicio=servicio_ingresado)
     db.session.add(cotizacion)
     db.session.commit()
 
