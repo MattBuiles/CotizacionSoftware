@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap'); /*importar fuente*/
+
+body {
+    font-family: 'Open Sans', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f4f4f4;
+  }
+
+header {
+    background-color: #f17d2f; 
+    color: white;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+  }
+
+header .logobonito {
+    height: 100px;
+    width: auto; /* Permite que el ancho de la imagen se ajuste automáticamente */
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+  }
+
+  th, td {
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #a3a3a3;
+}
+
+th {
+    background-color: #f17d2f; 
+    color: white; 
+}
+
+#myTable {
+    border-collapse: collapse;
+    width: 85%;
+    margin: 20px auto;
+    border: 1px solid #a3a3a3;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px #6b4e3a80; 
+}
+
+.btn-ver-cotizacion {
+    display: block; /* Ocupa todo el ancho disponible */
+    padding: 5px 2px; /* Padding para el contenido del botón */
+    background-color: #a3a3a3; /* Mismo color que el fondo de la tabla */
+    color: rgb(0, 0, 0); /* Texto blanco */
+    border: none; /* Elimina el borde predeterminado */
+    border-radius: 5px; /* Esquinas redondeadas */
+    text-decoration: none; /* Elimina el subrayado */
+    text-align: center; /* Alinea el texto al centro */
+    font-weight: 600; /* Texto seminegrita */
+    cursor: pointer; /* Indica que es un botón al pasar el mouse */
+    transition: background-color 0.3s ease; /* Efecto de transición */
+  }
+  
+.btn-ver-cotizacion:hover {
+    background-color: #d76b29; /* Oscurece un poco el color al pasar el mouse */
+  }
+
+footer {
+    background-color: #f17d2f; 
+    color: white;
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+.support-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.support-link:hover {
+    text-decoration: underline;
+}
