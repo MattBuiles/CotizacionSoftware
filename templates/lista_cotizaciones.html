@@ -3,29 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Cotizaciones</title>
+    <title>Historial de cotizaciones</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styleListaCotizaciones.css') }}">
 </head>
 <body>
-    <h1>Lista de Cotizaciones</h1>
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Cliente</th>
-            <th>Subtotal</th>
-            <th>Impuesto</th>
-            <th>Total</th>
-            <th>Acciones</th>
-        </tr>
-        {% for cotizacion in cotizaciones %}
-        <tr>
-            <td>{{ cotizacion.id }}</td>
-            <td>{{ cotizacion.cliente }}</td>
-            <td>{{ cotizacion.subtotal }}</td>
-            <td>{{ cotizacion.impuesto }}</td>
-            <td>{{ cotizacion.total }}</td>
-            <td><a href="/cotizacion/{{ cotizacion.id }}">Ver Productos</a></td>
-        </tr>
-        {% endfor %}
+    <header>
+        <img src="static/logobonito.png" alt="Logo de IPB SAS" class="logobonito">
+        <h1>Historial de Cotizaciones</h1>
+    </header>
+    <table id="myTable" border="1" class="cotizaciones">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Producto</th>
+                <th>Cliente</th>
+                <th>Visualizar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cotizacion in cotizaciones%}
+            <tr>
+                <td>{{ cotizacion.fecha }}</td>
+                <td>{{ cotizacion.producto }}</td>
+                <td>{{ cotizacion.cliente }}</td>
+                <td><a href="/cotizacion/{{ cotizacion.id }}"class="btn-ver-cotizacion">Ver cotización</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
+    <footer>
+        <a href="/" class="support-link">Volver al Inicio</a>
+    </footer>
 </body>
 </html>
