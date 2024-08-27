@@ -76,14 +76,19 @@ def crear_cotizacion():
     anticipo = request.form['porcentaje_anticipo']
     p_acta = request.form['porcentaje_primera_acta']
     f_acta = request.form['porcentaje_acta_final']
-    consecutivo = request.form['1']
+    consecutivo = 1
+    producto_seleccionado=None
+    servicio_ingresado=None
+
 
     opcion = request.form.get('producto_servicio')
     if opcion == 'producto':
-        
+        # Captura el valor del select de productos
+        producto_seleccionado = request.form.get('producto')
+    
     elif opcion == 'servicio':
-        # Lógica para la opción 'servicio'
-        return "Seleccionaste Servicio"
+        # Captura el valor del campo de texto para servicios
+        servicio_ingresado = request.form.get('servicio')
 
     #! Código de los productos a modificar
     """
@@ -103,10 +108,11 @@ def crear_cotizacion():
             })
     """
 
-    cotizacion = Cotizacion()
+    cotizacion = Cotizacion(ciudad=ciudad, empresa=empresa, cliente=cliente, celular=celular, email=email, proyecto=proyecto, plazo=plazo, entrega=entrega, anticipo=anticipo, p_acta=p_acta, f_acta=f_acta, consecutivo=consecutivo, producto=producto_seleccionado, servicio=servicio_ingresado)
     db.session.add(cotizacion)
     db.session.commit()
 
+    """
     for producto in productos:
         producto_db = Producto(
             cotizacion_id=cotizacion.id,
@@ -117,8 +123,9 @@ def crear_cotizacion():
         )
         db.session.add(producto_db)
     db.session.commit()
+    """
 
-    return render_template('cotizacion_final.html', cliente=cliente, productos=productos, subtotal=subtotal, impuesto=impuesto, total=total)
+    return render_template('cotizacion_final.html', cotizacion=cotizacion)
 
 @app.route('/cotizaciones')
 def listar_cotizaciones():
@@ -135,8 +142,6 @@ def ver_cotizacion(id):
 if __name__ == '__main__':
     # Creación de tablas con logging adicional para debug
     with app.app_context():
-        print("Creando tablas...")
         db.create_all()
-        print("Tablas creadas. Base de datos inicializada.")
 
     app.run(debug=True)
