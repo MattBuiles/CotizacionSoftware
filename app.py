@@ -22,8 +22,8 @@ class Cotizacion(db.Model):
     celular = db.Column(db.Integer, nullable=False)
     email = db.Column(db.String(100), nullable=False)
     proyecto = db.Column(db.String(100), nullable=False)
-    plazo = db.Column(db.Integer, nullable=False)
-    entrega = db.Column(db.Integer, nullable=False)
+    plazo = db.Column(db.String(100), nullable=False)
+    entrega = db.Column(db.String(100), nullable=False)
     anticipo = db.Column(db.Integer, nullable=False)
     p_acta = db.Column(db.Integer, nullable=False)
     f_acta= db.Column(db.Integer, nullable=False)
@@ -32,30 +32,25 @@ class Cotizacion(db.Model):
     version_padre_id = db.Column(db.Integer, db.ForeignKey('cotizacion.id'), nullable=True)
     versiones = db.relationship('Cotizacion', backref=db.backref('version_padre', remote_side=[id]), lazy=True)
     #Atributos definibles por el usuario
-    producto = db.relationship('Producto', back_populates='cotizacion')
-    servicio = db.relationship('Servicio', back_populates='cotizacion')
+    productos = db.relationship('Producto', back_populates='cotizacion', order_by='Producto.id')
+    servicio = db.Column(db.String(1000), nullable=False)
     def __repr__(self):
         return f'<Cotizacion {self.id} - Cliente: {self.cliente} - Empresa: {self.empresa}>'
 
 class Producto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    cotizacion_id = db.Column(db.Integer, db.ForeignKey(
-        'cotizacion.id'), nullable=False)
-    descripcion = db.Column(db.String(200), nullable=False)
-    cantidad = db.Column(db.Integer, nullable=False)
-    precio_unitario = db.Column(db.Float, nullable=False)
-    total = db.Column(db.Float, nullable=False)
+    nombre = db.Column(db.String(100), nullable=False)
+    precio = db.Column(db.Float, nullable=False)
+    # Clave foránea para referenciar a Cotizacion
+    cotizacion_id = db.Column(db.Integer, db.ForeignKey('cotizacion.id'))
+    # Relación con Cotizacion
     cotizacion = db.relationship('Cotizacion', back_populates='productos')
-
-
-Cotizacion.productos = db.relationship(
-    'Producto', order_by=Producto.id, back_populates='cotizacion')
-
-# Código para que puedan ver la interfaz, importante adaptar luego a la extructura de teo:
+    def __repr__(self):
+        return f'<Producto {self.id} - Nombre: {self.nombre}>'
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html",)
 
 
 @app.route("/crear_cotizacion")
