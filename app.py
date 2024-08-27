@@ -103,7 +103,7 @@ def crear_cotizacion():
             })
     """
 
-    cotizacion = Cotizacion(ciudad=ciudad, empresa=empresa, cliente=cliente, celular=celular, email=email, proyecto=proyecto, plazo=plazo, entrega=entrega, anticipo=anticipo, p_acta=p_acta, f_acta=f_acta, consecutivo=consecutivo, producto=producto_seleccionado, servicio=servicio_ingresado)
+    cotizacion = Cotizacion(ciudad=ciudad, empresa=empresa, cliente=cliente, celular=celular, email=email, proyecto=proyecto, plazo=plazo, entrega=entrega, anticipo=anticipo, p_acta=p_acta, f_acta=f_acta, consecutivo=consecutivo, productos=producto_seleccionado, servicio=servicio_ingresado)
     db.session.add(cotizacion)
     db.session.commit()
 
