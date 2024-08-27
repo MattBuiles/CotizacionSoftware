@@ -12,11 +12,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-
 class Cotizacion(db.Model):
     #Atributos base
     id = db.Column(db.Integer, primary_key=True)
-    fecha = db.Column(db.Date, default=func.current_date())
+    fecha = db.Column(db.Date(timezone=True), default=func.current_date())
     ciudad = db.Column(db.String(100), nullable=False)
     empresa = db.Column(db.String(100), nullable=False)
     cliente = db.Column(db.String(100), nullable=False)
