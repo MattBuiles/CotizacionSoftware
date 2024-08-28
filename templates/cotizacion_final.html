@@ -57,22 +57,50 @@
     <p style="text-align: right;"><strong>COT N&deg;{{ cotizacion.consecutivo }}</strong></p>
     <p>Se&ntilde;ores</p>
     <p><strong>{{ cotizacion.empresa }}</strong></p>
-    <p><strong>{{ cotizacion.cliente }}</strong></p>
-    <p><strong>{{ cotizacion.celular }}</strong></p>
-    <p><strong>{{ cotizacion.email }}</strong></p>
+    <p><strong>{{ cotizacion.cliente.nombre }}</strong></p>
+    <p><strong>{{ cotizacion.cliente.celular }}</strong></p>
+    <p><strong>{{ cotizacion.cliente.email }}</strong></p>
     <p>E. S. M.</p>
     <p>Ref: <strong>{{ cotizacion.proyecto }}</strong></p>
     <p>Asunto: <strong>Propuesta Econ&oacute;mica</strong></p>
-    <p><strong>{{ cotizacion.cliente }}</strong> Cordial saludo.</p>
+    <p><strong>{{ cotizacion.cliente.nombre }}</strong> Cordial saludo.</p>
     <p>Adjuntamos propuesta econ&oacute;mica del servicio ofrecido por nuestra empresa:</p>
     <p style="text-align: center;"><strong>COMPONENTES NUEVOS</strong></p>
     
     <!-- Tabla para mostrar los componentes -->
     <table>
-        <tbody>
-
-        </tbody>
+        {% if cotizacion.servicio != "v" %}
+            <tbody>
+                <tr>
+                    <td colspan="6">{{ cotizacion.servicio }}</td>
+                </tr>
+            </tbody>
+        {% else %}
+            <thead>
+                <tr>
+                    <th>Concepto</th>
+                    <th>Cantidad</th>
+                    <th>Unidad</th>
+                    <th>Valor Unitario</th>
+                    <th>IVA</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for detalle in cotizacion.productos_detalle %}
+                    <tr>
+                        <td>{{ detalle.producto.nombre }}</td>
+                        <td>{{ detalle.cantidad }}</td>
+                        <td>{{ detalle.tamano }}</td>
+                        <td>{{ (detalle.producto.precio * detalle.tamano) | round(2) }}</td>
+                        <td>{{ (detalle.producto.precio * detalle.cantidad * detalle.tamano * 0.19) | round(2) }}</td>
+                        <td>{{ (detalle.producto.precio * detalle.cantidad * detalle.tamano * 1.19) | round(2) }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        {% endif %}
     </table>
+    
 
     <p style="text-align: left;"><span style="text-decoration: underline;"><strong>Notas Adjuntas.</strong></span></p>
     <p>EL PERSONAL DE PRODUCTOS IPB TIENE CERTIFICACI&Oacute;N PARA TRABAJO EN ALTURAS Y RECINTOS CERRADOS.</p>
