@@ -160,6 +160,15 @@ def ver_cotizacion(id):
     productos = Producto.query.filter_by(cotizacion_id=id).all()
     return render_template('ver_cotizacion.html', cotizacion=cotizacion, productos=productos)
 
+# Metodo para probar generación de cotización
+"""@app.route('/cotizacion_final')
+def listar_cotizacion():
+    # Obtener la cuarta cotización de la base de datos
+    cotizacion = Cotizacion.query.offset(3).first()
+    return render_template('cotizacion_final.html', cotizacion=cotizacion)"""
+
+
+
 if __name__ == '__main__':
     # Creación de tablas con logging adicional para debug
     with app.app_context():
