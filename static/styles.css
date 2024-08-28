@@ -9,7 +9,7 @@ body {
 }
 
 header {
-    background-color: #004080; 
+    background-color: #f17d2f; 
     color: white;
     padding: 20px;
     text-align: center;
@@ -43,7 +43,7 @@ h1 {
 }
 
 h2 {
-    color: #004080; 
+    color: #f17d2f; 
 }
 
 p {
@@ -55,7 +55,7 @@ p {
     display: block;
     margin: 15px 0;
     padding: 10px 15px;
-    background-color: #004080; 
+    background-color: #f17d2f; 
     color: white;
     border-radius: 5px;
     text-decoration: none;
@@ -64,11 +64,11 @@ p {
 }
 
 .btn:hover {
-    background-color: #003366; /* Un poco más oscuro al pasar el mouse */
+    background-color: #d25e1f; /* Un poco más oscuro al pasar el mouse */
 }
 
 footer {
-    background-color: #004080; 
+    background-color: #f17d2f; 
     color: white;
     padding: 10px;
     text-align: center;
@@ -106,7 +106,7 @@ footer {
 .form-group label {
     display: block;
     margin-bottom: 5px;
-    color: #004080;
+    color: #f17d2f;
 }
 
 .form-group input {
@@ -128,7 +128,7 @@ button.btn {
     width: 100%;
     padding: 10px; 
     font-size: 1rem;
-    background-color: #004080;
+    background-color: #f17d2f;
     color: white;
     border: none;
     border-radius: 5px;
@@ -137,7 +137,7 @@ button.btn {
 }
 
 button.btn:hover {
-    background-color: #003366;
+    background-color: #d25e1f;
 }
 
 /* Estilos adicionales para la presentación condicional de campos */
