@@ -1,7 +1,31 @@
+"""
+This file contains the implementation of a Flask web application for creating and managing quotations.
+Classes:
+- Cotizacion: Represents a quotation with various attributes such as date, city, company, project, etc.
+- Cliente: Represents a client with attributes like name, phone number, and email.
+- Producto: Represents a product with attributes like name and price.
+- CotizacionProducto: Represents the relationship between a quotation and a product, including quantity and size.
+Routes:
+- index: Renders the index.html template.
+- create_quote: Renders the crear_cotizacion.html template for creating a new quotation.
+- crear_cotizacion: Handles the form submission for creating a new quotation.
+- listar_cotizaciones: Renders the lista_cotizaciones.html template for listing all quotations.
+- ver_cotizacion: Renders the ver_cotizacion.html template for viewing a specific quotation.
+- listar_cotizacion: Renders the cotizacion_final.html template for testing the generation of a quotation.
+Functions:
+- index: Renders the index.html template.
+- create_quote: Renders the crear_cotizacion.html template for creating a new quotation.
+- crear_cotizacion: Handles the form submission for creating a new quotation.
+- listar_cotizaciones: Renders the lista_cotizaciones.html template for listing all quotations.
+- ver_cotizacion: Renders the ver_cotizacion.html template for viewing a specific quotation.
+- listar_cotizacion: Renders the cotizacion_final.html template for testing the generation of a quotation.
+"""
 import os
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
+from datetime import datetime
+import pytz
 
 app = Flask(__name__)
 
@@ -15,7 +39,7 @@ db = SQLAlchemy(app)
 class Cotizacion(db.Model):
     #Atributos base
     id = db.Column(db.Integer, primary_key=True)
-    fecha = db.Column(db.Date, default=func.current_date())
+    fecha = db.Column(db.Date, default=lambda: datetime.now(pytz.timezone('America/Bogota')).date())
     ciudad = db.Column(db.String(100), nullable=False)
     empresa = db.Column(db.String(100), nullable=False)
     proyecto = db.Column(db.String(100), nullable=False)
@@ -161,11 +185,11 @@ def ver_cotizacion(id):
     return render_template('ver_cotizacion.html', cotizacion=cotizacion, productos=productos)
 
 # Metodo para probar generación de cotización
-"""@app.route('/cotizacion_final')
+@app.route('/cotizacion_final')
 def listar_cotizacion():
     # Obtener la cuarta cotización de la base de datos
     cotizacion = Cotizacion.query.offset(3).first()
-    return render_template('cotizacion_final.html', cotizacion=cotizacion)"""
+    return render_template('cotizacion_final.html', cotizacion=cotizacion)
 
 
 
