@@ -29,7 +29,8 @@ class Cotizacion(db.Model):
     version_padre_id = db.Column(db.Integer, db.ForeignKey('cotizacion.id'), nullable=True)
     versiones = db.relationship('Cotizacion', backref=db.backref('version_padre', remote_side=[id]), lazy=True)
     #Atributos definibles por el usuario
-    productos = db.relationship('Producto', secondary='cotizacion_producto', lazy='subquery',backref=db.backref('cotizaciones', lazy=True))
+    # Relación con CotizacionProducto
+    productos_detalle = db.relationship('CotizacionProducto', backref='cotizacion', lazy=True)
     cliente_id = db.Column(db.Integer, db.ForeignKey('cliente.id'), nullable=False)
     cliente = db.relationship('Cliente', backref=db.backref('cotizaciones', lazy=True))
     servicio = db.Column(db.String(1000), nullable=False, default="v")
@@ -62,11 +63,22 @@ class Producto(db.Model):
     def __repr__(self):
         return f'<Producto {self.nombre}>'
     
-# Tabla intermedia para la relación muchos a muchos entre Cotizacion y Producto
-cotizacion_producto = db.Table('cotizacion_producto',
-    db.Column('cotizacion_id', db.Integer, db.ForeignKey('cotizacion.id'), primary_key=True),
-    db.Column('producto_id', db.Integer, db.ForeignKey('producto.id'), primary_key=True)
-)
+
+class CotizacionProducto(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    cotizacion_id = db.Column(db.Integer, db.ForeignKey(
+        'cotizacion.id'), nullable=False)
+    producto_id = db.Column(db.Integer, db.ForeignKey(
+        'producto.id'), nullable=False)
+
+    cantidad = db.Column(db.Integer, nullable=False)
+    tamano = db.Column(db.Integer, nullable=False)
+
+    producto = db.relationship('Producto', backref=db.backref(
+        'cotizacion_producto', lazy=True))
+
+    def __repr__(self):
+        return f'<CotizacionProducto: Producto {self.producto.nombre}, Cantidad: {self.cantidad}, Tamaño: {self.tamano}>'
 
 @app.route("/")
 def index():
@@ -75,8 +87,9 @@ def index():
 
 @app.route("/crear_cotizacion")
 def create_quote():
-    return render_template("crear_cotizacion.html")
-
+    clientes = Cliente.query.all()
+    productos = Producto.query.all()
+    return render_template("crear_cotizacion.html", clientes=clientes, productos=productos)
 
 @app.route('/ver_cotizacion', methods=['POST'])
 def crear_cotizacion():
@@ -107,10 +120,24 @@ def crear_cotizacion():
     opcion = request.form.get('producto_servicio')
     if opcion == 'producto':
         # Captura el valor del select de productos
-        producto_ids = request.form.getlist('productos')
-        productos = Producto.query.filter(Producto.id.in_(producto_ids)).all()
-        cotizacion = Cotizacion(ciudad=ciudad, empresa=empresa, proyecto=proyecto, plazo=plazo, entrega=entrega, anticipo=anticipo, p_acta=p_acta, f_acta=f_acta, consecutivo=consecutivo,cliente=cliente, productos=productos)
+        cotizacion = Cotizacion(ciudad=ciudad, empresa=empresa, proyecto=proyecto, plazo=plazo, entrega=entrega,anticipo=anticipo, p_acta=p_acta, f_acta=f_acta, consecutivo=consecutivo, cliente=cliente, productos=productos)
         db.session.add(cotizacion)
+        db.session.commit()
+
+        producto_ids = request.form.getlist('productos')
+
+        for producto_id in producto_ids:
+            cantidad = request.form.get(f'cantidad_{producto_id}')
+            tamano = request.form.get(f'tamano_{producto_id}')
+            if cantidad and tamano:
+                if tamano == 'CUNETE':
+                    tamano = 4
+                elif tamano == 'GALON':
+                    tamano = 20
+                elif tamano == 'TAMBOR':
+                    tamano = 200
+                detalle = CotizacionProducto(cotizacion_id=cotizacion.id, producto_id=producto_id, cantidad=int(cantidad), tamano=tamano)
+                db.session.add(detalle)
         db.session.commit()
     
     elif opcion == 'servicio':

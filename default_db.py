@@ -1,4 +1,4 @@
-from app import db, Producto, Cliente, Cotizacion, app
+from app import db, Producto, Cliente, Cotizacion, app, CotizacionProducto
 
 def agregar_productos_default():
     productos_default = [
@@ -30,17 +30,36 @@ def agregar_clientes_default():
 
 def agregar_cotizaciones_default():
     cotizaciones_default = [
-        {'ciudad': 'Bogotá', 'empresa': 'Empresa 1', 'proyecto': 'Proyecto 1', 'plazo': '30 (TREINTA)', 'entrega': '15 (QUINCE)', 'anticipo': 0.3, 'p_acta': 0.3, 'f_acta': 0.4, 'consecutivo': 1, 'cliente': 1, 'productos': [1, 2, 3]},
-        {'ciudad': 'Medellín', 'empresa': 'Empresa 2', 'proyecto': 'Proyecto 2', 'plazo': '45 (CUARENTA Y CINCO)', 'entrega': '20 (VEINTE)', 'anticipo': 0.3, 'p_acta': 0.3, 'f_acta': 0.4, 'consecutivo': 1, 'cliente': 2, 'productos': [2, 3, 4]},
-        {'ciudad': 'Cali', 'empresa': 'Empresa 3', 'proyecto': 'Proyecto 3', 'plazo': '60 (SESENTA)', 'entrega': '30 (TREINTA)', 'anticipo': 0.3, 'p_acta': 0.3, 'f_acta': 0.4, 'consecutivo': 1, 'cliente': 3, 'productos': [3, 4, 1]},
+        {'ciudad': 'Bogotá', 'empresa': 'Empresa 1', 'proyecto': 'Proyecto 1', 'plazo': '30 (TREINTA)', 'entrega': '15 (QUINCE)', 'anticipo': 0.3, 'p_acta': 0.3, 'f_acta': 0.4, 'consecutivo': 1, 'cliente': 1},
+        {'ciudad': 'Medellín', 'empresa': 'Empresa 2', 'proyecto': 'Proyecto 2', 'plazo': '45 (CUARENTA Y CINCO)', 'entrega': '20 (VEINTE)', 'anticipo': 0.3, 'p_acta': 0.3, 'f_acta': 0.4, 'consecutivo': 1, 'cliente': 2},
+        {'ciudad': 'Cali', 'empresa': 'Empresa 3', 'proyecto': 'Proyecto 3', 'plazo': '60 (SESENTA)', 'entrega': '30 (TREINTA)', 'anticipo': 0.3, 'p_acta': 0.3, 'f_acta': 0.4, 'consecutivo': 1, 'cliente': 3},
     ]
 
     for cotizacion in cotizaciones_default:
         cliente = Cliente.query.get(cotizacion['cliente'])
-        productos = Producto.query.filter(Producto.id.in_(cotizacion['productos'])).all()
-        cotizacion = Cotizacion(ciudad=cotizacion['ciudad'], empresa=cotizacion['empresa'], proyecto=cotizacion['proyecto'], plazo=cotizacion['plazo'], entrega=cotizacion['entrega'], anticipo=cotizacion['anticipo'], p_acta=cotizacion['p_acta'], f_acta=cotizacion['f_acta'], consecutivo=cotizacion['consecutivo'], cliente=cliente, productos=productos)
+        cotizacion = Cotizacion(ciudad=cotizacion['ciudad'], empresa=cotizacion['empresa'], proyecto=cotizacion['proyecto'], plazo=cotizacion['plazo'], entrega=cotizacion['entrega'], anticipo=cotizacion['anticipo'], p_acta=cotizacion['p_acta'], f_acta=cotizacion['f_acta'], consecutivo=cotizacion['consecutivo'], cliente=cliente)
         db.session.add(cotizacion)
+
+        productos_seleccionados = [
+        {"producto_id": 1, "cantidad": 10, "tamano": 20},
+        {"producto_id": 2, "cantidad": 5, "tamano": 200},
+        ]
+        # Creación de las relaciones CotizacionProducto
+        for item in productos_seleccionados:
+            producto = Producto.query.get(item["producto_id"])
+            cotizacion_producto = CotizacionProducto(
+                cotizacion_id=cotizacion.id,
+                producto_id=producto.id,
+                cantidad=item["cantidad"],
+                tamano=item["tamano"]
+            )
+            db.session.add(cotizacion_producto)
+
+        # Commit final para guardar todo en la base de datos
+        db.session.commit()
     db.session.commit()
+    
+
 
     cotizaciones_default = [
         {'ciudad': 'Bogotá', 'empresa': 'Empresa 1', 'proyecto': 'Proyecto 1', 'plazo': '30 (TREINTA)', 'entrega': '15 (QUINCE)', 'anticipo': 0.3, 'p_acta': 0.3, 'f_acta': 0.4, 'consecutivo': 1, 'cliente': 1, 'servicio': "El servicio de la cotización 1"},
