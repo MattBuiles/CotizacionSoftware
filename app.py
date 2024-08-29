@@ -106,22 +106,20 @@ class CotizacionProducto(db.Model):
 
 @app.route("/")
 def index():
-    return render_template("index.html",)
+    return render_template("index.html")
 
-
-@app.route("/usuario_cotizacion")
+@app.route("/usuario_cotizacion", methods=["GET", "POST"])
 def userManager():
     clientes = Cliente.query.all()
     productos = Producto.query.all()
     return render_template("usuario_cotizacion.html", clientes=clientes, productos=productos)
 
 
-@app.route("/crear_cotizacion")
+@app.route("/crear_cotizacion", methods=['POST'])
 def cotiacion():
     return render_template("crear_cotizacion.html")
 
-
-@app.route("/producto_servicio")
+@app.route("/producto_servicio", methods=["GET", "POST"])
 def product_service():
     productos = Producto.query.all()
     return render_template("producto_servicio.html", productos=productos)
@@ -194,7 +192,18 @@ def listar_cotizaciones():
 @app.route('/versiones_cotizacion/<int:id>')
 def listar_versiones(id):
     cotizacion = Cotizacion.query.get_or_404(id)
-    return render_template('versiones_cotizacion.html', cotizacion=cotizacion)
+    # Obtener todas las versiones de esta cotización, ordenadas por consecutivo descendente
+    versiones = Cotizacion.query.filter_by(version_padre_id=cotizacion.id).order_by(Cotizacion.consecutivo.desc()).all()
+    # Obtener la cotización actual y todas las versiones padres (incluyendo abuelo si existe)
+    padres = []
+    padre = cotizacion.version_padre
+    while padre:
+        padres.append(padre)
+        padre = padre.version_padre
+    padres.reverse()  # Para mostrar desde el más antiguo al más reciente
+
+    return render_template('versiones_cotizacion.html', cotizacion=cotizacion, versiones=versiones, padres=padres)
+
 
 @app.route('/cotizacion/<int:id>')
 def ver_cotizacion(id):
@@ -234,11 +243,12 @@ def actualizar_cotizacion(id):
     return render_template('ver_cotizacion.html', cotizacion=cotizacion)
 
 # Metodo para probar generación de cotización
-@app.route('/cotizacion_final')
+@app.route('/cotizacion_final', methods=['POST'])
 def listar_cotizacion():
     # Obtener la cuarta cotización de la base de datos
     cotizacion = Cotizacion.query.offset(3).first()
     return render_template('cotizacion_final.html', cotizacion=cotizacion)
+    
 
 
 
