@@ -192,7 +192,18 @@ def listar_cotizaciones():
 @app.route('/versiones_cotizacion/<int:id>')
 def listar_versiones(id):
     cotizacion = Cotizacion.query.get_or_404(id)
-    return render_template('versiones_cotizacion.html', cotizacion=cotizacion)
+    # Obtener todas las versiones de esta cotización, ordenadas por consecutivo descendente
+    versiones = Cotizacion.query.filter_by(version_padre_id=cotizacion.id).order_by(Cotizacion.consecutivo.desc()).all()
+    # Obtener la cotización actual y todas las versiones padres (incluyendo abuelo si existe)
+    padres = []
+    padre = cotizacion.version_padre
+    while padre:
+        padres.append(padre)
+        padre = padre.version_padre
+    padres.reverse()  # Para mostrar desde el más antiguo al más reciente
+
+    return render_template('versiones_cotizacion.html', cotizacion=cotizacion, versiones=versiones, padres=padres)
+
 
 @app.route('/cotizacion/<int:id>')
 def ver_cotizacion(id):
@@ -232,6 +243,7 @@ def listar_cotizacion():
     # Obtener la cuarta cotización de la base de datos
     cotizacion = Cotizacion.query.offset(3).first()
     return render_template('cotizacion_final.html', cotizacion=cotizacion)
+    
 
 
 
