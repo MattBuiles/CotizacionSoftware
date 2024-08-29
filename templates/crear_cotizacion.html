@@ -12,24 +12,6 @@
     </header>
     <main>
         <form action="{{ url_for('product_service', cliente=cliente) }}" method="post" class="consignation-form">
-            <!-- Mostrar detalles de productos seleccionados -->
-            {% if productos_seleccionados %}
-                {% for producto in productos_seleccionados %}
-                <div class="form-group">
-                    <label>{{ producto.nombre }} - Cantidad</label>
-                    <input type="number" name="cantidad_{{ producto.id }}" required>
-                </div>
-                <div class="form-group">
-                    <label>Unidad</label>
-                    <select name="tamano_{{ producto.id }}" required>
-                        <option value="CUNETE">Cunete</option>
-                        <option value="GALON">Galon</option>
-                        <option value="TAMBOR">Tambor</option>
-                    </select>
-                </div>
-                {% endfor %}
-            {% endif %}
-
             <!-- Campos comunes que siempre se muestran -->
             <div class="form-group">
                 <label for="ciudad">Ciudad</label>

@@ -36,6 +36,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+clientez = None
+infoz = None
+
 
 class Cotizacion(db.Model):
     # Atributos base
@@ -114,7 +117,7 @@ def userManager():
     return render_template("usuario_cotizacion.html", clientes=clientes)
 
 @app.route("/producto_servicio", methods=["GET", "POST"])
-def product_service(cliente):
+def product_service():
     # Datos de cotización
     ciudad = request.form['ciudad']
     empresa = request.form['empresa_cliente_nombre']
@@ -127,12 +130,15 @@ def product_service(cliente):
     consecutivo = 1
 
     info=[ciudad,empresa, proyecto,plazo, entrega, anticipo, p_acta, f_acta, consecutivo]
+    global infoz
+    infoz=info
     productos = Producto.query.all()
-    return render_template("producto_servicio.html", productos=productos, cliente = cliente, info=info)
+    return render_template("producto_servicio.html", productos=productos)
 
 @app.route("/crear_cotizacion", methods=['POST'])
 def cotizacion():
     tipo_usuario = request.form.get('tipo_usuario')
+    cliente = None
     if tipo_usuario == 'registrado':
         cliente_id = request.form.get('cliente_existente')
         cliente = Cliente.query.get(cliente_id)
@@ -144,13 +150,19 @@ def cotizacion():
         cliente = Cliente(nombre=nombre_cliente, celular=celular_cliente, email=correo_cliente)
         db.session.add(cliente)
         db.session.commit()
-    return render_template("crear_cotizacion.html", cliente=cliente)
+    global clientez
+    clientez = cliente
+    return render_template("crear_cotizacion.html")
 
 
 @app.route('/ver_cotizacion', methods=['POST'])
-def crear_cotizacion(cliente,info):
+def crear_cotizacion():
     # Datos del producto o servicio
     opcion = request.form.get('producto_servicio')
+    global infoz
+    info = infoz
+    global clientez
+    cliente = clientez
 
     ciudad = info[0]
     empresa = info[1]
