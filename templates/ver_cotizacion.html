@@ -134,9 +134,8 @@
 
 
     <!-- Botón para editar la cotización -->
-    <form action="{{ url_for('modificar_cotizacion', id=cotizacion.id) }}" method="post">
-        <input type="hidden" name="cotizacion_id" value="{{ cotizacion.id }}">
-        <input type="submit" value="Editar Cotización">
+    <form action="{{ url_for('modificar_cotizacion', id=cotizacion.id) }}" method="POST">
+        <button type="submit">Editar Cotización</button>
     </form>
 
     <a href="/cotizaciones">Volver a la lista de cotizaciones</a>

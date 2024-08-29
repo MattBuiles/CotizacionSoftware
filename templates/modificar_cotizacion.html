@@ -3,73 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalles de la Cotización - IPB SAS</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Modificar Cotización</title>
 </head>
 <body>
-    <header>
-        <h1>Detalles de la Cotización</h1>
-    </header>
-    <main>
-        <form action="/ver_cotizacion" method="post" class="consignation-form">
-            <!-- Mostrar detalles de productos seleccionados -->
-            {% if productos_seleccionados %}
-                {% for producto in productos_seleccionados %}
-                <div class="form-group">
-                    <label>{{ producto.nombre }} - Cantidad</label>
-                    <input type="number" name="cantidad_{{ producto.id }}" required>
-                </div>
-                <div class="form-group">
-                    <label>Unidad</label>
-                    <select name="tamano_{{ producto.id }}" required>
-                        <option value="CUNETE">Cunete</option>
-                        <option value="GALON">Galón</option>
-                        <option value="TAMBOR">Tambor</option>
-                    </select>
-                </div>
-                {% endfor %}
-            {% endif %}
+    <h1>Modificar Cotización {{ cotizacion.id }}</h1>
 
-            <!-- Campos comunes que siempre se muestran -->
-            <div class="form-group">
-                <label for="ciudad">Ciudad</label>
-                <input type="text" id="ciudad" name="ciudad" required>
-            </div>
-            <div class="form-group">
-                <label for="empresa_cliente_nombre">Nombre de la Empresa Cliente</label>
-                <input type="text" id="empresa_cliente_nombre" name="empresa_cliente_nombre" required>
-            </div>
-            <div class="form-group">
-                <label for="nombre_proyecto">Nombre del Proyecto</label>
-                <input type="text" id="nombre_proyecto" name="nombre_proyecto" required>
-            </div>
-            <div class="form-group">
-                <label for="plazo_oferta">Plazo de la Oferta</label>
-                <input type="number" id="plazo_oferta" name="plazo_oferta" required>
-            </div>
-            <div class="form-group">
-                <label for="tiempo_entrega">Tiempo de Entrega</label>
-                <input type="text" id="tiempo_entrega" name="tiempo_entrega" required>
-            </div>
-            <div class="form-group">
-                <label for="porcentaje_anticipo">Porcentaje de Anticipo</label>
-                <input type="number" id="porcentaje_anticipo" name="porcentaje_anticipo" required>
-            </div>
-            <div class="form-group">
-                <label for="porcentaje_primera_acta">Porcentaje Primera Acta</label>
-                <input type="number" id="porcentaje_primera_acta" name="porcentaje_primera_acta" required>
-            </div>
-            <div class="form-group">
-                <label for="porcentaje_acta_final">Porcentaje Acta Final</label>
-                <input type="number" id="porcentaje_acta_final" name="porcentaje_acta_final" required>
-            </div>
+    <form action="{{ url_for('actualizar_cotizacion', id=cotizacion.id) }}" method="POST">
+        <!-- Campos para modificar la cotización -->
+        <label for="ciudad">Ciudad:</label>
+        <input type="text" id="ciudad" name="ciudad" value="{{ cotizacion.ciudad }}" required>
+        
+        <label for="empresa">Empresa:</label>
+        <input type="text" id="empresa" name="empresa" value="{{ cotizacion.empresa }}" required>
+        
+        <!-- Agrega más campos según lo necesario -->
 
-            <a href= "{{ url_for('actualizar_cotizacion', id=padre.id) }}"type="submit" class="btn">Actualizar Cotización</a>
-        </form>
-    </main>
-    <footer>
-        <a href="/" class="support-link">Volver al Inicio</a>
-    </footer>
+        <button type="submit">Guardar Cambios</button>
+    </form>
+
+    <a href="{{ url_for('ver_cotizacion', id=cotizacion.id) }}">Volver a ver cotización</a>
 </body>
 </html>
-

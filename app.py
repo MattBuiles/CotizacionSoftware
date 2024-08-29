@@ -21,7 +21,7 @@ Functions:
 - listar_cotizacion: Renders the cotizacion_final.html template for testing the generation of a quotation.
 """
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 from datetime import datetime
@@ -224,32 +224,34 @@ def modificar_cotizacion(id):
     cotizacion = Cotizacion.query.get_or_404(id)
     return render_template('modificar_cotizacion.html', cotizacion=cotizacion)
 
-@app.route('/actualizar cotizacion/<int:id>')
+
+@app.route('/actualizar_cotizacion/<int:id>', methods=['POST'])
 def actualizar_cotizacion(id):
     cotizacion = Cotizacion.query.get_or_404(id)
     
-    id = cotizacion.id
-    fecha = cotizacion.fecha
-    ciudad = cotizacion.ciudad
-    empresa = cotizacion.empresa
-    proyecto = cotizacion.proyecto
-    plazo = cotizacion.plazo
-    entrega = cotizacion.entrega
-    anticipo = cotizacion.anticipo
-    p_acta = cotizacion.p_acta
-    f_acta = cotizacion.f_acta
-    consecutivo = cotizacion.consecutivo
-    cliente = cotizacion.cliente
-    productos = cotizacion.productos_detalle
-    servicio = cotizacion.servicio
-    consecutivo += 1
-
-    cotizacionHija = Cotizacion(fecha=fecha, ciudad=ciudad, empresa=empresa, proyecto=proyecto, plazo=plazo, entrega=entrega, anticipo=anticipo, p_acta=p_acta, f_acta=f_acta, consecutivo=consecutivo, cliente=cliente, productos=productos, servicio=servicio)
-    cotizacionHija.version_padre_id = id
-
-    db.session.add(cotizacionHija)
+    # Crear nueva cotización como una versión
+    nueva_cotizacion = Cotizacion(
+        fecha=cotizacion.fecha,
+        ciudad=request.form['ciudad'],
+        empresa=request.form['empresa'],
+        proyecto=cotizacion.proyecto,
+        plazo=cotizacion.plazo,
+        entrega=cotizacion.entrega,
+        anticipo=cotizacion.anticipo,
+        p_acta=cotizacion.p_acta,
+        f_acta=cotizacion.f_acta,
+        consecutivo=cotizacion.consecutivo + 1,
+        cliente=cotizacion.cliente,
+        servicio=cotizacion.servicio,
+        version_padre_id=cotizacion.id
+    )
+    
+    db.session.add(nueva_cotizacion)
     db.session.commit()
-    return render_template('ver_cotizacion.html', cotizacion=cotizacion)
+    
+    # Redirigir a la vista de la nueva cotización
+    return redirect(url_for('ver_cotizacion', id=nueva_cotizacion.id))
+
 
 # Metodo para probar generación de cotización
 """
