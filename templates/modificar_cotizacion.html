@@ -64,7 +64,7 @@
                 <input type="number" id="porcentaje_acta_final" name="porcentaje_acta_final" required>
             </div>
 
-            <a href= "/cotizacion_final"type="submit" class="btn">Finalizar Cotización</a>
+            <a href= "{{ url_for('actualizar_cotizacion', id=padre.id) }}"type="submit" class="btn">Actualizar Cotización</a>
         </form>
     </main>
     <footer>

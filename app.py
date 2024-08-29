@@ -201,8 +201,13 @@ def ver_cotizacion(id):
     cotizacion = Cotizacion.query.get_or_404(id)
     return render_template('ver_cotizacion.html', cotizacion=cotizacion)
 
-@app.route('/cotizacion_modificacion/<int:id>')
+@app.route('/cotizacion_modificacion/<int:id>', methods=['POST'])
 def modificar_cotizacion(id):
+    cotizacion = Cotizacion.query.get_or_404(id)
+    return render_template('modificar_cotizacion.html', cotizacion=cotizacion)
+
+@app.route('/actualizar cotizacion/<int:id>')
+def actualizar_cotizacion(id):
     cotizacion = Cotizacion.query.get_or_404(id)
     
     id = cotizacion.id
@@ -226,7 +231,7 @@ def modificar_cotizacion(id):
 
     db.session.add(cotizacionHija)
     db.session.commit()
-
+    return render_template('ver_cotizacion.html', cotizacion=cotizacion)
 
 # Metodo para probar generación de cotización
 @app.route('/cotizacion_final')
