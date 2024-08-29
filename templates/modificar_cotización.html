@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de la Cotización - IPB SAS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Detalles de la Cotización</h1>
+    </header>
+    <main>
+        <form action="/ver_cotizacion" method="post" class="consignation-form">
+            <!-- Mostrar detalles de productos seleccionados -->
+            {% if productos_seleccionados %}
+                {% for producto in productos_seleccionados %}
+                <div class="form-group">
+                    <label>{{ producto.nombre }} - Cantidad</label>
+                    <input type="number" name="cantidad_{{ producto.id }}" required>
+                </div>
+                <div class="form-group">
+                    <label>Unidad</label>
+                    <select name="tamano_{{ producto.id }}" required>
+                        <option value="CUNETE">Cunete</option>
+                        <option value="GALON">Galón</option>
+                        <option value="TAMBOR">Tambor</option>
+                    </select>
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Campos comunes que siempre se muestran -->
+            <div class="form-group">
+                <label for="ciudad">Ciudad</label>
+                <input type="text" id="ciudad" name="ciudad" required>
+            </div>
+            <div class="form-group">
+                <label for="empresa_cliente_nombre">Nombre de la Empresa Cliente</label>
+                <input type="text" id="empresa_cliente_nombre" name="empresa_cliente_nombre" required>
+            </div>
+            <div class="form-group">
+                <label for="nombre_proyecto">Nombre del Proyecto</label>
+                <input type="text" id="nombre_proyecto" name="nombre_proyecto" required>
+            </div>
+            <div class="form-group">
+                <label for="plazo_oferta">Plazo de la Oferta</label>
+                <input type="number" id="plazo_oferta" name="plazo_oferta" required>
+            </div>
+            <div class="form-group">
+                <label for="tiempo_entrega">Tiempo de Entrega</label>
+                <input type="text" id="tiempo_entrega" name="tiempo_entrega" required>
+            </div>
+            <div class="form-group">
+                <label for="porcentaje_anticipo">Porcentaje de Anticipo</label>
+                <input type="number" id="porcentaje_anticipo" name="porcentaje_anticipo" required>
+            </div>
+            <div class="form-group">
+                <label for="porcentaje_primera_acta">Porcentaje Primera Acta</label>
+                <input type="number" id="porcentaje_primera_acta" name="porcentaje_primera_acta" required>
+            </div>
+            <div class="form-group">
+                <label for="porcentaje_acta_final">Porcentaje Acta Final</label>
+                <input type="number" id="porcentaje_acta_final" name="porcentaje_acta_final" required>
+            </div>
+
+            <a href= "/cotizacion_final"type="submit" class="btn">Finalizar Cotización</a>
+        </form>
+    </main>
+    <footer>
+        <a href="/" class="support-link">Volver al Inicio</a>
+    </footer>
+</body>
+</html>
+
