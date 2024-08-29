@@ -106,22 +106,20 @@ class CotizacionProducto(db.Model):
 
 @app.route("/")
 def index():
-    return render_template("index.html",)
+    return render_template("index.html")
 
-
-@app.route("/usuario_cotizacion")
+@app.route("/usuario_cotizacion", methods=["GET", "POST"])
 def userManager():
     clientes = Cliente.query.all()
     productos = Producto.query.all()
     return render_template("usuario_cotizacion.html", clientes=clientes, productos=productos)
 
 
-@app.route("/crear_cotizacion")
+@app.route("/crear_cotizacion", methods=['POST'])
 def cotiacion():
     return render_template("crear_cotizacion.html")
 
-
-@app.route("/producto_servicio")
+@app.route("/producto_servicio", methods=["GET", "POST"])
 def product_service():
     productos = Producto.query.all()
     return render_template("producto_servicio.html", productos=productos)
@@ -229,7 +227,7 @@ def modificar_cotizacion(id):
 
 
 # Metodo para probar generación de cotización
-@app.route('/cotizacion_final')
+@app.route('/cotizacion_final', methods=['POST'])
 def listar_cotizacion():
     # Obtener la cuarta cotización de la base de datos
     cotizacion = Cotizacion.query.offset(3).first()

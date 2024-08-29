@@ -11,7 +11,7 @@
         <h1>Detalles de la Cotización</h1>
     </header>
     <main>
-        <form action="/ver_cotizacion" method="post" class="consignation-form">
+        <form action="/cotizacion_final" method="post" class="consignation-form">
             <!-- Mostrar detalles de productos seleccionados -->
             {% if productos_seleccionados %}
                 {% for producto in productos_seleccionados %}
@@ -23,7 +23,7 @@
                     <label>Unidad</label>
                     <select name="tamano_{{ producto.id }}" required>
                         <option value="CUNETE">Cunete</option>
-                        <option value="GALON">Galón</option>
+                        <option value="GALON">Galon</option>
                         <option value="TAMBOR">Tambor</option>
                     </select>
                 </div>
@@ -64,7 +64,7 @@
                 <input type="number" id="porcentaje_acta_final" name="porcentaje_acta_final" required>
             </div>
 
-            <a href= "/cotizacion_final"type="submit" class="btn">Finalizar Cotización</a>
+            <button type="submit" class="btn">Continuar</button>
         </form>
     </main>
     <footer>

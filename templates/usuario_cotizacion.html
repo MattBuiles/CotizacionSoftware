@@ -26,7 +26,7 @@
         <h1>Seleccionar Usuario</h1>
     </header>
     <main>
-        <form action="/seleccionar_producto_servicio" method="post" class="consignation-form">
+        <form action="/producto_servicio" method="post" class="consignation-form">
             <div class="form-group">
                 <label><input type="radio" name="tipo_usuario" value="registrado" onchange="toggleUserType()" required> Usuario Registrado</label>
                 <label><input type="radio" name="tipo_usuario" value="nuevo" onchange="toggleUserType()" required> Usuario Nuevo</label>
@@ -56,7 +56,7 @@
                 </div>
             </div>
 
-            <a href="/producto_servicio" type="submit" class="btn">Continuar</a>
+            <button type="submit" class="btn">Continuar</button>
         </form>
     </main>
     <footer>

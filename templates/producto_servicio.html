@@ -19,6 +19,54 @@
                 serviceGroup.style.display = 'block';
             }
         }
+
+        function validateForm() {
+            const selectedOption = document.querySelector('input[name="producto_servicio"]:checked').value;
+            let isValid = true;
+            let errorMessage = '';
+
+            if (selectedOption === 'producto') {
+                const checkboxes = document.querySelectorAll('input[type="checkbox"][name="productos"]');
+                const isAnyProductSelected = Array.from(checkboxes).some(checkbox => checkbox.checked);
+                
+                if (!isAnyProductSelected) {
+                    isValid = false;
+                    errorMessage = 'Debes seleccionar al menos un producto.\n';
+                }
+            } else if (selectedOption === 'servicio') {
+                const servicioText = document.getElementById('servicio').value.trim();
+                
+                if (servicioText === '') {
+                    isValid = false;
+                    errorMessage += 'El campo de servicio no puede estar vacío.\n';
+                }
+            }
+
+            if (!isValid) {
+                alert(errorMessage);
+            }
+
+            return isValid;
+        }
+
+        // Habilitar o deshabilitar campos según se seleccione el checkbox del producto
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('input[type="checkbox"][name="productos"]').forEach(function(checkbox) {
+                checkbox.addEventListener('change', function() {
+                    const productoId = this.value;
+                    const cantidadInput = document.getElementById('cantidad' + productoId);
+                    const tamanoSelect = document.getElementById('tamano' + productoId);
+
+                    if (this.checked) {
+                        cantidadInput.disabled = false;
+                        tamanoSelect.disabled = false;
+                    } else {
+                        cantidadInput.disabled = true;
+                        tamanoSelect.disabled = true;
+                    }
+                });
+            });
+        });
     </script>
 </head>
 <body>
@@ -26,7 +74,7 @@
         <h1>Seleccionar Producto o Servicio</h1>
     </header>
     <main>
-        <form action="/vercotizacion" method="post" class="consignation-form">
+        <form action="/crear_cotizacion" method="post" class="consignation-form" onsubmit="return validateForm();">
             <div class="form-group">
                 <label><input type="radio" name="producto_servicio" value="producto" onchange="toggleProductService()" required> Producto</label>
                 <label><input type="radio" name="producto_servicio" value="servicio" onchange="toggleProductService()" required> Servicio</label>
@@ -62,31 +110,13 @@
                 </div>
             </div>
 
-            <a href="/crear_cotizacion" type="submit" class="btn">Continuar</a>
+            <button type="submit" class="btn">Continuar</button>
         </form>
     </main>
     <footer>
         <a href="/" class="support-link">Volver al Inicio</a>
     </footer>
-
-    <script>
-        // Habilitar o deshabilitar campos según se seleccione el checkbox del producto
-        document.querySelectorAll('input[type="checkbox"][name="productos"]').forEach(function(checkbox) {
-            checkbox.addEventListener('change', function() {
-                const productoId = this.value;
-                const cantidadInput = document.getElementById('cantidad' + productoId);
-                const tamanoSelect = document.getElementById('tamano' + productoId);
-
-                if (this.checked) {
-                    cantidadInput.disabled = false;
-                    tamanoSelect.disabled = false;
-                } else {
-                    cantidadInput.disabled = true;
-                    tamanoSelect.disabled = true;
-                }
-            });
-        });
-    </script>
 </body>
 </html>
+
 
