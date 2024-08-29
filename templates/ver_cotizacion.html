@@ -30,6 +30,12 @@
         {% endfor %}
     </table>
 
+    <!-- Botón para editar la cotización -->
+    <form action="{{ url_for('crear_cotizacion') }}" method="post">
+        <input type="hidden" name="cotizacion_id" value="{{ cotizacion.id }}">
+        <input type="submit" value="Editar Cotización">
+    </form>
+
     <a href="/cotizaciones">Volver a la lista de cotizaciones</a>
 </body>
 </html>
