@@ -40,8 +40,7 @@ db = SQLAlchemy(app)
 class Cotizacion(db.Model):
     # Atributos base
     id = db.Column(db.Integer, primary_key=True)
-    fecha = db.Column(db.Date, default=lambda: datetime.now(
-        pytz.timezone('America/Bogota')).date())
+    fecha = db.Column(db.Date, default=lambda: datetime.now(pytz.timezone('America/Bogota')).date())
     ciudad = db.Column(db.String(100), nullable=False)
     empresa = db.Column(db.String(100), nullable=False)
     proyecto = db.Column(db.String(100), nullable=False)
@@ -52,18 +51,13 @@ class Cotizacion(db.Model):
     f_acta = db.Column(db.Integer, nullable=False)
     consecutivo = db.Column(db.Integer, nullable=False)
     # Relación auto-referencial para versiones
-    version_padre_id = db.Column(
-        db.Integer, db.ForeignKey('cotizacion.id'), nullable=True)
-    versiones = db.relationship('Cotizacion', backref=db.backref(
-        'version_padre', remote_side=[id]), lazy=True)
+    version_padre_id = db.Column(db.Integer, db.ForeignKey('cotizacion.id'), nullable=True)
+    versiones = db.relationship('Cotizacion', backref=db.backref('version_padre', remote_side=[id]), lazy=True)
     # Atributos definibles por el usuario
     # Relación con CotizacionProducto
-    productos_detalle = db.relationship(
-        'CotizacionProducto', backref='cotizacion', lazy=True)
-    cliente_id = db.Column(db.Integer, db.ForeignKey(
-        'cliente.id'), nullable=False)
-    cliente = db.relationship(
-        'Cliente', backref=db.backref('cotizaciones', lazy=True))
+    productos_detalle = db.relationship('CotizacionProducto', backref='cotizacion', lazy=True)
+    cliente_id = db.Column(db.Integer, db.ForeignKey('cliente.id'), nullable=False)
+    cliente = db.relationship('Cliente', backref=db.backref('cotizaciones', lazy=True))
     servicio = db.Column(db.String(1000), nullable=False, default="v")
 
     def __repr__(self):
@@ -102,16 +96,13 @@ class Producto(db.Model):
 
 class CotizacionProducto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    cotizacion_id = db.Column(db.Integer, db.ForeignKey(
-        'cotizacion.id'), nullable=False)
-    producto_id = db.Column(db.Integer, db.ForeignKey(
-        'producto.id'), nullable=False)
+    cotizacion_id = db.Column(db.Integer, db.ForeignKey('cotizacion.id'), nullable=False)
+    producto_id = db.Column(db.Integer, db.ForeignKey('producto.id'), nullable=False)
 
     cantidad = db.Column(db.Integer, nullable=False)
     tamano = db.Column(db.Integer, nullable=False)
 
-    producto = db.relationship('Producto', backref=db.backref(
-        'cotizacion_producto', lazy=True))
+    producto = db.relationship('Producto', backref=db.backref('cotizacion_producto', lazy=True))
 
     def __repr__(self):
         return f'<CotizacionProducto: Producto {self.producto.nombre}, Cantidad: {self.cantidad}, Tamaño: {self.tamano}>'
@@ -149,8 +140,7 @@ def crear_cotizacion():
         nombre_cliente = request.form['cliente_nombre']
         email_cliente = request.form['cliente_celular']
         telefono_cliente = request.form.get('cliente_correo')
-        cliente = Cliente(nombre=nombre_cliente,
-                          email=email_cliente, celular=telefono_cliente)
+        cliente = Cliente(nombre=nombre_cliente, email=email_cliente, celular=telefono_cliente)
         db.session.add(cliente)
         db.session.commit()
 
@@ -169,8 +159,7 @@ def crear_cotizacion():
     opcion = request.form.get('producto_servicio')
     if opcion == 'producto':
         # Captura el valor del select de productos
-        cotizacion = Cotizacion(ciudad=ciudad, empresa=empresa, proyecto=proyecto, plazo=plazo, entrega=entrega,
-                                anticipo=anticipo, p_acta=p_acta, f_acta=f_acta, consecutivo=consecutivo, cliente=cliente, productos=productos)
+        cotizacion = Cotizacion(ciudad=ciudad, empresa=empresa, proyecto=proyecto, plazo=plazo, entrega=entrega,anticipo=anticipo, p_acta=p_acta, f_acta=f_acta, consecutivo=consecutivo, cliente=cliente, productos=productos)
         db.session.add(cotizacion)
         db.session.commit()
 
@@ -186,16 +175,14 @@ def crear_cotizacion():
                     tamano = 20
                 elif tamano == 'TAMBOR':
                     tamano = 200
-                detalle = CotizacionProducto(
-                    cotizacion_id=cotizacion.id, producto_id=producto_id, cantidad=int(cantidad), tamano=tamano)
+                detalle = CotizacionProducto(cotizacion_id=cotizacion.id, producto_id=producto_id, cantidad=int(cantidad), tamano=tamano)
                 db.session.add(detalle)
         db.session.commit()
 
     elif opcion == 'servicio':
         # Captura el valor del campo de texto para servicios
         servicio_ingresado = request.form.get('servicio')
-        cotizacion = Cotizacion(ciudad=ciudad, empresa=empresa, proyecto=proyecto, plazo=plazo, entrega=entrega, anticipo=anticipo,
-                                p_acta=p_acta, f_acta=f_acta, consecutivo=consecutivo, cliente=cliente, servicio=servicio_ingresado)
+        cotizacion = Cotizacion(ciudad=ciudad, empresa=empresa, proyecto=proyecto, plazo=plazo, entrega=entrega, anticipo=anticipo,p_acta=p_acta, f_acta=f_acta, consecutivo=consecutivo, cliente=cliente, servicio=servicio_ingresado)
         db.session.add(cotizacion)
         db.session.commit()
 
@@ -215,8 +202,6 @@ def ver_cotizacion(id):
     return render_template('ver_cotizacion.html', cotizacion=cotizacion, productos=productos)
 
 # Metodo para probar generación de cotización
-
-
 @app.route('/cotizacion_final')
 def listar_cotizacion():
     # Obtener la cuarta cotización de la base de datos
