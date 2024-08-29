@@ -1,11 +1,22 @@
-<!-- 
-    Este código HTML representa una plantilla para un documento de cotización final.
-    Incluye la estructura y el estilo necesarios para el documento.
-    La plantilla contiene secciones para el encabezado, contenido principal, tabla para mostrar los componentes, notas, firma y pie de página.
-    Utiliza variables de un objeto de contexto llamado "cotizacion" para llenar datos dinámicos en el documento.
-    El documento está escrito en español e incluye instrucciones específicas de formato y estilo.
-    La plantilla está diseñada para ser utilizada en una aplicación web para generar y mostrar cotizaciones finales.
+<!--
+Archivo: /D:/Users/USER/Documents/GitHub/CotizacionSoftware/templates/cotizacion_final.html
+
+Descripción:
+Este archivo contiene el código HTML de una plantilla para generar una propuesta económica de cotización. La plantilla incluye estilos CSS para dar formato al contenido y una estructura HTML para organizar la información de la cotización.
+
+Estructura del archivo:
+- Encabezado: Contiene una imagen de encabezado.
+- Contenido principal: Incluye la información de la cotización, como la fecha, el número de cotización, los datos del cliente, el asunto y los componentes de la cotización.
+- Tabla de componentes: Muestra los componentes de la cotización en una tabla. Si el servicio de la cotización no es "v", se muestra una única fila en el cuerpo de la tabla con el nombre del servicio. De lo contrario, se muestra una fila de encabezado con los nombres de las columnas y luego se itera sobre los detalles de los productos de la cotización para mostrar cada uno en una fila separada en el cuerpo de la tabla.
+- Notas adjuntas: Contiene notas adicionales relacionadas con la cotización.
+- Firma: Incluye la firma del representante legal.
+- Pie de página: Muestra la dirección, números de teléfono y correo electrónico de la empresa.
+
+Uso:
+Este archivo se utiliza como plantilla para generar una propuesta económica de cotización. Se deben reemplazar los valores de las variables de la plantilla con los datos correspondientes de la cotización.
+
 -->
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
