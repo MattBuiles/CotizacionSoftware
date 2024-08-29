@@ -118,7 +118,8 @@ def userManager():
 
 @app.route("/crear_cotizacion")
 def cotiacion():
-    return render_template("crear_cotizacion.html",)
+    productos = Producto.query.all()
+    return render_template("crear_cotizacion.html", productos=productos)
 
 
 @app.route("/producto_servicio")
