@@ -25,9 +25,9 @@ Este es un sistema web desarrollado en Flask para la gestión de cotizaciones, p
 Sigue estos pasos para instalar y ejecutar el proyecto localmente:
 
 1. Clona este repositorio:
-   ```bash
-   git clone https://github.com/MattBuiles/CotizacionSoftware.git
-   ```
+  ```bash
+  git clone https://github.com/MattBuiles/CotizacionSoftware.git
+  ```
 2. Navega al directorio del proyecto:
   ```bash
   cd nombre-del-repositorio
