@@ -74,7 +74,7 @@
         <h1>Seleccionar Producto o Servicio</h1>
     </header>
     <main>
-        <form action="/crear_cotizacion" method="post" class="consignation-form" onsubmit="return validateForm();">
+        <form action="{{ url_for('crear_cotizacion', cliente=cliente, info=info) }}" method="post" class="consignation-form" onsubmit="return validateForm();">
             <div class="form-group">
                 <label><input type="radio" name="producto_servicio" value="producto" onchange="toggleProductService()" required> Producto</label>
                 <label><input type="radio" name="producto_servicio" value="servicio" onchange="toggleProductService()" required> Servicio</label>

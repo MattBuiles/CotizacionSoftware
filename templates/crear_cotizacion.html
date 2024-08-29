@@ -11,7 +11,7 @@
         <h1>Detalles de la Cotización</h1>
     </header>
     <main>
-        <form action="/cotizacion_final" method="post" class="consignation-form">
+        <form action="{{ url_for('product_service', cliente=cliente) }}" method="post" class="consignation-form">
             <!-- Mostrar detalles de productos seleccionados -->
             {% if productos_seleccionados %}
                 {% for producto in productos_seleccionados %}

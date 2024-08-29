@@ -111,34 +111,10 @@ def index():
 @app.route("/usuario_cotizacion", methods=["GET", "POST"])
 def userManager():
     clientes = Cliente.query.all()
-    productos = Producto.query.all()
-    return render_template("usuario_cotizacion.html", clientes=clientes, productos=productos)
-
-
-@app.route("/crear_cotizacion", methods=['POST'])
-def cotiacion():
-    return render_template("crear_cotizacion.html")
+    return render_template("usuario_cotizacion.html", clientes=clientes)
 
 @app.route("/producto_servicio", methods=["GET", "POST"])
-def product_service():
-    productos = Producto.query.all()
-    return render_template("producto_servicio.html", productos=productos)
-
-
-@app.route('/ver_cotizacion', methods=['POST'])
-def crear_cotizacion():
-    # Datos del cliente
-    cliente_id = request.form.get('cliente_existente')
-    if cliente_id:
-        cliente = Cliente.query.get(cliente_id)
-    else:
-        nombre_cliente = request.form['cliente_nombre']
-        email_cliente = request.form['cliente_celular']
-        telefono_cliente = request.form.get('cliente_correo')
-        cliente = Cliente(nombre=nombre_cliente, email=email_cliente, celular=telefono_cliente)
-        db.session.add(cliente)
-        db.session.commit()
-
+def product_service(cliente):
     # Datos de cotización
     ciudad = request.form['ciudad']
     empresa = request.form['empresa_cliente_nombre']
@@ -150,27 +126,60 @@ def crear_cotizacion():
     f_acta = request.form['porcentaje_acta_final']
     consecutivo = 1
 
+    info=[ciudad,empresa, proyecto,plazo, entrega, anticipo, p_acta, f_acta, consecutivo]
+    productos = Producto.query.all()
+    return render_template("producto_servicio.html", productos=productos, cliente = cliente, info=info)
+
+@app.route("/crear_cotizacion", methods=['POST'])
+def cotizacion():
+    tipo_usuario = request.form.get('tipo_usuario')
+    if tipo_usuario == 'registrado':
+        cliente_id = request.form.get('cliente_existente')
+        cliente = Cliente.query.get(cliente_id)
+    elif tipo_usuario == 'nuevo':
+        nombre_cliente = request.form.get('cliente_nombre')
+        celular_cliente = request.form.get('cliente_celular')
+        correo_cliente = request.form.get('cliente_correo')
+        # Crear nuevo cliente
+        cliente = Cliente(nombre=nombre_cliente, celular=celular_cliente, email=correo_cliente)
+        db.session.add(cliente)
+        db.session.commit()
+    return render_template("crear_cotizacion.html", cliente=cliente)
+
+
+@app.route('/ver_cotizacion', methods=['POST'])
+def crear_cotizacion(cliente,info):
     # Datos del producto o servicio
     opcion = request.form.get('producto_servicio')
+
+    ciudad = info[0]
+    empresa = info[1]
+    proyecto = info[2]
+    plazo = info[3]
+    entrega = info[4]
+    anticipo = info[5]
+    p_acta = info[6]
+    f_acta = info[7]
+    consecutivo = info[8]
+
     if opcion == 'producto':
         # Captura el valor del select de productos
-        cotizacion = Cotizacion(ciudad=ciudad, empresa=empresa, proyecto=proyecto, plazo=plazo, entrega=entrega,anticipo=anticipo, p_acta=p_acta, f_acta=f_acta, consecutivo=consecutivo, cliente=cliente, productos=productos)
+        cotizacion = Cotizacion(ciudad=ciudad, empresa=empresa, proyecto=proyecto, plazo=plazo, entrega=entrega,anticipo=anticipo, p_acta=p_acta, f_acta=f_acta, consecutivo=consecutivo, cliente=cliente)
         db.session.add(cotizacion)
         db.session.commit()
 
-        producto_ids = request.form.getlist('productos')
-
-        for producto_id in producto_ids:
-            cantidad = request.form.get(f'cantidad_{producto_id}')
-            tamano = request.form.get(f'tamano_{producto_id}')
-            if cantidad and tamano:
+        # Obtener los productos seleccionados
+        for producto in Producto.query.all():
+            if request.form.get(f'cantidad{producto.id}'):
+                cantidad = int(request.form.get(f'cantidad{producto.id}'))
+                tamano = request.form.get(f'tamano{producto.id}')
                 if tamano == 'CUNETE':
                     tamano = 4
                 elif tamano == 'GALON':
                     tamano = 20
                 elif tamano == 'TAMBOR':
                     tamano = 200
-                detalle = CotizacionProducto(cotizacion_id=cotizacion.id, producto_id=producto_id, cantidad=int(cantidad), tamano=tamano)
+                detalle = CotizacionProducto(cotizacion_id=cotizacion.id, producto_id=producto.id, cantidad=int(cantidad), tamano=tamano)
                 db.session.add(detalle)
         db.session.commit()
 
