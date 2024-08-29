@@ -152,3 +152,139 @@ button.btn:hover {
     display: none; 
 }
 
+
+/* ====> Estilos adicionales para la página de Versiones de Cotización */
+
+/* Estilo general para contenedores en la página de Versiones de Cotización */
+.versions-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Títulos específicos para la página */
+.versions-container h1, .versions-container h2 {
+    color: #f17d2f;
+    text-align: center;
+}
+
+/* Estilo para listas en la página de Versiones de Cotización */
+.versions-container ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.versions-container ul li {
+    background-color: #f4f4f4;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.versions-container ul li strong {
+    color: #333;
+}
+
+/* Estilo para los enlaces dentro de las listas */
+.versions-container ul li a {
+    color: #f17d2f;
+    text-decoration: none;
+    font-weight: 600;
+    float: right;
+}
+
+.versions-container ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Estilo para el botón de "Volver a la lista de cotizaciones" */
+.versions-container .btn {
+    display: inline-block;
+    margin: 15px auto;
+    padding: 10px 20px;
+    background-color: #f17d2f;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+.versions-container .btn:hover {
+    background-color: #d25e1f;
+}
+
+/* ====> Estilos adicionales para la página de Modificar Cotización */
+
+/* Contenedor general */
+.modify-quote-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modify-quote-container h1 {
+    color: #f17d2f;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Estilo para los formularios */
+.modify-quote-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.modify-quote-container label {
+    margin-bottom: 5px;
+    color: #f17d2f;
+    font-weight: 600;
+}
+
+.modify-quote-container input[type="text"] {
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* Botón de guardar cambios */
+.modify-quote-container button[type="submit"] {
+    padding: 10px;
+    background-color: #f17d2f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.modify-quote-container button[type="submit"]:hover {
+    background-color: #d25e1f;
+}
+
+/* Enlace para volver a ver la cotización */
+.modify-quote-container a {
+    display: inline-block;
+    margin-top: 20px;
+    color: #f17d2f;
+    text-decoration: none;
+    font-weight: 600;
+    text-align: center;
+}
+
+.modify-quote-container a:hover {
+    text-decoration: underline;
+}

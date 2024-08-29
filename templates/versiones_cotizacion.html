@@ -4,52 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Versiones de Cotización</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Versiones de Cotización {{ cotizacion.id }}</h1>
+    <header>
+        <h1>Versiones de Cotización {{ cotizacion.id }}</h1>
+    </header>
+    <main class="versions-container">
+        <h2>Versión Actual</h2>
+        <ul>
+            <li><strong>ID:</strong> {{ cotizacion.id }}</li>
+            <li><strong>Consecutivo:</strong> {{ cotizacion.consecutivo }}</li>
+            <li><strong>Fecha:</strong> {{ cotizacion.fecha }}</li>
+            <li><strong>Ciudad:</strong> {{ cotizacion.ciudad }}</li>
+            <li><strong>Empresa:</strong> {{ cotizacion.empresa }}</li>
+            <li><strong>Proyecto:</strong> {{ cotizacion.proyecto }}</li>
+            <!-- Otros atributos relevantes -->
+            <li><a href="{{ url_for('ver_cotizacion', id=cotizacion.id) }}">Ver detalles</a></li>
+        </ul>
 
-    <h2>Versión Actual</h2>
-    <ul>
-        <li><strong>ID:</strong> {{ cotizacion.id }}</li>
-        <li><strong>Consecutivo:</strong> {{ cotizacion.consecutivo }}</li>
-        <li><strong>Fecha:</strong> {{ cotizacion.fecha }}</li>
-        <li><strong>Ciudad:</strong> {{ cotizacion.ciudad }}</li>
-        <li><strong>Empresa:</strong> {{ cotizacion.empresa }}</li>
-        <li><strong>Proyecto:</strong> {{ cotizacion.proyecto }}</li>
-        <!-- Otros atributos relevantes -->
-        <li><a href="{{ url_for('ver_cotizacion', id=cotizacion.id) }}">Ver detalles</a></li>
-    </ul>
+        {% if padres %}
+        <h2>Versiones Padre</h2>
+        <ul>
+            {% for padre in padres %}
+            <li>
+                <strong>ID:</strong> {{ padre.id }} |
+                <strong>Consecutivo:</strong> {{ padre.consecutivo }} |
+                <strong>Fecha:</strong> {{ padre.fecha }} |
+                <a href="{{ url_for('ver_cotizacion', id=padre.id) }}">Ver detalles</a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
 
-    {% if padres %}
-    <h2>Versiones Padre</h2>
-    <ul>
-        {% for padre in padres %}
-        <li>
-            <strong>ID:</strong> {{ padre.id }} |
-            <strong>Consecutivo:</strong> {{ padre.consecutivo }} |
-            <strong>Fecha:</strong> {{ padre.fecha }} |
-            <a href="{{ url_for('ver_cotizacion', id=padre.id) }}">Ver detalles</a>
-        </li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+        {% if versiones %}
+        <h2>Versiones Hijas</h2>
+        <ul>
+            {% for version in versiones %}
+            <li>
+                <strong>ID:</strong> {{ version.id }} |
+                <strong>Consecutivo:</strong> {{ version.consecutivo }} |
+                <strong>Fecha:</strong> {{ version.fecha }} |
+                <a href="{{ url_for('ver_cotizacion', id=version.id) }}">Ver detalles</a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No hay versiones hijas para esta cotización.</p>
+        {% endif %}
 
-    {% if versiones %}
-    <h2>Versiones Hijas</h2>
-    <ul>
-        {% for version in versiones %}
-        <li>
-            <strong>ID:</strong> {{ version.id }} |
-            <strong>Consecutivo:</strong> {{ version.consecutivo }} |
-            <strong>Fecha:</strong> {{ version.fecha }} |
-            <a href="{{ url_for('ver_cotizacion', id=version.id) }}">Ver detalles</a>
-        </li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p>No hay versiones hijas para esta cotización.</p>
-    {% endif %}
-
-    <a href="{{ url_for('listar_cotizaciones') }}">Volver a la lista de cotizaciones</a>
+        <a href="{{ url_for('listar_cotizaciones') }}" class="btn">Volver a la lista de cotizaciones</a>
+    </main>
+    <footer>
+        <a href="/" class="support-link">Volver al Inicio</a>
+    </footer>
 </body>
 </html>
+
