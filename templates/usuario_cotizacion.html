@@ -7,18 +7,28 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script>
         function toggleUserType() {
-            const userType = document.querySelector('input[name="tipo_usuario"]:checked').value;
-            const existingUserGroup = document.getElementById('existing-user-group');
-            const newUserGroup = document.getElementById('new-user-group');
+        const userType = document.querySelector('input[name="tipo_usuario"]:checked').value;
+        const existingUserGroup = document.getElementById('existing-user-group');
+        const newUserGroup = document.getElementById('new-user-group');
+        
+        if (userType === 'registrado') {
+            existingUserGroup.style.display = 'block';
+            newUserGroup.style.display = 'none';
             
-            if (userType === 'registrado') {
-                existingUserGroup.style.display = 'block';
-                newUserGroup.style.display = 'none';
-            } else if (userType === 'nuevo') {
-                existingUserGroup.style.display = 'none';
-                newUserGroup.style.display = 'block';
-            }
+            // Remove required attribute from new user fields
+            document.getElementById('cliente_nombre').removeAttribute('required');
+            document.getElementById('cliente_celular').removeAttribute('required');
+            document.getElementById('cliente_correo').removeAttribute('required');
+        } else if (userType === 'nuevo') {
+            existingUserGroup.style.display = 'none';
+            newUserGroup.style.display = 'block';
+            
+            // Add required attribute to new user fields
+            document.getElementById('cliente_nombre').setAttribute('required', 'required');
+            document.getElementById('cliente_celular').setAttribute('required', 'required');
+            document.getElementById('cliente_correo').setAttribute('required', 'required');
         }
+    }
     </script>
 </head>
 <body>
