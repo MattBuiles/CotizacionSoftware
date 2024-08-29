@@ -24,8 +24,8 @@
             {% for cotizacion in cotizaciones%}
             <tr>
                 <td>{{ cotizacion.fecha }}</td>
-                <td>{{ cotizacion.producto }}</td>
-                <td>{{ cotizacion.cliente }}</td>
+                <td>{{ cotizacion.proyecto }}</td>
+                <td>{{ cotizacion.cliente.nombre }}</td>
                 <td><a href="/cotizacion/{{ cotizacion.id }}"class="btn-ver-cotizacion">Ver cotización</a></td>
             </tr>
             {% endfor %}
