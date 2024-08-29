@@ -28,8 +28,8 @@
     <main>
         <form action="/producto_servicio" method="post" class="consignation-form">
             <div class="form-group">
-                <label><input type="radio" name="tipo_usuario" value="registrado" onchange="toggleUserType()" required> Usuario Registrado</label>
-                <label><input type="radio" name="tipo_usuario" value="nuevo" onchange="toggleUserType()" required> Usuario Nuevo</label>
+                <label><input type="radio" id="tipo_usuario" value="registrado" onchange="toggleUserType()" required> Usuario Registrado</label>
+                <label><input type="radio" id="tipo_usuario" value="nuevo" onchange="toggleUserType()" required> Usuario Nuevo</label>
             </div>
 
             <div id="existing-user-group" class="form-group" style="display: none;">
