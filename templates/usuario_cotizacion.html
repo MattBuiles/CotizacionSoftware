@@ -1,3 +1,34 @@
+<!-- 
+Archivo: /D:/Users/USER/Documents/GitHub/CotizacionSoftware/templates/usuario_cotizacion.html
+
+Descripción:
+Este archivo HTML representa la página de selección de usuario en el sistema de cotización de software. Permite al usuario seleccionar entre un usuario registrado y un usuario nuevo.
+
+Estructura del archivo:
+- El archivo comienza con la declaración del tipo de documento y el idioma.
+- A continuación, se definen las etiquetas meta para la codificación de caracteres y la escala de visualización.
+- El título de la página se establece como "Seleccionar Usuario - IPB SAS".
+- Se enlaza una hoja de estilos externa llamada "styles.css".
+- Se define un script JavaScript que contiene una función llamada "toggleUserType()".
+- El cuerpo del archivo contiene un encabezado, un contenido principal y un pie de página.
+- El contenido principal consiste en un formulario con dos opciones de selección de usuario: "Usuario Registrado" y "Usuario Nuevo".
+- Dependiendo de la opción seleccionada, se muestra un grupo de campos correspondientes al usuario existente o al usuario nuevo.
+- Al final del formulario, hay un botón de envío para continuar con el proceso de cotización.
+- El pie de página contiene un enlace para volver al inicio.
+
+Uso:
+- Este archivo se utiliza como una plantilla para generar la página de selección de usuario en el sistema de cotización de software.
+- Se utiliza el lenguaje de plantillas Flask para generar dinámicamente el contenido del formulario, como la lista de usuarios existentes.
+
+Notas adicionales:
+- Se recomienda que el archivo "styles.css" esté presente en la ruta especificada para que los estilos se apliquen correctamente.
+- La función "toggleUserType()" se ejecuta cuando se cambia la selección de usuario y muestra u oculta los campos correspondientes.
+- Los campos del usuario nuevo tienen el atributo "required" para garantizar que se ingresen los datos necesarios antes de enviar el formulario.
+- El formulario se envía a través de una solicitud POST a la ruta especificada en el atributo "action" del formulario.
+- El valor seleccionado en el campo "cliente_existente" se enviará como parte de la solicitud POST.
+- El botón de envío tiene la clase "btn" para aplicar estilos adicionales.
+
+-->
 <!DOCTYPE html>
 <html lang="es">
 <head>
