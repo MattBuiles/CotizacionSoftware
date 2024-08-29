@@ -83,12 +83,8 @@ class Producto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), nullable=False)
     precio = db.Column(db.Float, nullable=False)
-    """
-    # Clave foránea para referenciar a Cotizacion
-    cotizacion_id = db.Column(db.Integer, db.ForeignKey('cotizacion.id'))
-    # Relación con Cotizacion
-    cotizacion = db.relationship('Cotizacion', back_populates='productos')
-    """
+    cotizacion_id = db.Column(db.Integer, db.ForeignKey('cotizacion.id'), nullable=False)
+    cotizacion = db.relationship('Cotizacion', backref=db.backref('productos', lazy=True))
 
     def __repr__(self):
         return f'<Producto {self.nombre}>'
