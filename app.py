@@ -201,12 +201,41 @@ def ver_cotizacion(id):
     cotizacion = Cotizacion.query.get_or_404(id)
     return render_template('ver_cotizacion.html', cotizacion=cotizacion)
 
+@app.route('/cotizacion_modificacion/<int:id>')
+def modificar_cotizacion(id):
+    cotizacion = Cotizacion.query.get_or_404(id)
+    
+    id = cotizacion.id
+    fecha = cotizacion.fecha
+    ciudad = cotizacion.ciudad
+    empresa = cotizacion.empresa
+    proyecto = cotizacion.proyecto
+    plazo = cotizacion.plazo
+    entrega = cotizacion.entrega
+    anticipo = cotizacion.anticipo
+    p_acta = cotizacion.p_acta
+    f_acta = cotizacion.f_acta
+    consecutivo = cotizacion.consecutivo
+    cliente = cotizacion.cliente
+    productos = cotizacion.productos_detalle
+    servicio = cotizacion.servicio
+    consecutivo += 1
+
+    cotizacionHija = Cotizacion(fecha=fecha, ciudad=ciudad, empresa=empresa, proyecto=proyecto, plazo=plazo, entrega=entrega, anticipo=anticipo, p_acta=p_acta, f_acta=f_acta, consecutivo=consecutivo, cliente=cliente, productos=productos, servicio=servicio)
+    cotizacionHija.version_padre_id = id
+
+    db.session.add(cotizacionHija)
+    db.session.commit()
+
+
 # Metodo para probar generación de cotización
 @app.route('/cotizacion_final')
 def listar_cotizacion():
     # Obtener la cuarta cotización de la base de datos
     cotizacion = Cotizacion.query.offset(3).first()
     return render_template('cotizacion_final.html', cotizacion=cotizacion)
+
+
 
 
 if __name__ == '__main__':
