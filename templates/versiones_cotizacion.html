@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Versiones de Cotización</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Versiones de Cotización</h1>
+    </header>
+    <main>
+        <h2>Versiones para Cotización ID: {{ cotizacion.id }}</h2>
+        <p>Versión Actual:</p>
+        <ul>
+            <li>
+                <a href="{{ url_for('ver_cotizacion', id=cotizacion.id) }}">
+                    Cotización Actual ID: {{ cotizacion.id }} - Versión: {{ cotizacion.consecutivo }}
+                </a>
+            </li>
+        </ul>
+        <p>Versiones Padre y Abuelo:</p>
+        <ul>
+            {% for padre in padres %}
+            <li>
+                <a href="{{ url_for('ver_cotizacion', id=padre.id) }}">
+                    Cotización ID: {{ padre.id }} - Versión: {{ padre.consecutivo }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        <a href="{{ url_for('index') }}">Volver al Inicio</a>
+    </main>
+    <footer>
+        <p>&copy; 2024 Tu Empresa</p>
+    </footer>
+</body>
+</html>
