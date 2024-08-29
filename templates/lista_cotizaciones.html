@@ -15,7 +15,7 @@
         <thead>
             <tr>
                 <th>Fecha</th>
-                <th>Producto</th>
+                <th>Proyecto</th>
                 <th>Cliente</th>
                 <th>Visualizar</th>
             </tr>
@@ -26,7 +26,7 @@
                 <td>{{ cotizacion.fecha }}</td>
                 <td>{{ cotizacion.proyecto }}</td>
                 <td>{{ cotizacion.cliente.nombre }}</td>
-                <td><a href="/cotizacion/{{ cotizacion.id }}"class="btn-ver-cotizacion">Ver cotización</a></td>
+                <td><a href="//versiones_cotizacion/{{int:id}}"class="btn-ver-cotizacion">Ver cotización</a></td>
             </tr>
             {% endfor %}
         </tbody>

@@ -190,7 +190,10 @@ def listar_cotizaciones():
     cotizaciones = Cotizacion.query.all()
     return render_template('lista_cotizaciones.html', cotizaciones=cotizaciones)
 
-@app.route('/cotizacion/<int:id>')
+@app.route('/versiones_cotizacion/<int:id>')
+def listar_versiones(id):
+    cotizacion = Cotizacion.query.get_or_404(id)
+    return render_template('versiones_cotizacion.html', cotizacion=cotizacion)
 
 @app.route('/cotizacion/<int:id>')
 def ver_cotizacion(id):
