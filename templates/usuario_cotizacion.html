@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleccionar Usuario - IPB SAS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        function toggleUserType() {
+            const userType = document.querySelector('input[name="tipo_usuario"]:checked').value;
+            const existingUserGroup = document.getElementById('existing-user-group');
+            const newUserGroup = document.getElementById('new-user-group');
+            
+            if (userType === 'registrado') {
+                existingUserGroup.style.display = 'block';
+                newUserGroup.style.display = 'none';
+            } else if (userType === 'nuevo') {
+                existingUserGroup.style.display = 'none';
+                newUserGroup.style.display = 'block';
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Seleccionar Usuario</h1>
+    </header>
+    <main>
+        <form action="/seleccionar_producto_servicio" method="post" class="consignation-form">
+            <div class="form-group">
+                <label><input type="radio" name="tipo_usuario" value="registrado" onchange="toggleUserType()" required> Usuario Registrado</label>
+                <label><input type="radio" name="tipo_usuario" value="nuevo" onchange="toggleUserType()" required> Usuario Nuevo</label>
+            </div>
+
+            <div id="existing-user-group" class="form-group" style="display: none;">
+                <label for="cliente_existente">Selecciona un usuario</label>
+                <select id="cliente_existente" name="cliente_existente">
+                    {% for cliente in clientes %}
+                        <option value="{{ cliente.id }}">{{ cliente.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div id="new-user-group" style="display: none;">
+                <div class="form-group">
+                    <label for="cliente_nombre">Nombre</label>
+                    <input type="text" id="cliente_nombre" name="cliente_nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="cliente_celular">Celular</label>
+                    <input type="number" id="cliente_celular" name="cliente_celular" required>
+                </div>
+                <div class="form-group">
+                    <label for="cliente_correo">Correo</label>
+                    <input type="email" id="cliente_correo" name="cliente_correo" required>
+                </div>
+            </div>
+
+            <a href="/producto_servicio" type="submit" class="btn">Continuar</a>
+        </form>
+    </main>
+    <footer>
+        <a href="/" class="support-link">Volver al Inicio</a>
+    </footer>
+</body>
+</html>

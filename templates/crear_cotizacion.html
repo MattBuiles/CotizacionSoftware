@@ -3,111 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Consignación - IPB SAS</title>
+    <title>Detalles de la Cotización - IPB SAS</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <script>
-        function toggleProductService() {
-            const selectedOption = document.getElementById("producto_servicio").value;
-            const additionalFields = document.getElementById("additional-fields");
-            const productoGroup = document.getElementById("producto-group");
-            const servicioGroup = document.getElementById("servicio-group");
-
-            if (selectedOption === "producto") {
-                additionalFields.style.display = "block";
-                productoGroup.style.display = "block";
-                servicioGroup.style.display = "none";
-            } else if (selectedOption === "servicio") {
-                additionalFields.style.display = "block";
-                productoGroup.style.display = "none";
-                servicioGroup.style.display = "block";
-            } else {
-                additionalFields.style.display = "none";
-            }
-        }
-    </script>
 </head>
 <body>
     <header>
-        <h1>Crear Consignación</h1>
+        <h1>Detalles de la Cotización</h1>
     </header>
     <main>
         <form action="/ver_cotizacion" method="post" class="consignation-form">
-            <!-- Selección de Producto o Servicio -->
-            <div class="form-group">
-                <label for="producto_servicio">Producto o Servicio</label>
-                <select id="producto_servicio" name="producto_servicio" required onchange="toggleProductService()">
-                    <option value="">Selecciona una opción</option>
-                    <option value="producto">Producto</option>
-                    <option value="servicio">Servicio</option>
-                </select>
-            </div>
-                <!-- Campos comunes que siempre se muestran -->
-                <div class="form-group" id="producto-group" style="display: none;">
-                    <label for="producto">Producto</label>
-                    <select id="producto" name="producto">
-                        <option value="impermeabilizacion">Impermeabilización</option>
-                        <option value="obra_civil">Obra Civil</option>
-                        <option value="ingenieria_agua">Ingeniería del Agua</option>
-                        <!-- Agrega más productos según sea necesario -->
+            <!-- Mostrar detalles de productos seleccionados -->
+            {% if productos_seleccionados %}
+                {% for producto in productos_seleccionados %}
+                <div class="form-group">
+                    <label>{{ producto.nombre }} - Cantidad</label>
+                    <input type="number" name="cantidad_{{ producto.id }}" required>
+                </div>
+                <div class="form-group">
+                    <label>Unidad</label>
+                    <select name="tamano_{{ producto.id }}" required>
+                        <option value="CUNETE">Cunete</option>
+                        <option value="GALON">Galón</option>
+                        <option value="TAMBOR">Tambor</option>
                     </select>
                 </div>
-                <!-- Campo adicional para Servicio -->
-                <div class="form-group" id="servicio-group" style="display: none;">
-                    <label for="servicio">Servicio</label>
-                    <input type="text" id="servicio" name="servicio">
-                </div>
+                {% endfor %}
+            {% endif %}
 
-                <!-- Campos comunes que siempre se muestran -->
-            <!-- Campos adicionales que se mostrarán después de seleccionar Producto o Servicio -->
-            <div id="additional-fields" style="display: none;">
-                <!-- Campos comunes que siempre se muestran -->
-                <div class="form-group">
-                    <label for="ciudad">Ciudad</label>
-                    <input type="text" id="ciudad" name="ciudad" required>
-                </div>
-                <div class="form-group">
-                    <label for="empresa_cliente_nombre">Nombre de la Empresa Cliente</label>
-                    <input type="text" id="empresa_cliente_nombre" name="empresa_cliente_nombre" required>
-                </div>
-                <div class="form-group">
-                    <label for="cliente_nombre">Nombre del Cliente</label>
-                    <input type="text" id="cliente_nombre" name="cliente_nombre" required>
-                </div>
-                <div class="form-group">
-                    <label for="cliente_celular">Celular del Cliente</label>
-                    <input type="text" id="cliente_celular" name="cliente_celular" required>
-                </div>
-                <div class="form-group">
-                    <label for="cliente_correo">Correo del Cliente</label>
-                    <input type="email" id="cliente_correo" name="cliente_correo" required>
-                </div>
-                <div class="form-group">
-                    <label for="nombre_proyecto">Nombre del Proyecto</label>
-                    <input type="text" id="nombre_proyecto" name="nombre_proyecto" required>
-                </div>
-                <div class="form-group">
-                    <label for="plazo_oferta">Plazo de la Oferta</label>
-                    <input type="text" id="plazo_oferta" name="plazo_oferta" required>
-                </div>
-                <div class="form-group">
-                    <label for="tiempo_entrega">Tiempo de Entrega</label>
-                    <input type="text" id="tiempo_entrega" name="tiempo_entrega" required>
-                </div>
-                <div class="form-group">
-                    <label for="porcentaje_anticipo">Porcentaje de Anticipo</label>
-                    <input type="number" id="porcentaje_anticipo" name="porcentaje_anticipo" required>
-                </div>
-                <div class="form-group">
-                    <label for="porcentaje_primera_acta">Porcentaje Primera Acta</label>
-                    <input type="number" id="porcentaje_primera_acta" name="porcentaje_primera_acta" required>
-                </div>
-                <div class="form-group">
-                    <label for="porcentaje_acta_final">Porcentaje Acta Final</label>
-                    <input type="number" id="porcentaje_acta_final" name="porcentaje_acta_final" required>
-                </div>
+            <!-- Campos comunes que siempre se muestran -->
+            <div class="form-group">
+                <label for="ciudad">Ciudad</label>
+                <input type="text" id="ciudad" name="ciudad" required>
+            </div>
+            <div class="form-group">
+                <label for="empresa_cliente_nombre">Nombre de la Empresa Cliente</label>
+                <input type="text" id="empresa_cliente_nombre" name="empresa_cliente_nombre" required>
+            </div>
+            <div class="form-group">
+                <label for="nombre_proyecto">Nombre del Proyecto</label>
+                <input type="text" id="nombre_proyecto" name="nombre_proyecto" required>
+            </div>
+            <div class="form-group">
+                <label for="plazo_oferta">Plazo de la Oferta</label>
+                <input type="text" id="plazo_oferta" name="plazo_oferta" required>
+            </div>
+            <div class="form-group">
+                <label for="tiempo_entrega">Tiempo de Entrega</label>
+                <input type="text" id="tiempo_entrega" name="tiempo_entrega" required>
+            </div>
+            <div class="form-group">
+                <label for="porcentaje_anticipo">Porcentaje de Anticipo</label>
+                <input type="number" id="porcentaje_anticipo" name="porcentaje_anticipo" required>
+            </div>
+            <div class="form-group">
+                <label for="porcentaje_primera_acta">Porcentaje Primera Acta</label>
+                <input type="number" id="porcentaje_primera_acta" name="porcentaje_primera_acta" required>
+            </div>
+            <div class="form-group">
+                <label for="porcentaje_acta_final">Porcentaje Acta Final</label>
+                <input type="number" id="porcentaje_acta_final" name="porcentaje_acta_final" required>
             </div>
 
-            <button type="submit" class="btn">Crear Consignación</button>
+            <button type="submit" class="btn">Finalizar Cotización</button>
         </form>
     </main>
     <footer>
@@ -115,3 +72,4 @@
     </footer>
 </body>
 </html>
+

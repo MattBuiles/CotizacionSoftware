@@ -20,6 +20,7 @@ def agregar_clientes_default():
         {'nombre': 'Cliente 1', 'celular': '1234567890', 'email': 'cliente1@example.com'},
         {'nombre': 'Cliente 2', 'celular': '9876543210', 'email': 'cliente2@example.com'},
         {'nombre': 'Cliente 3', 'celular': '5555555555', 'email': 'cliente3@example.com'},
+        {'nombre': 'Juanito Alimana', 'celular': '6666666666', 'email': "juanito@alimana.com"}
     ]
 
     for cliente in clientes_default:

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleccionar Producto o Servicio - IPB SAS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        function toggleProductService() {
+            const selectedOption = document.querySelector('input[name="producto_servicio"]:checked').value;
+            const productGroup = document.getElementById('producto-group');
+            const serviceGroup = document.getElementById('servicio-group');
+
+            if (selectedOption === 'producto') {
+                productGroup.style.display = 'block';
+                serviceGroup.style.display = 'none';
+            } else if (selectedOption === 'servicio') {
+                productGroup.style.display = 'none';
+                serviceGroup.style.display = 'block';
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Seleccionar Producto o Servicio</h1>
+    </header>
+    <main>
+        <form action="/resumen" method="post" class="consignation-form">
+            <div class="form-group">
+                <label><input type="radio" name="producto_servicio" value="producto" onchange="toggleProductService()" required> Producto</label>
+                <label><input type="radio" name="producto_servicio" value="servicio" onchange="toggleProductService()" required> Servicio</label>
+            </div>
+
+            <div id="producto-group" style="display: none;">
+                <div class="form-group">
+                    <label for="productos">Selecciona Producto(s)</label>
+                    <select id="productos" name="productos" multiple>
+                        {% for producto in productos %}
+                            <option value="{{ producto.id }}">{{ producto.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div id="servicio-group" style="display: none;">
+                <div class="form-group">
+                    <label for="servicio">Describe el Servicio</label>
+                    <textarea id="servicio" name="servicio" rows="4"></textarea>
+                </div>
+            </div>
+
+            <a href="/crear_cotizacion" type="submit" class="btn">Continuar</a>
+        </form>
+    </main>
+    <footer>
+        <a href="/" class="support-link">Volver al Inicio</a>
+    </footer>
+</body>
+</html>
