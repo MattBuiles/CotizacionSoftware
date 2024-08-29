@@ -26,23 +26,35 @@
         <h1>Seleccionar Producto o Servicio</h1>
     </header>
     <main>
-        <form action="/resumen" method="post" class="consignation-form">
+        <form action="/vercotizacion" method="post" class="consignation-form">
             <div class="form-group">
                 <label><input type="radio" name="producto_servicio" value="producto" onchange="toggleProductService()" required> Producto</label>
                 <label><input type="radio" name="producto_servicio" value="servicio" onchange="toggleProductService()" required> Servicio</label>
             </div>
 
+            <!-- Grupo para seleccionar productos, cantidades y tamaños -->
             <div id="producto-group" style="display: none;">
-                <div class="form-group">
-                    <label for="productos">Selecciona Producto(s)</label>
-                    <select id="productos" name="productos" multiple>
-                        {% for producto in productos %}
-                            <option value="{{ producto.id }}">{{ producto.nombre }}</option>
-                        {% endfor %}
-                    </select>
+                <div id="productos">
+                    {% for producto in productos %}
+                    <div class="producto-item">
+                        <label for="producto{{ producto.id }}">{{ producto.nombre }}:</label>
+                        <input type="checkbox" name="productos" value="{{ producto.id }}">
+
+                        <label for="cantidad{{ producto.id }}">Cantidad:</label>
+                        <input type="number" id="cantidad{{ producto.id }}" name="cantidad{{ producto.id }}" min="1" disabled>
+
+                        <label for="tamano{{ producto.id }}">Tamaño:</label>
+                        <select id="tamano{{ producto.id }}" name="tamano{{ producto.id }}" disabled>
+                            <option value="CUNETE">Cunete</option>
+                            <option value="GALON">Galón</option>
+                            <option value="TAMBOR">Tambor</option>
+                        </select>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
 
+            <!-- Grupo para describir servicio -->
             <div id="servicio-group" style="display: none;">
                 <div class="form-group">
                     <label for="servicio">Describe el Servicio</label>
@@ -56,5 +68,25 @@
     <footer>
         <a href="/" class="support-link">Volver al Inicio</a>
     </footer>
+
+    <script>
+        // Habilitar o deshabilitar campos según se seleccione el checkbox del producto
+        document.querySelectorAll('input[type="checkbox"][name="productos"]').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                const productoId = this.value;
+                const cantidadInput = document.getElementById('cantidad' + productoId);
+                const tamanoSelect = document.getElementById('tamano' + productoId);
+
+                if (this.checked) {
+                    cantidadInput.disabled = false;
+                    tamanoSelect.disabled = false;
+                } else {
+                    cantidadInput.disabled = true;
+                    tamanoSelect.disabled = true;
+                }
+            });
+        });
+    </script>
 </body>
 </html>
+
