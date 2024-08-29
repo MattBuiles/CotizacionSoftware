@@ -288,3 +288,62 @@ button.btn:hover {
 .modify-quote-container a:hover {
     text-decoration: underline;
 }
+
+/* Estilos adicionales para la página de soporte */
+
+/* Contenedor principal para la página de soporte */
+.support-container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para las secciones de contacto y FAQ */
+.contact-section, .faq-section {
+    margin-bottom: 30px;
+}
+
+.contact-section h2, .faq-section h2 {
+    color: #f17d2f;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+.contact-info p {
+    font-size: 1rem;
+    margin: 10px 0;
+    color: #333;
+}
+
+.contact-info a {
+    color: #f17d2f;
+    text-decoration: none;
+}
+
+.contact-info a:hover {
+    text-decoration: underline;
+}
+
+/* Estilo para los elementos FAQ */
+.faq-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-left: 4px solid #f17d2f;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+.faq-item h3 {
+    color: #f17d2f;
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+}
+
+.faq-item p {
+    color: #555;
+    font-size: 0.95rem;
+    margin: 0;
+}

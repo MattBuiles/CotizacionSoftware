@@ -111,6 +111,10 @@ class CotizacionProducto(db.Model):
 def index():
     return render_template("index.html")
 
+@app.route("/soporte")
+def soporte():
+    return render_template("soporte.html")
+
 @app.route("/usuario_cotizacion", methods=["GET", "POST"])
 def userManager():
     clientes = Cliente.query.all()
