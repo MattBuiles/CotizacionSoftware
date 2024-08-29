@@ -1,3 +1,11 @@
+<!-- 
+    Este código HTML representa una plantilla para un documento de cotización final.
+    Incluye la estructura y el estilo necesarios para el documento.
+    La plantilla contiene secciones para el encabezado, contenido principal, tabla para mostrar los componentes, notas, firma y pie de página.
+    Utiliza variables de un objeto de contexto llamado "cotizacion" para llenar datos dinámicos en el documento.
+    El documento está escrito en español e incluye instrucciones específicas de formato y estilo.
+    La plantilla está diseñada para ser utilizada en una aplicación web para generar y mostrar cotizaciones finales.
+-->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -67,6 +75,13 @@
     <p>Adjuntamos propuesta econ&oacute;mica del servicio ofrecido por nuestra empresa:</p>
     <p style="text-align: center;"><strong>COMPONENTES NUEVOS</strong></p>
     
+    <!-- 
+        Este código muestra una tabla que se utiliza para mostrar los componentes de una cotización.
+        Si el servicio de la cotización no es "v", se muestra una única fila en el cuerpo de la tabla con el nombre del servicio.
+        De lo contrario, se muestra una fila de encabezado con los nombres de las columnas y luego se itera sobre los detalles de los productos de la cotización para mostrar cada uno en una fila separada en el cuerpo de la tabla.
+        Cada fila de detalle muestra el nombre del producto, la cantidad, el tamaño, el valor unitario, el IVA y el subtotal.
+        Los valores de los campos se obtienen de las propiedades de los objetos "cotizacion" y "detalle".
+    -->
     <!-- Tabla para mostrar los componentes -->
     <table>
         {% if cotizacion.servicio != "v" %}
