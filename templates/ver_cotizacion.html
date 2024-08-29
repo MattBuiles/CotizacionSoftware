@@ -3,32 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalles de la Cotización</title>
+    <title>Propuesta Económica</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        .header {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .header img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .content {
+            margin-bottom: 40px;
+        }
+        .signature {
+            text-align: left;
+            margin-top: 60px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
 </head>
 <body>
-    <h1>Detalles de la Cotización #{{ cotizacion.id }}</h1>
-    <p><strong>Cliente:</strong> {{ cotizacion.cliente }}</p>
-    <p><strong>Subtotal:</strong> {{ cotizacion.subtotal }}</p>
-    <p><strong>Impuesto:</strong> {{ cotizacion.impuesto }}</p>
-    <p><strong>Total:</strong> {{ cotizacion.total }}</p>
 
-    <h2>Productos</h2>
-    <table border="1">
-        <tr>
-            <th>Descripción</th>
-            <th>Cantidad</th>
-            <th>Precio Unitario</th>
-            <th>Total</th>
-        </tr>
-        {% for producto in productos %}
-        <tr>
-            <td>{{ producto.descripcion }}</td>
-            <td>{{ producto.cantidad }}</td>
-            <td>{{ producto.precio_unitario }}</td>
-            <td>{{ producto.total }}</td>
-        </tr>
-        {% endfor %}
+<!-- Encabezado con imagen -->
+<div class="header">
+    <img src="static/encabezado.png" alt="Encabezado" />
+</div>
+
+<!-- Contenido principal -->
+<div class="content">
+    <p><strong>{{ cotizacion.ciudad }} {{ cotizacion.fecha }}</strong></p>
+    <p style="text-align: right;"><strong>COT N&deg;{{ cotizacion.consecutivo }}</strong></p>
+    <p>Se&ntilde;ores</p>
+    <p><strong>{{ cotizacion.empresa }}</strong></p>
+    <p><strong>{{ cotizacion.cliente.nombre }}</strong></p>
+    <p><strong>{{ cotizacion.cliente.celular }}</strong></p>
+    <p><strong>{{ cotizacion.cliente.email }}</strong></p>
+    <p>E. S. M.</p>
+    <p>Ref: <strong>{{ cotizacion.proyecto }}</strong></p>
+    <p>Asunto: <strong>Propuesta Econ&oacute;mica</strong></p>
+    <p><strong>{{ cotizacion.cliente.nombre }}</strong> Cordial saludo.</p>
+    <p>Adjuntamos propuesta econ&oacute;mica del servicio ofrecido por nuestra empresa:</p>
+    <p style="text-align: center;"><strong>COMPONENTES NUEVOS</strong></p>
+    
+    <!-- Tabla para mostrar los componentes -->
+    <table>
+        {% if cotizacion.servicio != "v" %}
+            <tbody>
+                <tr>
+                    <td colspan="6">{{ cotizacion.servicio }}</td>
+                </tr>
+            </tbody>
+        {% else %}
+            <thead>
+                <tr>
+                    <th>Concepto</th>
+                    <th>Cantidad</th>
+                    <th>Unidad</th>
+                    <th>Valor Unitario</th>
+                    <th>IVA</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for detalle in cotizacion.productos_detalle %}
+                    <tr>
+                        <td>{{ detalle.producto.nombre }}</td>
+                        <td>{{ detalle.cantidad }}</td>
+                        <td>{{ detalle.tamano }}</td>
+                        <td>{{ (detalle.producto.precio * detalle.tamano) | round(2) }}</td>
+                        <td>{{ (detalle.producto.precio * detalle.cantidad * detalle.tamano * 0.19) | round(2) }}</td>
+                        <td>{{ (detalle.producto.precio * detalle.cantidad * detalle.tamano * 1.19) | round(2) }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        {% endif %}
     </table>
+    
+
+    <p style="text-align: left;"><span style="text-decoration: underline;"><strong>Notas Adjuntas.</strong></span></p>
+    <p>EL PERSONAL DE PRODUCTOS IPB TIENE CERTIFICACI&Oacute;N PARA TRABAJO EN ALTURAS Y RECINTOS CERRADOS.</p>
+    <p>El valor real ser&aacute; el de multiplicar el precio unitario por el total de metros terminados reales.</p>
+    <p>Si se requiere SISO lo debe suministrar la obra.</p>
+    <p>La obra (parte Contratante) suministrar&aacute; energ&iacute;a el&eacute;ctrica y agua para la ejecuci&oacute;n de la obra.</p>
+    <p>El valor unitario de la actividad en menci&oacute;n es a Todo Costo: Mano de Obra, Suministro de Materiales, Transportes y Acarreos necesarios para entregar a satisfacci&oacute;n la Obra Cotizada.</p>
+    <p>Si se requiere hacer cualquier reparaci&oacute;n o garant&iacute;a en el transcurso del trabajo o despu&eacute;s de la entrega del mismo, la Compa&ntilde;&iacute;a Productos IPB SAS solo se responsabiliza por mano de obra y materiales de la actividad ejecutada por nuestra empresa, mas no por acabados y/o estructuras ajenas a la misma.</p>
+    <p>PLAZO DE LA OFERTA:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<strong>{{ cotizacion.plazo }}</strong></p>
+    <p>TIEMPO DE ENTREGA:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<strong>{{ cotizacion.entrega }} días hábiles</strong></p>
+    <p>FORMA DE PAGO:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Anticipo del <strong>{{ cotizacion.anticipo }}</strong></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Pago del <strong>{{ cotizacion.p_acta }}</strong> primera acta de avance de Obra,</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Pagos <strong>{{ cotizacion.f_acta }}</strong> con la entrega y acta final.</p>
+</div>
+
+<!-- Firma -->
+<div class="signature">
+    <p>Atentamente,</p>
+    <p><span style="text-decoration: underline;"><img src="static/firma.png" alt="Firma" /></span></p>
+    <p><strong>J. TIBERIO BUILES</strong></p>
+    <p>Representante Legal</p>
+</div>
+
+<!-- Pie de página -->
+<div class="footer">
+    <p><strong>DIAGONAL 44 N&deg; 30C 32 FONTIDUE&Ntilde;O &ndash; BELLO &ndash; ANTIOQUIA &ndash; COLOMBIA</strong></p>
+    <p><strong>TELS: (57) (4) 481 09 07 &ndash; 481 08 87 &ndash; 481 08 67</strong></p>
+    <p><strong>productosipb@une.net.co - ipbsas@hotmail.com</strong></p>
+    <p>www.productosipb.com</p>
+</div>
+
 
     <!-- Botón para editar la cotización -->
     <form action="{{ url_for('modificar_cotizacion', id=cotizacion.id) }}" method="post">
