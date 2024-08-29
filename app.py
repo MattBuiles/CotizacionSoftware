@@ -112,8 +112,7 @@ def index():
 @app.route("/usuario_cotizacion")
 def userManager():
     clientes = Cliente.query.all()
-    productos = Producto.query.all()
-    return render_template("usuario_cotizacion.html", clientes=clientes, productos=productos)
+    return render_template("usuario_cotizacion.html", clientes=clientes)
 
 
 @app.route("/crear_cotizacion")
@@ -123,7 +122,8 @@ def cotiacion():
 
 @app.route("/producto_servicio")
 def product_service():
-    return render_template("producto_servicio.html",)
+    productos = Producto.query.all()
+    return render_template("producto_servicio.html",productos=productos)
 
 
 @app.route('/ver_cotizacion', methods=['POST'])
