@@ -194,12 +194,12 @@ def listar_cotizaciones():
     cotizaciones = Cotizacion.query.all()
     return render_template('lista_cotizaciones.html', cotizaciones=cotizaciones)
 
+@app.route('/cotizacion/<int:id>')
 
 @app.route('/cotizacion/<int:id>')
 def ver_cotizacion(id):
     cotizacion = Cotizacion.query.get_or_404(id)
-    productos = Producto.query.filter_by(cotizacion_id=id).all()
-    return render_template('ver_cotizacion.html', cotizacion=cotizacion, productos=productos)
+    return render_template('ver_cotizacion.html', cotizacion=cotizacion)
 
 # Metodo para probar generación de cotización
 @app.route('/cotizacion_final')
