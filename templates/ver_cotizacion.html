@@ -19,6 +19,11 @@ Estructura del archivo:
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Propuesta Económica</title>
@@ -155,6 +160,42 @@ Estructura del archivo:
     <form action="{{ url_for('modificar_cotizacion', id=cotizacion.id) }}" method="POST">
         <button type="submit">Editar Cotización</button>
     </form>
+
+    <button onclick="exportToPDF()">Exportar a PDF</button>
+
+<script>
+    function exportToPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.text(document.body.innerText, 10, 10);
+        doc.save('cotizacion.pdf');
+    }
+</script>
+
+<button onclick="exportToExcel()">Exportar a Excel</button>
+
+<script>
+    function exportToExcel() {
+        var wb = XLSX.utils.book_new();
+        var ws = XLSX.utils.table_to_sheet(document.querySelector('table'));
+        XLSX.utils.book_append_sheet(wb, ws, "Cotización");
+        XLSX.writeFile(wb, 'cotizacion.xlsx');
+    }
+</script>
+
+<button onclick="exportToPNG()">Exportar a PNG</button>
+
+<script>
+    function exportToPNG() {
+        html2canvas(document.body).then(function(canvas) {
+            let link = document.createElement('a');
+            link.href = canvas.toDataURL();
+            link.download = 'cotizacion.png';
+            link.click();
+        });
+    }
+</script>
+
 
     <a href="/cotizaciones">Volver a la lista de cotizaciones</a>
 </body>
