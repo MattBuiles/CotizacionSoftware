@@ -41,7 +41,7 @@ Notas:
             <div class="section">
                 <h2>Manejo de Datos</h2>
                 <p>Accede a la documentación interna y recursos de la empresa.</p>
-                <a href="/agregar_datos" class="btn">Crear Documentos</a>
+                <a href="{{ url_for('subir_archivo') }}"  method="post" class="btn">Subir Documentos</a>
                 <a href="/lista_proyectos" class="btn">Acceder Documentos</a>
             </div>
         </div>
