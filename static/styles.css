@@ -347,3 +347,30 @@ button.btn:hover {
     font-size: 0.95rem;
     margin: 0;
 }
+
+/* ===> lista_documentos.css <=== */
+.document-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.document-item {
+    background-color: #f4f4f4;
+    margin: 15px 0;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.document-link {
+    color: #f17d2f;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.document-link:hover {
+    color: #d25e1f;
+    text-decoration: underline;
+}

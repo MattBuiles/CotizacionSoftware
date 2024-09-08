@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Documentos - Proyecto {{ proyecto }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Documentos del Proyecto: {{ proyecto }}</h1>
+    </header>
+
+    <div class="container">
+        <div class="section">
+            <h2>Documentos Disponibles</h2>
+            <ul class="document-list">
+                {% for documento in documentos %}
+                    <li class="document-item">
+                        <a href="{{ documento.url }}" target="_blank" class="document-link">
+                            {{ documento.nombre }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <a href="/" class="support-link">Volver al Inicio</a>
+    </footer>
+</body>
+</html>

@@ -111,6 +111,22 @@ class CotizacionProducto(db.Model):
 def index():
     return render_template("index.html")
 
+@app.route('/lista_proyectos')
+def lista_proyectos():
+    cotizaciones = Cotizacion.query.all()
+    return render_template('lista_proyectos.html', cotizaciones=cotizaciones)
+
+@app.route('/documentos/<proyecto>')
+def listar_documentos(proyecto):
+    cotizaciones = Cotizacion.query.filter_by(proyecto=proyecto).all()
+
+    documentos = [
+        {"nombre": "Documento1.pdf", "url": "https://drive.google.com/..."},
+        {"nombre": "Documento2.pdf", "url": "https://drive.google.com/..."}
+    ]
+
+    return render_template('documentos_proyecto.html', documentos=documentos, proyecto=proyecto)
+
 @app.route("/soporte")
 def soporte():
     return render_template("soporte.html")
