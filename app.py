@@ -27,6 +27,7 @@ from sqlalchemy.sql import func
 from datetime import datetime
 import pytz
 import cloudinary.uploader
+from config import *
 
 app = Flask(__name__)
 app.secret_key = 'BWvTvS8DxBkMp9Dp8p-jxYbsgWE'
@@ -127,25 +128,29 @@ def upload_file():
     # Verifica si el archivo ha sido subido
     if 'file' not in request.files:
         flash('No se seleccionó ningún archivo')
-        return redirect(url_for('index'))
+        return redirect(url_for('subir_archivo'))
     
     file = request.files['file']
 
     # Verifica si el archivo tiene un nombre
     if file.filename == '':
         flash('Archivo no válido')
-        return redirect(url_for('index'))
+        return redirect(url_for('subir_archivo'))
 
     # Subir archivo a Cloudinary
     upload_result = cloudinary.uploader.upload(file)
+    print(upload_result)
 
     # Puedes guardar el URL en la base de datos si es necesario
     file_url = upload_result['url']
     flash(f'Archivo subido exitosamente: {file_url}')
+    file_url = upload_result.get('secure_url')
+    print(f'Archivo subido exitosamente. URL: {file_url}')
     return redirect(url_for('index'))
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route('/subir_archivo', methods=["GET",'POST'])
+def subir_archivo():
+    return render_template('subir_archivo.html')
 
 @app.route("/soporte")
 def soporte():
