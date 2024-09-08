@@ -21,13 +21,15 @@ Functions:
 - listar_cotizacion: Renders the cotizacion_final.html template for testing the generation of a quotation.
 """
 import os
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 from datetime import datetime
 import pytz
+import cloudinary.uploader
 
 app = Flask(__name__)
+app.secret_key = 'BWvTvS8DxBkMp9Dp8p-jxYbsgWE'
 
 # Ruta Absoluta para evitar problemas de acceso
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -106,10 +108,44 @@ class CotizacionProducto(db.Model):
     def __repr__(self):
         return f'<CotizacionProducto: Producto {self.producto.nombre}, Cantidad: {self.cantidad}, Tamaño: {self.tamano}>'
 
+class Document(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    file_url = db.Column(db.String(255), nullable=False)
+    file_name = db.Column(db.String(100), nullable=False)
+    proyecto = db.Column(db.String(100), nullable=False)
+    def __init__(self, file_url, file_name, proyecto):
+        self.file_url = file_url
+        self.file_name = file_name
+        self.proyecto = proyecto
 
 @app.route("/")
 def index():
     return render_template("index.html")
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    # Verifica si el archivo ha sido subido
+    if 'file' not in request.files:
+        flash('No se seleccionó ningún archivo')
+        return redirect(url_for('index'))
+    
+    file = request.files['file']
+
+    # Verifica si el archivo tiene un nombre
+    if file.filename == '':
+        flash('Archivo no válido')
+        return redirect(url_for('index'))
+
+    # Subir archivo a Cloudinary
+    upload_result = cloudinary.uploader.upload(file)
+
+    # Puedes guardar el URL en la base de datos si es necesario
+    file_url = upload_result['url']
+    flash(f'Archivo subido exitosamente: {file_url}')
+    return redirect(url_for('index'))
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 @app.route("/soporte")
 def soporte():
