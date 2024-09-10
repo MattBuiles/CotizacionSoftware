@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentos Subidos</title>
+</head>
+<body>
+    <h1>Documentos Subidos</h1>
+    
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nombre del Documento</th>
+                <th>Enlace</th>
+                <th>Fecha de Subida</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for documento in documentos %}
+                <tr>
+                    <td>{{ documento.nombre }}</td>
+                    <td><a href="{{ documento.url }}" target="_blank">Ver Documento</a></td>
+                    <td>{{ documento.fecha_subida.strftime('%Y-%m-%d') }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+</body>
+</html>

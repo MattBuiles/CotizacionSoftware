@@ -111,13 +111,13 @@ class CotizacionProducto(db.Model):
 
 class Document(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    file_url = db.Column(db.String(255), nullable=False)
-    file_name = db.Column(db.String(100), nullable=False)
+    url = db.Column(db.String(255), nullable=False)
+    nombre = db.Column(db.String(100), nullable=False)
+    fecha_subida = db.Column(db.Date, default=lambda: datetime.now(pytz.timezone('America/Bogota')).date())
     proyecto = db.Column(db.String(100), nullable=False)
-    def __init__(self, file_url, file_name, proyecto):
-        self.file_url = file_url
-        self.file_name = file_name
-        self.proyecto = proyecto
+
+    def __repr__(self):
+        return f'<Document: Nombre {self.nombre}, URL: {self.url}, Proyecto: {self.proyecto}>'
 
 @app.route("/")
 def index():
@@ -137,7 +137,13 @@ def listar_documentos(proyecto):
         {"nombre": "Documento2.pdf", "url": "https://drive.google.com/..."}
     ]
 
-    return render_template('documentos_proyecto.html', documentos=documentos, proyecto=proyecto)
+    return render_template('documentos.html', documentos=documentos, proyecto=proyecto)
+
+@app.route('/documentos', methods=["GET",'POST'])
+def mostrar_documentos():
+    # Recupera todos los documentos de la base de datos
+    documentos = Document.query.all()
+    return render_template('documentos_proyecto.html', documentos=documentos)
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -153,16 +159,21 @@ def upload_file():
         flash('Archivo no válido')
         return redirect(url_for('subir_archivo'))
 
-    # Subir archivo a Cloudinary
-    upload_result = cloudinary.uploader.upload(file)
-    print(upload_result)
-
-    # Puedes guardar el URL en la base de datos si es necesario
-    file_url = upload_result['url']
-    flash(f'Archivo subido exitosamente: {file_url}')
-    file_url = upload_result.get('secure_url')
-    print(f'Archivo subido exitosamente. URL: {file_url}')
-    return redirect(url_for('index'))
+    if file:
+        try:
+            # Sube el archivo a Cloudinary
+            result = cloudinary.uploader.upload(file, secure=True)
+            
+            # Guarda la URL en la base de datos
+            nuevo_documento = Document(url=result['secure_url'],nombre=file.filename,  proyecto="Proyecto 1")
+            db.session.add(nuevo_documento)
+            db.session.commit()
+            
+            flash('Archivo subido exitosamente')
+            return redirect(url_for('mostrar_documentos'))
+        except Exception as e:
+            flash(f'Error al subir el archivo: {str(e)}')
+            return redirect(request.url)
 
 @app.route('/subir_archivo', methods=["GET",'POST'])
 def subir_archivo():

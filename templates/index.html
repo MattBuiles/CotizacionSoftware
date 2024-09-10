@@ -42,7 +42,7 @@ Notas:
                 <h2>Manejo de Datos</h2>
                 <p>Accede a la documentación interna y recursos de la empresa.</p>
                 <a href="{{ url_for('subir_archivo') }}"  method="post" class="btn">Subir Documentos</a>
-                <a href="/lista_proyectos" class="btn">Acceder Documentos</a>
+                <a href="{{ url_for('mostrar_documentos') }}" method="post" class="btn">Acceder Documentos</a>
             </div>
         </div>
     </main>
