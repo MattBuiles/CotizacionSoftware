@@ -310,31 +310,35 @@ def modificar_cotizacion(id):
 
 
 @app.route('/actualizar_cotizacion/<int:id>', methods=['POST'])
+@app.route('/actualizar_cotizacion/<int:id>', methods=['POST'])
 def actualizar_cotizacion(id):
+    # Obtener la cotización original
     cotizacion = Cotizacion.query.get_or_404(id)
     
-    # Crear nueva cotización como una versión
+    # Crear una nueva cotización basada en la original, pero con los cambios
     nueva_cotizacion = Cotizacion(
         fecha=cotizacion.fecha,
         ciudad=request.form['ciudad'],
-        empresa=request.form['empresa'],
-        proyecto=cotizacion.proyecto,
-        plazo=cotizacion.plazo,
-        entrega=cotizacion.entrega,
-        anticipo=cotizacion.anticipo,
-        p_acta=cotizacion.p_acta,
-        f_acta=cotizacion.f_acta,
-        consecutivo=cotizacion.consecutivo + 1,
+        empresa=request.form['empresa_cliente_nombre'],
+        proyecto=request.form['nombre_proyecto'],
+        plazo=request.form['plazo_oferta'],
+        entrega=request.form['tiempo_entrega'],
+        anticipo=request.form['porcentaje_anticipo'],
+        p_acta=request.form['porcentaje_primera_acta'],
+        f_acta=request.form['porcentaje_acta_final'],
+        consecutivo=cotizacion.consecutivo + 1,  # Aumentar el consecutivo para crear una nueva versión
         cliente=cotizacion.cliente,
-        servicio=cotizacion.servicio,
-        version_padre_id=cotizacion.id
+        servicio=cotizacion.servicio,  # Mantener el servicio original o permitir su modificación
+        version_padre_id=cotizacion.id  # Establecer que esta nueva cotización es una versión de la anterior
     )
     
+    # Guardar la nueva cotización en la base de datos
     db.session.add(nueva_cotizacion)
     db.session.commit()
     
     # Redirigir a la vista de la nueva cotización
     return redirect(url_for('ver_cotizacion', id=nueva_cotizacion.id))
+
 
 
 # Metodo para probar generación de cotización
