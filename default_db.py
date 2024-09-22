@@ -17,10 +17,10 @@ def agregar_productos_default():
 
 def agregar_clientes_default():
     clientes_default = [
-        {'nombre': 'Cliente 1', 'celular': '1234567890', 'email': 'cliente1@example.com'},
-        {'nombre': 'Cliente 2', 'celular': '9876543210', 'email': 'cliente2@example.com'},
-        {'nombre': 'Cliente 3', 'celular': '5555555555', 'email': 'cliente3@example.com'},
-        {'nombre': 'Juanito Alimana', 'celular': '6666666666', 'email': "juanito@alimana.com"}
+        {'nombre': 'Juan Carlos', 'celular': '1234567890', 'email': 'cliente1@example.com'},
+        {'nombre': 'Carlos Galindo', 'celular': '9876543210', 'email': 'cliente2@example.com'},
+        {'nombre': 'Francis Echeverri', 'celular': '5555555555', 'email': 'cliente3@example.com'},
+        {'nombre': 'Alvaro Gonzalez', 'celular': '6666666666', 'email': "juanito@alimana.com"}
     ]
 
     for cliente in clientes_default:
@@ -31,9 +31,9 @@ def agregar_clientes_default():
 
 def agregar_cotizaciones_default():
     cotizaciones_default = [
-        {'ciudad': 'Bogotá', 'empresa': 'Empresa 1', 'proyecto': 'Proyecto 1', 'plazo': '30 (TREINTA)', 'entrega': '15 (QUINCE)', 'anticipo': 0.3, 'p_acta': 0.3, 'f_acta': 0.4, 'consecutivo': 1, 'cliente': 1},
-        {'ciudad': 'Medellín', 'empresa': 'Empresa 2', 'proyecto': 'Proyecto 2', 'plazo': '45 (CUARENTA Y CINCO)', 'entrega': '20 (VEINTE)', 'anticipo': 0.3, 'p_acta': 0.3, 'f_acta': 0.4, 'consecutivo': 1, 'cliente': 2},
-        {'ciudad': 'Cali', 'empresa': 'Empresa 3', 'proyecto': 'Proyecto 3', 'plazo': '60 (SESENTA)', 'entrega': '30 (TREINTA)', 'anticipo': 0.3, 'p_acta': 0.3, 'f_acta': 0.4, 'consecutivo': 1, 'cliente': 3},
+        {'ciudad': 'Bogotá', 'empresa': 'Teleperformance', 'proyecto': 'Proyecto Teleperformance 1', 'plazo': '30 (TREINTA)', 'entrega': '15 (QUINCE)', 'anticipo': 0.3, 'p_acta': 0.3, 'f_acta': 0.4, 'consecutivo': 1, 'cliente': 1},
+        {'ciudad': 'Medellín', 'empresa': 'EPM', 'proyecto': 'Proyecto Edificio Inteligente', 'plazo': '45 (CUARENTA Y CINCO)', 'entrega': '20 (VEINTE)', 'anticipo': 0.3, 'p_acta': 0.3, 'f_acta': 0.4, 'consecutivo': 1, 'cliente': 2},
+        {'ciudad': 'Cali', 'empresa': 'EMCALI', 'proyecto': 'Acueducto Urbano', 'plazo': '60 (SESENTA)', 'entrega': '30 (TREINTA)', 'anticipo': 0.3, 'p_acta': 0.3, 'f_acta': 0.4, 'consecutivo': 1, 'cliente': 3},
     ]
 
     for cotizacion in cotizaciones_default:

@@ -66,6 +66,7 @@ class Cotizacion(db.Model):
     cliente_id = db.Column(db.Integer, db.ForeignKey('cliente.id'), nullable=False)
     cliente = db.relationship('Cliente', backref=db.backref('cotizaciones', lazy=True))
     servicio = db.Column(db.String(1000), nullable=False, default="v")
+    #documentos = db.relationship('Document', backref='cotizacion', lazy=True)
 
     def __repr__(self):
         return f'<Cotizacion {self.id} - Cliente: {self.cliente} - Empresa: {self.empresa}>'
@@ -113,9 +114,11 @@ class CotizacionProducto(db.Model):
 class Document(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     url = db.Column(db.String(255), nullable=False)
-    nombre = db.Column(db.String(100), nullable=False)
-    fecha_subida = db.Column(db.Date, default=lambda: datetime.now(pytz.timezone('America/Bogota')).date())
-    proyecto = db.Column(db.String(100), nullable=False)
+    nombre = db.Column(db.String(255), nullable=False)
+    fecha_subida = db.Column(db.DateTime, nullable=False)
+    cotizacion_id = db.Column(db.Integer, db.ForeignKey('cotizacion.id'), nullable=False)
+    
+    cotizacion = db.relationship('Cotizacion', backref='documentos')
 
     def __repr__(self):
         return f'<Document: Nombre {self.nombre}, URL: {self.url}, Proyecto: {self.proyecto}>'
@@ -217,14 +220,15 @@ def eliminar_archivo():
 
 
 
-@app.route('/documentos/<proyecto>')
-def listar_documentos(proyecto):
+@app.route('/documentos/<int:cotizacion_id>')
+def listar_documentos(cotizacion_id):
 
+    cotizacion = Cotizacion.query.get_or_404(cotizacion_id)
     # Filtra los documentos por proyecto en la base de datos
-    documentos = Document.query.filter_by(proyecto=proyecto).all()
+    documentos = Document.query.filter_by(proyecto=cotizacion.proyecto).all()
 
     # Renderiza la plantilla enviando solo los documentos filtrados
-    return render_template('documentos.html', documentos=documentos, proyecto=proyecto)
+    return render_template('documentos.html', documentos=documentos, cotizacion=cotizacion)
 
 
 @app.route('/documentos', methods=["GET",'POST'])
@@ -236,36 +240,35 @@ def mostrar_documentos():
 @app.route('/upload', methods=['POST'])
 def upload_file():
     # Verifica si el archivo ha sido subido
-    if 'file' not in request.files:
+    if 'documento' not in request.files:
+        print("a")
         flash('No se seleccionó ningún archivo')
         return redirect(url_for('subir_archivo'))
     
-    file = request.files['file']
+    archivo = request.files.get('documento')
+    cotizacion_id = request.form.get('cotizacion')
 
-    # Verifica si el archivo tiene un nombre
-    if file.filename == '':
-        flash('Archivo no válido')
-        return redirect(url_for('subir_archivo'))
-
-    if file:
+    if archivo:
         try:
             # Sube el archivo a Cloudinary
-            result = cloudinary.uploader.upload(file, secure=True)
-            
+            result = cloudinary.uploader.upload(archivo, secure=True)
+            print("c")
             # Guarda la URL en la base de datos
-            nuevo_documento = Document(url=result['secure_url'],nombre=file.filename,  proyecto="Proyecto 1")
+            nuevo_documento = Document(url=result['secure_url'],nombre=archivo.filename,cotizacion_id=cotizacion_id)
             db.session.add(nuevo_documento)
             db.session.commit()
             
             flash('Archivo subido exitosamente')
-            return redirect(url_for('mostrar_documentos'))
+            return redirect(url_for('listar_documentos',cotizacion=cotizacion_id))
         except Exception as e:
-            flash(f'Error al subir el archivo: {str(e)}')
+            print("d")
+            flash(f'Error al subir el archivo, vuelvelo a intentar: {str(e)}')
             return redirect(request.url)
 
 @app.route('/subir_archivo', methods=["GET",'POST'])
 def subir_archivo():
-    return render_template('subir_archivo.html')
+    cotizaciones = Cotizacion.query.all()
+    return render_template('subir_archivo.html', cotizaciones=cotizaciones)
 
 @app.route("/soporte")
 def soporte():

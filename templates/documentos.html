@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentos del Proyecto {{ proyecto }}</title>
+    <title>Documentos del Proyecto {{ cotizacion.proyecto }}</title>
     <style>
         .filters {
             margin: 20px 0;
@@ -15,7 +15,7 @@
 </head>
 <body>
     <header>
-        <h1>Documentos del Proyecto {{ proyecto }}</h1>
+        <h1>Documentos del Proyecto {{ cotizacion.proyecto }}</h1>
     </header>
 
     {% with messages = get_flashed_messages() %}
