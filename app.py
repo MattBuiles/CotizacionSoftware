@@ -28,6 +28,7 @@ from datetime import datetime
 import pytz
 import cloudinary.uploader
 from config import *
+import re
 
 app = Flask(__name__)
 app.secret_key = 'BWvTvS8DxBkMp9Dp8p-jxYbsgWE'
@@ -111,13 +112,13 @@ class CotizacionProducto(db.Model):
 
 class Document(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    file_url = db.Column(db.String(255), nullable=False)
-    file_name = db.Column(db.String(100), nullable=False)
+    url = db.Column(db.String(255), nullable=False)
+    nombre = db.Column(db.String(100), nullable=False)
+    fecha_subida = db.Column(db.Date, default=lambda: datetime.now(pytz.timezone('America/Bogota')).date())
     proyecto = db.Column(db.String(100), nullable=False)
-    def __init__(self, file_url, file_name, proyecto):
-        self.file_url = file_url
-        self.file_name = file_name
-        self.proyecto = proyecto
+
+    def __repr__(self):
+        return f'<Document: Nombre {self.nombre}, URL: {self.url}, Proyecto: {self.proyecto}>'
 
 @app.route("/")
 def index():
@@ -125,19 +126,112 @@ def index():
 
 @app.route('/lista_proyectos')
 def lista_proyectos():
+    # Consulta todas las cotizaciones
     cotizaciones = Cotizacion.query.all()
-    return render_template('lista_proyectos.html', cotizaciones=cotizaciones)
+
+    # Consulta todos los documentos
+    documentos = Document.query.all()
+
+    # Usar un diccionario para evitar proyectos duplicados
+    proyectos_unicos = {}
+
+    for cotizacion in cotizaciones:
+        # Filtrar documentos por proyecto
+        docs_asociados = [doc for doc in documentos if doc.proyecto == cotizacion.proyecto]
+        if docs_asociados:  # Si hay documentos asociados
+            # Solo agregar una vez el proyecto, usando 'proyecto' como clave
+            if cotizacion.proyecto not in proyectos_unicos:
+                proyectos_unicos[cotizacion.proyecto] = {
+                    "cotizacion": cotizacion,
+                    "documentos": docs_asociados
+                }
+
+    # Enviar la lista de cotizaciones únicas
+    return render_template('lista_proyectos.html', cotizaciones=list(proyectos_unicos.values()))
+
+
+def extract_public_id(url):
+    # Extraer el public_id de la URL de Cloudinary
+    match = re.search(r'/v\d+/(.+?)\.\w+', url)
+    if match:
+        return match.group(1)
+    return None
+
+@app.route('/reemplazar_archivo', methods=['POST'])
+def reemplazar_archivo():
+    nombreArchivoReemplazar = request.form['nombreArchivoReemplazar']
+    archivoNuevo = request.files['archivoNuevo']
+    proyecto = request.form['proyecto']
+    
+    if archivoNuevo:
+        try:
+            documento_existente = Document.query.filter_by(nombre=nombreArchivoReemplazar, proyecto=proyecto).first()
+            if documento_existente:
+                # Extraer el public_id de la URL existente
+                public_id = extract_public_id(documento_existente.url)
+                if public_id:
+                    # Eliminar el archivo anterior de Cloudinary
+                    cloudinary.uploader.destroy(public_id)
+
+                # Subir el nuevo archivo a Cloudinary
+                resultado = cloudinary.uploader.upload(archivoNuevo, secure=True)
+                documento_existente.url = resultado['secure_url']
+                documento_existente.nombre = archivoNuevo.filename
+
+                db.session.commit()
+                flash('Archivo reemplazado exitosamente', 'success')
+            else:
+                flash('El archivo a reemplazar no existe', 'error')
+        except Exception as e:
+            flash(f'Error al reemplazar el archivo: {str(e)}', 'error')
+    else:
+        flash('No se seleccionó ningún archivo', 'error')
+    
+    return redirect(url_for('listar_documentos', proyecto=proyecto))
+
+@app.route('/eliminar_archivo', methods=['POST'])
+def eliminar_archivo():
+    nombreArchivoEliminar = request.form['nombreArchivoEliminar']
+    proyecto = request.form['proyecto']
+    
+    try:
+        documento = Document.query.filter_by(nombre=nombreArchivoEliminar, proyecto=proyecto).first()
+        if documento:
+            # Extraer el public_id de la URL
+            public_id = extract_public_id(documento.url)
+            if public_id:
+                # Eliminar el archivo de Cloudinary
+                cloudinary.uploader.destroy(public_id)
+
+            # Eliminar el registro de la base de datos
+            db.session.delete(documento)
+            db.session.commit()
+            
+            flash('Archivo eliminado exitosamente', 'success')
+        else:
+            flash('El archivo a eliminar no existe', 'error')
+    except Exception as e:
+        flash(f'Error al eliminar el archivo: {str(e)}', 'error')
+    
+    return redirect(url_for('listar_documentos', proyecto=proyecto))
+
+
 
 @app.route('/documentos/<proyecto>')
 def listar_documentos(proyecto):
-    cotizaciones = Cotizacion.query.filter_by(proyecto=proyecto).all()
 
-    documentos = [
-        {"nombre": "Documento1.pdf", "url": "https://drive.google.com/..."},
-        {"nombre": "Documento2.pdf", "url": "https://drive.google.com/..."}
-    ]
+    # Filtra los documentos por proyecto en la base de datos
+    documentos = Document.query.filter_by(proyecto=proyecto).all()
 
-    return render_template('documentos_proyecto.html', documentos=documentos, proyecto=proyecto)
+    # Renderiza la plantilla enviando solo los documentos filtrados
+    return render_template('documentos.html', documentos=documentos, proyecto=proyecto)
+
+
+@app.route('/documentos', methods=["GET",'POST'])
+def mostrar_documentos():
+    # Recupera todos los documentos de la base de datos
+    documentos = Document.query.all()
+    return render_template('documentos_proyecto.html', documentos=documentos)
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -153,16 +247,21 @@ def upload_file():
         flash('Archivo no válido')
         return redirect(url_for('subir_archivo'))
 
-    # Subir archivo a Cloudinary
-    upload_result = cloudinary.uploader.upload(file)
-    print(upload_result)
-
-    # Puedes guardar el URL en la base de datos si es necesario
-    file_url = upload_result['url']
-    flash(f'Archivo subido exitosamente: {file_url}')
-    file_url = upload_result.get('secure_url')
-    print(f'Archivo subido exitosamente. URL: {file_url}')
-    return redirect(url_for('index'))
+    if file:
+        try:
+            # Sube el archivo a Cloudinary
+            result = cloudinary.uploader.upload(file, secure=True)
+            
+            # Guarda la URL en la base de datos
+            nuevo_documento = Document(url=result['secure_url'],nombre=file.filename,  proyecto="Proyecto 1")
+            db.session.add(nuevo_documento)
+            db.session.commit()
+            
+            flash('Archivo subido exitosamente')
+            return redirect(url_for('mostrar_documentos'))
+        except Exception as e:
+            flash(f'Error al subir el archivo: {str(e)}')
+            return redirect(request.url)
 
 @app.route('/subir_archivo', methods=["GET",'POST'])
 def subir_archivo():
@@ -299,31 +398,101 @@ def modificar_cotizacion(id):
 
 
 @app.route('/actualizar_cotizacion/<int:id>', methods=['POST'])
+@app.route('/actualizar_cotizacion/<int:id>', methods=['POST'])
 def actualizar_cotizacion(id):
+    # Obtener la cotización original
     cotizacion = Cotizacion.query.get_or_404(id)
     
-    # Crear nueva cotización como una versión
+    # Crear una nueva cotización basada en la original, pero con los cambios
     nueva_cotizacion = Cotizacion(
         fecha=cotizacion.fecha,
         ciudad=request.form['ciudad'],
-        empresa=request.form['empresa'],
-        proyecto=cotizacion.proyecto,
-        plazo=cotizacion.plazo,
-        entrega=cotizacion.entrega,
-        anticipo=cotizacion.anticipo,
-        p_acta=cotizacion.p_acta,
-        f_acta=cotizacion.f_acta,
-        consecutivo=cotizacion.consecutivo + 1,
+        empresa=request.form['empresa_cliente_nombre'],
+        proyecto=request.form['nombre_proyecto'],
+        plazo=request.form['plazo_oferta'],
+        entrega=request.form['tiempo_entrega'],
+        anticipo=request.form['porcentaje_anticipo'],
+        p_acta=request.form['porcentaje_primera_acta'],
+        f_acta=request.form['porcentaje_acta_final'],
+        consecutivo=cotizacion.consecutivo + 1,  # Aumentar el consecutivo para crear una nueva versión
         cliente=cotizacion.cliente,
-        servicio=cotizacion.servicio,
-        version_padre_id=cotizacion.id
+        servicio=cotizacion.servicio,  # Mantener el servicio original o permitir su modificación
+        version_padre_id=cotizacion.id  # Establecer que esta nueva cotización es una versión de la anterior
     )
     
+    # Guardar la nueva cotización en la base de datos
     db.session.add(nueva_cotizacion)
     db.session.commit()
     
     # Redirigir a la vista de la nueva cotización
     return redirect(url_for('ver_cotizacion', id=nueva_cotizacion.id))
+
+@app.route('/lista_clientes')
+def listar_clientes():
+    clientes = Cliente.query.all()
+    return render_template('lista_clientes.html', clientes=clientes)
+
+@app.route("/añadir_cliente", methods=["GET", "POST"])
+def clienteManager():
+    if request.method == "POST":
+        # Capturar los datos del formulario
+        nombre_cliente = request.form.get("nombre")
+        celular_cliente = request.form.get("celular")
+        correo_cliente = request.form.get("correo")
+
+        # Validar que los campos no estén vacíos
+        if not nombre_cliente or not celular_cliente or not correo_cliente:
+            flash("Todos los campos son obligatorios", "error")
+            return redirect(url_for("clienteManager"))
+
+        try:
+            # Crear un nuevo cliente
+            nuevo_cliente = Cliente(nombre=nombre_cliente, celular=celular_cliente, email=correo_cliente)
+
+            # Añadirlo a la base de datos
+            db.session.add(nuevo_cliente)
+            db.session.commit()
+
+            flash("Cliente añadido exitosamente", "success")
+            return redirect(url_for("listar_clientes"))
+
+        except Exception as e:
+            # En caso de error, mostrar un mensaje
+            flash(f"Error al añadir el cliente: {str(e)}", "error")
+            db.session.rollback()
+
+    # Si el método es GET, mostrar el formulario
+    return render_template("añadir_cliente.html")
+
+# Ruta para listar clientes y mostrar el formulario de edición
+@app.route('/editar_cliente', methods=['GET', 'POST'])
+def editar_cliente():
+    if request.method == 'POST':
+        # Obtener los datos del formulario
+        cliente_id = request.form.get('cliente')
+        nuevo_numero = request.form.get('nuevo_numero')
+        nuevo_correo = request.form.get('nuevo_correo')
+
+        # Buscar el cliente en la base de datos
+        cliente = Cliente.query.get(cliente_id)
+
+        if cliente:
+            # Actualizar los datos del cliente
+            cliente.celular = nuevo_numero
+            cliente.email = nuevo_correo
+            db.session.commit()
+            flash('Cliente actualizado con éxito')
+        else:
+            flash('Cliente no encontrado')
+
+        return redirect(url_for('listar_clientes'))
+
+    # Obtener la lista de clientes para mostrar en el formulario
+    clientes = Cliente.query.all()
+    return render_template('editar_cliente.html', clientes=clientes)
+
+
+
 
 
 # Metodo para probar generación de cotización

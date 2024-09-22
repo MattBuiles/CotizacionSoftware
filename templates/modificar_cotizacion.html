@@ -1,25 +1,3 @@
-<!-- 
-    Archivo: /D:/Users/USER/Documents/GitHub/CotizacionSoftware/templates/modificar_cotizacion.html
-
-    Descripción:
-    Esta página HTML representa la plantilla para la modificación de una cotización en el sistema de cotización de software.
-
-    Estructura del archivo:
-    - La página utiliza el lenguaje HTML y tiene una estructura básica con etiquetas <html>, <head> y <body>.
-    - Se utiliza el juego de caracteres UTF-8 y se establece la metaetiqueta de la vista del dispositivo.
-    - El título de la página es "Modificar Cotización".
-    - Se enlaza una hoja de estilos externa llamada "styles.css" utilizando la función "url_for" de Flask.
-
-    Contenido de la página:
-    - La página contiene un contenedor principal con la clase "modify-quote-container".
-    - Se muestra un encabezado con el texto "Modificar Cotización" seguido del identificador de la cotización.
-    - Se incluye un formulario que se enviará a través de una solicitud POST a la ruta "actualizar_cotizacion" con el identificador de la cotización.
-    - Dentro del formulario, se encuentran campos para modificar la ciudad y la empresa de la cotización.
-    - Se pueden agregar más campos según sea necesario.
-    - Al final del formulario, hay un botón para guardar los cambios.
-    - También se incluye un enlace para volver a ver la cotización utilizando la ruta "ver_cotizacion" con el identificador de la cotización.
-
--->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -27,26 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modificar Cotización</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <script>
+        function validarFormulario(event) {
+            // Obtener los valores de los campos
+            const ciudad = document.getElementById('ciudad').value;
+            const empresa = document.getElementById('empresa_cliente_nombre').value;
+            const plazo = document.getElementById('plazo_oferta').value;
+            const entrega = document.getElementById('tiempo_entrega').value;
+            const anticipo = document.getElementById('porcentaje_anticipo').value;
+            const primeraActa = document.getElementById('porcentaje_primera_acta').value;
+            const actaFinal = document.getElementById('porcentaje_acta_final').value;
+
+            // Validar que ciudad y empresa sean strings
+            if (!isNaN(ciudad)) {
+                alert("El campo Ciudad debe ser texto.");
+                event.preventDefault(); // Evitar que se envíe el formulario
+                return;
+            }
+            if (!isNaN(empresa)) {
+                alert("El campo Nombre de la Empresa debe ser texto.");
+                event.preventDefault();
+                return;
+            }
+
+            // Validar que los demás campos sean números enteros
+            if (isNaN(plazo) || isNaN(entrega) || isNaN(anticipo) || isNaN(primeraActa) || isNaN(actaFinal)) {
+                alert("Plazo de la Oferta, Tiempo de Entrega y Porcentajes deben ser números enteros.");
+                event.preventDefault();
+                return;
+            }
+
+            // Si todo es válido, permitir el envío del formulario
+        }
+    </script>
 </head>
 <body>
     <div class="modify-quote-container">
         <h1>Modificar Cotización {{ cotizacion.id }}</h1>
 
-        <form action="{{ url_for('actualizar_cotizacion', id=cotizacion.id) }}" method="POST">
-            <!-- Campos para modificar la cotización -->
-            <label for="ciudad">Ciudad:</label>
-            <input type="text" id="ciudad" name="ciudad" value="{{ cotizacion.ciudad }}" required>
+        <form action="{{ url_for('actualizar_cotizacion', id=cotizacion.id) }}" method="POST" onsubmit="validarFormulario(event)">
+            <div class="form-group">
+                <label for="ciudad">Ciudad</label>
+                <input type="text" id="ciudad" name="ciudad" required>
+            </div>
+            <div class="form-group">
+                <label for="empresa_cliente_nombre">Nombre de la Empresa Cliente</label>
+                <input type="text" id="empresa_cliente_nombre" name="empresa_cliente_nombre" required>
+            </div>
+            <div class="form-group">
+                <label for="nombre_proyecto">Nombre del Proyecto</label>
+                <input type="text" id="nombre_proyecto" name="nombre_proyecto" required>
+            </div>
+            <div class="form-group">
+                <label for="plazo_oferta">Plazo de la Oferta</label>
+                <input type="text" id="plazo_oferta" name="plazo_oferta" required>
+            </div>
+            <div class="form-group">
+                <label for="tiempo_entrega">Tiempo de Entrega</label>
+                <input type="text" id="tiempo_entrega" name="tiempo_entrega" required>
+            </div>
+            <div class="form-group">
+                <label for="porcentaje_anticipo">Porcentaje de Anticipo</label>
+                <input type="number" id="porcentaje_anticipo" name="porcentaje_anticipo" required>
+            </div>
+            <div class="form-group">
+                <label for="porcentaje_primera_acta">Porcentaje Primera Acta</label>
+                <input type="number" id="porcentaje_primera_acta" name="porcentaje_primera_acta" required>
+            </div>
+            <div class="form-group">
+                <label for="porcentaje_acta_final">Porcentaje Acta Final</label>
+                <input type="number" id="porcentaje_acta_final" name="porcentaje_acta_final" required>
+            </div>
 
-            <label for="empresa">Empresa:</label>
-            <input type="text" id="empresa" name="empresa" value="{{ cotizacion.empresa }}" required>
-
-            <!-- Agrega más campos según lo necesario -->
-
-            <button type="submit">Guardar Cambios</button>
+            <button type="submit" class="btn">Continuar</button>
         </form>
 
         <a href="{{ url_for('ver_cotizacion', id=cotizacion.id) }}">Volver a ver cotización</a>
     </div>
 </body>
 </html>
-

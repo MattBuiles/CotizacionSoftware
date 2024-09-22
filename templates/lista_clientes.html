@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Clientes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styleListaCotizaciones.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Lista de Clientes</h1>
+    </header>
+
+    <div class="content">
+        <!-- Formulario de búsqueda -->
+        <div class="busqueda">
+            <label for="buscar">Buscar Cliente:</label>
+            <input type="text" id="buscar" placeholder="Nombre del cliente">
+            <button onclick="buscarCliente()">Buscar</button>
+            <button onclick="mostrarTodosClientes()">Mostrar Todos</button> <!-- Botón alineado horizontalmente -->
+        </div>
+
+        <br>
+
+        <!-- Mensaje cuando no se encuentran clientes -->
+        <div id="no-resultados" style="color: #333; display: none; text-align: center;">
+            Cliente no encontrado
+        </div>
+
+        <!-- Tabla de clientes -->
+        <table id="myTable">
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Información</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cliente in clientes %}
+                <tr>
+                    <td>{{ cliente.nombre }}</td>
+                    <td>Celular: {{ cliente.celular }} | Email: {{ cliente.email }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <a href="/" class="support-link">Volver al Inicio</a>
+    </footer>
+
+    <script>
+        function buscarCliente() {
+            var input = document.getElementById("buscar").value.toLowerCase();
+            var filas = document.getElementById("myTable").getElementsByTagName("tr");
+            var encontrado = false;
+
+            for (var i = 1; i < filas.length; i++) {
+                var cliente = filas[i].getElementsByTagName("td")[0];
+                if (cliente) {
+                    var nombreCliente = cliente.textContent || cliente.innerText;
+                    if (nombreCliente.toLowerCase().indexOf(input) > -1) {
+                        filas[i].style.display = "";
+                        encontrado = true;
+                    } else {
+                        filas[i].style.display = "none";
+                    }
+                }
+            }
+
+            var mensajeNoResultados = document.getElementById("no-resultados");
+            var tabla = document.getElementById("myTable");
+
+            if (!encontrado) {
+                mensajeNoResultados.style.display = "block";
+                tabla.style.display = "none";
+            } else {
+                mensajeNoResultados.style.display = "none";
+                tabla.style.display = "table";
+            }
+        }
+
+        function mostrarTodosClientes() {
+            var filas = document.getElementById("myTable").getElementsByTagName("tr");
+            for (var i = 1; i < filas.length; i++) {
+                filas[i].style.display = "";
+            }
+            document.getElementById("buscar").value = "";
+
+            document.getElementById("no-resultados").style.display = "none";
+            document.getElementById("myTable").style.display = "table";
+        }
+    </script>
+</body>
+</html>
