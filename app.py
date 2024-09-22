@@ -28,7 +28,6 @@ from datetime import datetime
 import pytz
 import cloudinary.uploader
 from config import *
-import cloudinary.uploader
 import re
 
 app = Flask(__name__)
