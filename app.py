@@ -28,6 +28,8 @@ from datetime import datetime
 import pytz
 import cloudinary.uploader
 from config import *
+import cloudinary.uploader
+import re
 
 app = Flask(__name__)
 app.secret_key = 'BWvTvS8DxBkMp9Dp8p-jxYbsgWE'
@@ -149,6 +151,13 @@ def lista_proyectos():
     return render_template('lista_proyectos.html', cotizaciones=list(proyectos_unicos.values()))
 
 
+def extract_public_id(url):
+    # Extraer el public_id de la URL de Cloudinary
+    match = re.search(r'/v\d+/(.+?)\.\w+', url)
+    if match:
+        return match.group(1)
+    return None
+
 @app.route('/reemplazar_archivo', methods=['POST'])
 def reemplazar_archivo():
     nombreArchivoReemplazar = request.form['nombreArchivoReemplazar']
@@ -159,14 +168,16 @@ def reemplazar_archivo():
         try:
             documento_existente = Document.query.filter_by(nombre=nombreArchivoReemplazar, proyecto=proyecto).first()
             if documento_existente:
-                # Eliminar el archivo anterior de Cloudinary
-                cloudinary.uploader.destroy(documento_existente.public_id)
+                # Extraer el public_id de la URL existente
+                public_id = extract_public_id(documento_existente.url)
+                if public_id:
+                    # Eliminar el archivo anterior de Cloudinary
+                    cloudinary.uploader.destroy(public_id)
 
                 # Subir el nuevo archivo a Cloudinary
                 resultado = cloudinary.uploader.upload(archivoNuevo, secure=True)
                 documento_existente.url = resultado['secure_url']
                 documento_existente.nombre = archivoNuevo.filename
-                documento_existente.public_id = resultado['public_id']
 
                 db.session.commit()
                 flash('Archivo reemplazado exitosamente', 'success')
@@ -187,8 +198,11 @@ def eliminar_archivo():
     try:
         documento = Document.query.filter_by(nombre=nombreArchivoEliminar, proyecto=proyecto).first()
         if documento:
-            # Eliminar el archivo de Cloudinary
-            cloudinary.uploader.destroy(documento.public_id)
+            # Extraer el public_id de la URL
+            public_id = extract_public_id(documento.url)
+            if public_id:
+                # Eliminar el archivo de Cloudinary
+                cloudinary.uploader.destroy(public_id)
 
             # Eliminar el registro de la base de datos
             db.session.delete(documento)

@@ -45,8 +45,14 @@
         <h2>Reemplazar un archivo</h2>
         <form action="{{ url_for('reemplazar_archivo') }}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="proyecto" value="{{ proyecto }}">
-            <label for="nombreArchivoReemplazar">Nombre del archivo a reemplazar:</label>
-            <input type="text" id="nombreArchivoReemplazar" name="nombreArchivoReemplazar" required>
+            <label for="nombreArchivoReemplazar">Archivo a reemplazar:</label>
+            <select id="nombreArchivoReemplazar" name="nombreArchivoReemplazar" required>
+                <!-- Opción vacía -->
+                <option value="" disabled selected>Seleccionar archivo...</option>
+                {% for documento in documentos %}
+                    <option value="{{ documento.nombre }}">{{ documento.nombre }}</option>
+                {% endfor %}
+            </select>
             <input type="file" name="archivoNuevo" required>
             <input type="submit" value="Reemplazar archivo">
         </form>
@@ -57,8 +63,14 @@
         <h2>Eliminar un archivo</h2>
         <form action="{{ url_for('eliminar_archivo') }}" method="post">
             <input type="hidden" name="proyecto" value="{{ proyecto }}">
-            <label for="nombreArchivoEliminar">Nombre del archivo a eliminar:</label>
-            <input type="text" id="nombreArchivoEliminar" name="nombreArchivoEliminar" required>
+            <label for="nombreArchivoEliminar">Archivo a eliminar:</label>
+            <select id="nombreArchivoEliminar" name="nombreArchivoEliminar" required>
+                <!-- Opción vacía -->
+                <option value="" disabled selected>Seleccionar archivo...</option>
+                {% for documento in documentos %}
+                    <option value="{{ documento.nombre }}">{{ documento.nombre }}</option>
+                {% endfor %}
+            </select>
             <input type="submit" value="Eliminar archivo">
         </form>
     </div>
