@@ -4,38 +4,97 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Cliente</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styleListaCotizaciones.css') }}">
     <style>
         .hidden {
             display: none;
         }
+        /* Estilo para centrar elementos */
+        .busqueda, .form-group {
+            display: flex;
+            justify-content: center; /* Centra horizontalmente */
+            align-items: center; /* Centra verticalmente */
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            margin-right: 10px; /* Espacio entre etiqueta y campo de entrada */
+        }
+        .form-group input {
+            flex: 1; /* Campo de entrada ocupa el espacio restante */
+            max-width: 300px; /* Ancho máximo para los campos de entrada */
+        }
+        button {
+            display: block; /* Para centrar el botón */
+            margin: 20px auto; /* Centra el botón */
+        }
     </style>
     <script>
         function mostrarCampos() {
-            document.getElementById('campos-edicion').classList.remove('hidden');
+            const selectCliente = document.getElementById('cliente');
+            const camposEdicion = document.getElementById('campos-edicion');
+
+            if (selectCliente.value) {
+                camposEdicion.classList.remove('hidden');
+            } else {
+                camposEdicion.classList.add('hidden');
+            }
         }
+
+        // Valida que los campos de teléfono y correo electrónico estén llenos
+        function validarFormulario(event) {
+            const numero = document.getElementById('nuevo_numero').value;
+            const correo = document.getElementById('nuevo_correo').value;
+
+            if (numero === "" || correo === "") {
+                event.preventDefault(); // Evita que se envíe el formulario
+                alert("Por favor, llena todos los campos antes de guardar.");
+                return false;
+            }
+
+            return true; // Permite enviar el formulario si todo está bien
+        }
+
+        // Ejecuta la función al cargar la página para verificar si hay un cliente preseleccionado
+        window.onload = function() {
+            mostrarCampos();
+        };
     </script>
 </head>
 <body>
-    <h1>Editar Cliente</h1>
-    <form action="/editar_cliente" method="POST">
-        <label for="cliente">Selecciona un cliente:</label>
-        <select id="cliente" name="cliente" onchange="mostrarCampos()">
-            {% for cliente in clientes %}
-                <option value="{{ cliente.id }}">{{ cliente.nombre }}</option>
-            {% endfor %}
-        </select>
+    <header>
+        <h1>Editar Cliente</h1>
+    </header>
 
-        <div id="campos-edicion" class="hidden">
-            <div>
-                <label for="nuevo_numero">Nuevo Número de Teléfono:</label>
-                <input type="number" id="nuevo_numero" name="nuevo_numero" placeholder="Ingrese nuevo número">
+    <div class="content">
+        <form action="/editar_cliente" method="POST" onsubmit="return validarFormulario(event)">
+            <!-- Selección de cliente -->
+            <div class="busqueda">
+                <label for="cliente">Selecciona un cliente:</label>
+                <select id="cliente" name="cliente" onchange="mostrarCampos()">
+                    <option value="">Selecciona un cliente</option>
+                    {% for cliente in clientes %}
+                        <option value="{{ cliente.id }}">{{ cliente.nombre }}</option>
+                    {% endfor %}
+                </select>
             </div>
-            <div>
-                <label for="nuevo_correo">Nuevo Correo Electrónico:</label>
-                <input type="email" id="nuevo_correo" name="nuevo_correo" placeholder="Ingrese nuevo correo">
+
+            <!-- Campos de edición -->
+            <div id="campos-edicion" class="hidden">
+                <div class="form-group">
+                    <label for="nuevo_numero">Nuevo Número de Teléfono:</label>
+                    <input type="number" id="nuevo_numero" name="nuevo_numero" placeholder="Ingrese nuevo número">
+                </div>
+                <div class="form-group">
+                    <label for="nuevo_correo">Nuevo Correo Electrónico:</label>
+                    <input type="email" id="nuevo_correo" name="nuevo_correo" placeholder="Ingrese nuevo correo">
+                </div>
+                <button type="submit">Guardar Cambios</button>
             </div>
-            <button type="submit">Guardar Cambios</button>
-        </div>
-    </form>
+        </form>
+    </div>
+
+    <footer>
+        <a href="/" class="support-link">Volver al Inicio</a>
+    </footer>
 </body>
 </html>

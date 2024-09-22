@@ -125,19 +125,94 @@ def index():
 
 @app.route('/lista_proyectos')
 def lista_proyectos():
+    # Consulta todas las cotizaciones
     cotizaciones = Cotizacion.query.all()
-    return render_template('lista_proyectos.html', cotizaciones=cotizaciones)
+
+    # Consulta todos los documentos
+    documentos = Document.query.all()
+
+    # Usar un diccionario para evitar proyectos duplicados
+    proyectos_unicos = {}
+
+    for cotizacion in cotizaciones:
+        # Filtrar documentos por proyecto
+        docs_asociados = [doc for doc in documentos if doc.proyecto == cotizacion.proyecto]
+        if docs_asociados:  # Si hay documentos asociados
+            # Solo agregar una vez el proyecto, usando 'proyecto' como clave
+            if cotizacion.proyecto not in proyectos_unicos:
+                proyectos_unicos[cotizacion.proyecto] = {
+                    "cotizacion": cotizacion,
+                    "documentos": docs_asociados
+                }
+
+    # Enviar la lista de cotizaciones únicas
+    return render_template('lista_proyectos.html', cotizaciones=list(proyectos_unicos.values()))
+
+
+@app.route('/reemplazar_archivo', methods=['POST'])
+def reemplazar_archivo():
+    nombreArchivoReemplazar = request.form['nombreArchivoReemplazar']
+    archivoNuevo = request.files['archivoNuevo']
+    proyecto = request.form['proyecto']
+    
+    if archivoNuevo:
+        try:
+            documento_existente = Document.query.filter_by(nombre=nombreArchivoReemplazar, proyecto=proyecto).first()
+            if documento_existente:
+                # Eliminar el archivo anterior de Cloudinary
+                cloudinary.uploader.destroy(documento_existente.public_id)
+
+                # Subir el nuevo archivo a Cloudinary
+                resultado = cloudinary.uploader.upload(archivoNuevo, secure=True)
+                documento_existente.url = resultado['secure_url']
+                documento_existente.nombre = archivoNuevo.filename
+                documento_existente.public_id = resultado['public_id']
+
+                db.session.commit()
+                flash('Archivo reemplazado exitosamente', 'success')
+            else:
+                flash('El archivo a reemplazar no existe', 'error')
+        except Exception as e:
+            flash(f'Error al reemplazar el archivo: {str(e)}', 'error')
+    else:
+        flash('No se seleccionó ningún archivo', 'error')
+    
+    return redirect(url_for('listar_documentos', proyecto=proyecto))
+
+@app.route('/eliminar_archivo', methods=['POST'])
+def eliminar_archivo():
+    nombreArchivoEliminar = request.form['nombreArchivoEliminar']
+    proyecto = request.form['proyecto']
+    
+    try:
+        documento = Document.query.filter_by(nombre=nombreArchivoEliminar, proyecto=proyecto).first()
+        if documento:
+            # Eliminar el archivo de Cloudinary
+            cloudinary.uploader.destroy(documento.public_id)
+
+            # Eliminar el registro de la base de datos
+            db.session.delete(documento)
+            db.session.commit()
+            
+            flash('Archivo eliminado exitosamente', 'success')
+        else:
+            flash('El archivo a eliminar no existe', 'error')
+    except Exception as e:
+        flash(f'Error al eliminar el archivo: {str(e)}', 'error')
+    
+    return redirect(url_for('listar_documentos', proyecto=proyecto))
+
+
 
 @app.route('/documentos/<proyecto>')
 def listar_documentos(proyecto):
-    cotizaciones = Cotizacion.query.filter_by(proyecto=proyecto).all()
 
-    documentos = [
-        {"nombre": "Documento1.pdf", "url": "https://drive.google.com/..."},
-        {"nombre": "Documento2.pdf", "url": "https://drive.google.com/..."}
-    ]
+    # Filtra los documentos por proyecto en la base de datos
+    documentos = Document.query.filter_by(proyecto=proyecto).all()
 
+    # Renderiza la plantilla enviando solo los documentos filtrados
     return render_template('documentos.html', documentos=documentos, proyecto=proyecto)
+
 
 @app.route('/documentos', methods=["GET",'POST'])
 def mostrar_documentos():

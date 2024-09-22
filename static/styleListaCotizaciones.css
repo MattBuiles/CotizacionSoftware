@@ -28,15 +28,6 @@ header {
     position: relative;
 }
 
-header .logobonito {
-    height: 100px;
-    width: auto; /* Permite que el ancho de la imagen se ajuste automáticamente */
-    position: absolute;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-}
-
 h1 {
     margin: 0;
     font-weight: 600;
@@ -63,25 +54,6 @@ th {
     color: white;
 }
 
-/* Botón "Ver Cotización" */
-.btn-ver-cotizacion {
-    display: inline-block;
-    padding: 5px 10px;
-    background-color: #a3a3a3;
-    color: black;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    text-align: center;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.btn-ver-cotizacion:hover {
-    background-color: #d76b29;
-}
-
 /* Estilos para el formulario de búsqueda */
 .busqueda {
     text-align: center;
@@ -97,13 +69,24 @@ input[type="text"] {
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #a3a3a3;
-    width: 50%; 
+    width: 40%; 
     font-size: 16px;
 }
 
 button {
-    padding: 10px 15px;
+    padding: 5px 10px; /* Tamaño más pequeño */
     margin-left: 10px; /* Espacio entre el input y el botón */
+    background-color: #f17d2f; /* Color de fondo */
+    color: white; /* Color de texto */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    font-size: 14px; /* Tamaño de fuente */
+    cursor: pointer; /* Cursor pointer */
+    transition: background-color 0.3s ease; /* Efecto hover */
+}
+
+button:hover {
+    background-color: #d76b29; /* Color de fondo al hacer hover */
 }
 
 /* Footer */
@@ -123,4 +106,85 @@ footer {
 
 .support-link:hover {
     text-decoration: underline;
+}
+
+/* Estilos específicos para el formulario de edición */
+form {
+    width: 50%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #a3a3a3;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px #6b4e3a80;
+}
+
+/* Contenedor para etiquetas y entradas */
+.form-group {
+    display: flex; /* Usar flexbox para alinear elementos */
+    justify-content: space-between; /* Espacio entre etiqueta y campo de entrada */
+    align-items: center; /* Centrar verticalmente */
+    margin-bottom: 10px; /* Espacio entre grupos */
+}
+
+label {
+    font-weight: 600;
+    margin-right: 10px; /* Espacio entre etiqueta y campo de entrada */
+}
+
+/* Ajustes para inputs específicos */
+input[type="number"], input[type="email"], select {
+    width: calc(100% - 150px); /* Ancho flexible */
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #a3a3a3;
+    font-size: 16px;
+}
+
+select {
+    width: 80%; /* Aumentar el ancho del select */
+}
+
+button {
+    background-color: #f17d2f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #d76b29;
+}
+
+/* Estilos para los botones en la barra de búsqueda */
+.btn-busqueda, .btn-mostrar-todos {
+    padding: 5px 10px; /* Ajustado a un tamaño más pequeño */
+    background-color: #a3a3a3;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px; /* Reducir el tamaño de la fuente */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-busqueda:hover, .btn-mostrar-todos:hover {
+    background-color: #d76b29; /* Mantén el mismo efecto hover */
+}
+
+/* Ajustes específicos para alinear con el input */
+.busqueda {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.busqueda input[type="text"] {
+    width: 40%; /* Mantén el tamaño del input */
+    margin-right: 10px; /* Espacio entre el input y los botones */
 }

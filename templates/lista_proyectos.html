@@ -1,34 +1,26 @@
-<!--
-Archivo: /D:/Users/USER/Documents/GitHub/CotizacionSoftware/templates/lista_cotizaciones.html
-
-Descripción:
-Este archivo contiene la plantilla HTML para mostrar el historial de cotizaciones. Muestra una tabla con las cotizaciones registradas, incluyendo la fecha, el proyecto, el cliente y un enlace para ver la cotización completa.
-
-Elementos principales:
-- `<header>`: Encabezado que muestra el logo de IPB SAS y el título "Historial de Cotizaciones".
-- `<table>`: Tabla que muestra las cotizaciones registradas.
-- `<tbody>`: Cuerpo de la tabla que contiene las filas de las cotizaciones.
-- `<tr>`: Fila de la tabla que muestra los detalles de una cotización.
-- `<td>`: Celda de la tabla que muestra un dato específico de una cotización.
-- `<a>`: Enlace para ver la cotización completa.
-
-Uso:
-Este archivo se utiliza para generar la página web que muestra el historial de cotizaciones. Se utiliza en conjunto con estilos CSS y datos dinámicos proporcionados por el servidor.
-
--->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historial de cotizaciones</title>
+    <title>Proyectos</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styleListaCotizaciones.css') }}">
 </head>
 <body>
     <header>
-        <img src="static/logobonito.png" alt="Logo de IPB SAS" class="logobonito">
+        <img src="{{ url_for('static', filename='logobonito.png') }}" alt="Logo de IPB SAS" class="logobonito">
         <h1>Proyectos</h1>
     </header>
+
+    <!-- Botones de filtrado -->
+    <div class="filters">
+        <label for="clienteFiltro">Filtrar por cliente:</label>
+        <input type="text" id="clienteFiltro" placeholder="Escribe el nombre del cliente" onkeyup="filtrarCliente()">
+
+        <label for="fechaFiltro">Filtrar por fecha de creación:</label>
+        <input type="date" id="fechaFiltro" onchange="filtrarFecha()">
+    </div>
+
     <table id="myTable" border="1" class="cotizaciones">
         <thead>
             <tr>
@@ -40,19 +32,62 @@ Este archivo se utiliza para generar la página web que muestra el historial de 
             </tr>
         </thead>
         <tbody>
-            {% for cotizacion in cotizaciones%}
+            {% for entry in cotizaciones %}
             <tr>
-                <td>{{ cotizacion.fecha }}</td>
-                <td>{{ cotizacion.proyecto }}</td>
-                <td>{{ cotizacion.cliente.nombre }}</td>
-                <td>{{ cotizacion.empresa }}</td>
-                <td><a href="/versiones_cotizacion/{{cotizacion.id}}"class="btn-ver-cotizacion">Documentos</a></td>
+                <td>{{ entry['cotizacion'].fecha }}</td>
+                <td>{{ entry['cotizacion'].proyecto }}</td>
+                <td>{{ entry['cotizacion'].cliente.nombre }}</td>
+                <td>{{ entry['cotizacion'].empresa }}</td>
+                <td><a href="/documentos/{{ entry['cotizacion'].proyecto }}" class="btn-ver-cotizacion">Documentos</a></td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+
     <footer>
         <a href="/" class="support-link">Volver al Inicio</a>
     </footer>
+
+    <script>
+        function filtrarCliente() {
+            // Obtener el valor del campo de búsqueda
+            var input = document.getElementById("clienteFiltro").value.toLowerCase();
+            var filas = document.getElementById("myTable").getElementsByTagName("tr");
+
+            // Empezar desde 1 para evitar el encabezado
+            for (var i = 1; i < filas.length; i++) {
+                var cliente = filas[i].getElementsByTagName("td")[2]; // Columna de cliente
+                if (cliente) {
+                    var nombreCliente = cliente.textContent || cliente.innerText;
+                    if (nombreCliente.toLowerCase().indexOf(input) > -1) {
+                        filas[i].style.display = ""; // Mostrar fila
+                    } else {
+                        filas[i].style.display = "none"; // Ocultar fila
+                    }
+                }
+            }
+        }
+
+        function filtrarFecha() {
+            // Obtener el valor del filtro de fecha
+            var input = document.getElementById("fechaFiltro").value;
+            var filas = document.getElementById("myTable").getElementsByTagName("tr");
+
+            // Empezar desde 1 para evitar el encabezado
+            for (var i = 1; i < filas.length; i++) {
+                var fecha = filas[i].getElementsByTagName("td")[0]; // Columna de fecha
+                if (fecha) {
+                    var fechaTexto = fecha.textContent || fecha.innerText;
+                    // Formatear la fecha en formato YYYY-MM-DD
+                    var fechaFormateada = new Date(fechaTexto).toISOString().split('T')[0];
+                    if (fechaFormateada === input) {
+                        filas[i].style.display = ""; // Mostrar fila
+                    } else {
+                        filas[i].style.display = "none"; // Ocultar fila
+                    }
+                }
+            }
+        }
+    </script>
 </body>
 </html>

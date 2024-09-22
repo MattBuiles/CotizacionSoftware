@@ -11,13 +11,13 @@
         <h1>Lista de Clientes</h1>
     </header>
 
-    <div class="content"> <!-- Añadido div con clase content -->
+    <div class="content">
         <!-- Formulario de búsqueda -->
         <div class="busqueda">
             <label for="buscar">Buscar Cliente:</label>
             <input type="text" id="buscar" placeholder="Nombre del cliente">
             <button onclick="buscarCliente()">Buscar</button>
-            <button onclick="mostrarTodosClientes()">Mostrar Todos</button> <!-- Nuevo botón -->
+            <button onclick="mostrarTodosClientes()">Mostrar Todos</button> <!-- Botón alineado horizontalmente -->
         </div>
 
         <br>
@@ -44,7 +44,7 @@
                 {% endfor %}
             </tbody>
         </table>
-    </div> <!-- Fin del div con clase content -->
+    </div>
 
     <footer>
         <a href="/" class="support-link">Volver al Inicio</a>
@@ -54,45 +54,42 @@
         function buscarCliente() {
             var input = document.getElementById("buscar").value.toLowerCase();
             var filas = document.getElementById("myTable").getElementsByTagName("tr");
-            var encontrado = false; // Bandera para verificar si se encontró algún cliente
+            var encontrado = false;
 
-            // Inicia en 1 para evitar la fila del encabezado
             for (var i = 1; i < filas.length; i++) {
                 var cliente = filas[i].getElementsByTagName("td")[0];
                 if (cliente) {
                     var nombreCliente = cliente.textContent || cliente.innerText;
                     if (nombreCliente.toLowerCase().indexOf(input) > -1) {
                         filas[i].style.display = "";
-                        encontrado = true; // Se encontró al menos un cliente
+                        encontrado = true;
                     } else {
                         filas[i].style.display = "none";
                     }
                 }
             }
 
-            // Mostrar el mensaje si no se encuentra ningún cliente
             var mensajeNoResultados = document.getElementById("no-resultados");
             var tabla = document.getElementById("myTable");
 
             if (!encontrado) {
-                mensajeNoResultados.style.display = "block"; // Mostrar el mensaje
-                tabla.style.display = "none"; // Ocultar la tabla
+                mensajeNoResultados.style.display = "block";
+                tabla.style.display = "none";
             } else {
-                mensajeNoResultados.style.display = "none"; // Ocultar el mensaje
-                tabla.style.display = "table"; // Mostrar la tabla si se encuentra algún cliente
+                mensajeNoResultados.style.display = "none";
+                tabla.style.display = "table";
             }
         }
 
         function mostrarTodosClientes() {
             var filas = document.getElementById("myTable").getElementsByTagName("tr");
-            for (var i = 1; i < filas.length; i++) { // Inicia en 1 para evitar la fila del encabezado
-                filas[i].style.display = ""; // Muestra todas las filas
+            for (var i = 1; i < filas.length; i++) {
+                filas[i].style.display = "";
             }
-            document.getElementById("buscar").value = ""; // Limpia el campo de búsqueda
+            document.getElementById("buscar").value = "";
 
-            // Ocultar el mensaje de "Cliente no encontrado" y mostrar la tabla
             document.getElementById("no-resultados").style.display = "none";
-            document.getElementById("myTable").style.display = "table"; // Asegurar que la tabla esté visible
+            document.getElementById("myTable").style.display = "table";
         }
     </script>
 </body>

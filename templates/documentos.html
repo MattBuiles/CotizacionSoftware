@@ -1,31 +1,95 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentos Subidos</title>
+    <title>Documentos del Proyecto {{ proyecto }}</title>
+    <style>
+        .filters {
+            margin: 20px 0;
+        }
+        .form-container {
+            margin: 20px 0;
+        }
+    </style>
 </head>
 <body>
-    <h1>Documentos Subidos</h1>
-    
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Nombre del Documento</th>
-                <th>Enlace</th>
-                <th>Fecha de Subida</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for documento in documentos %}
-                <tr>
-                    <td>{{ documento.nombre }}</td>
-                    <td><a href="{{ documento.url }}" target="_blank">Ver Documento</a></td>
-                    <td>{{ documento.fecha_subida.strftime('%Y-%m-%d') }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
+    <header>
+        <h1>Documentos del Proyecto {{ proyecto }}</h1>
+    </header>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Filtro por tipo de documento -->
+    <div class="filters">
+        <label for="tipoFiltro">Filtrar por tipo de documento:</label>
+        <select id="tipoFiltro" onchange="filtrarTipo()">
+            <option value="">Todos</option>
+            <option value="pdf">PDF</option>
+            <option value="png">PNG</option>
+            <option value="jpg">JPG</option>
+            <option value="docx">DOCX</option>
+        </select>
+    </div>
+
+    <!-- Formulario para reemplazar archivo -->
+    <div class="form-container">
+        <h2>Reemplazar un archivo</h2>
+        <form action="{{ url_for('reemplazar_archivo') }}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="proyecto" value="{{ proyecto }}">
+            <label for="nombreArchivoReemplazar">Nombre del archivo a reemplazar:</label>
+            <input type="text" id="nombreArchivoReemplazar" name="nombreArchivoReemplazar" required>
+            <input type="file" name="archivoNuevo" required>
+            <input type="submit" value="Reemplazar archivo">
+        </form>
+    </div>
+
+    <!-- Formulario para eliminar archivo -->
+    <div class="form-container">
+        <h2>Eliminar un archivo</h2>
+        <form action="{{ url_for('eliminar_archivo') }}" method="post">
+            <input type="hidden" name="proyecto" value="{{ proyecto }}">
+            <label for="nombreArchivoEliminar">Nombre del archivo a eliminar:</label>
+            <input type="text" id="nombreArchivoEliminar" name="nombreArchivoEliminar" required>
+            <input type="submit" value="Eliminar archivo">
+        </form>
+    </div>
+
+    <!-- Lista de documentos -->
+    <ul id="documentosLista">
+        {% for documento in documentos %}
+        <li class="documento-item" data-tipo="{{ documento.nombre.split('.')[-1] }}">
+            <a href="{{ documento.url }}" target="_blank">{{ documento.nombre }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <footer>
+        <a href="{{ url_for('lista_proyectos') }}">Volver a la Lista de Proyectos</a>
+    </footer>
+
+    <script>
+        function filtrarTipo() {
+            var tipoSeleccionado = document.getElementById("tipoFiltro").value;
+            var documentos = document.getElementsByClassName("documento-item");
+
+            for (var i = 0; i < documentos.length; i++) {
+                var tipoDocumento = documentos[i].getAttribute("data-tipo");
+                if (tipoSeleccionado === "" || tipoSeleccionado === tipoDocumento) {
+                    documentos[i].style.display = "";
+                } else {
+                    documentos[i].style.display = "none";
+                }
+            }
+        }
+    </script>
 </body>
 </html>
