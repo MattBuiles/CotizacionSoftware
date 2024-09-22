@@ -225,7 +225,7 @@ def listar_documentos(cotizacion_id):
 
     cotizacion = Cotizacion.query.get_or_404(cotizacion_id)
     # Filtra los documentos por proyecto en la base de datos
-    documentos = Document.query.filter_by(proyecto=cotizacion.proyecto).all()
+    documentos = Document.query.filter_by(cotizacio_id=cotizacion_id).all()
 
     # Renderiza la plantilla enviando solo los documentos filtrados
     return render_template('documentos.html', documentos=documentos, cotizacion=cotizacion)
@@ -237,33 +237,46 @@ def mostrar_documentos():
     documentos = Document.query.all()
     return render_template('documentos_proyecto.html', documentos=documentos)
 
-@app.route('/upload', methods=['POST'])
+@app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
-    # Verifica si el archivo ha sido subido
-    if 'documento' not in request.files:
-        print("a")
-        flash('No se seleccionó ningún archivo')
-        return redirect(url_for('subir_archivo'))
-    
-    archivo = request.files.get('documento')
-    cotizacion_id = request.form.get('cotizacion')
-
-    if archivo:
-        try:
-            # Sube el archivo a Cloudinary
-            result = cloudinary.uploader.upload(archivo, secure=True)
-            print("c")
-            # Guarda la URL en la base de datos
-            nuevo_documento = Document(url=result['secure_url'],nombre=archivo.filename,cotizacion_id=cotizacion_id)
-            db.session.add(nuevo_documento)
-            db.session.commit()
-            
-            flash('Archivo subido exitosamente')
-            return redirect(url_for('listar_documentos',cotizacion=cotizacion_id))
-        except Exception as e:
-            print("d")
-            flash(f'Error al subir el archivo, vuelvelo a intentar: {str(e)}')
-            return redirect(request.url)
+    if request.method == 'POST':
+        # Verifica si el archivo ha sido subido
+        if 'documento' not in request.files:
+            flash('No se seleccionó ningún archivo', 'danger')
+            return redirect(url_for('upload_file'))
+        
+        archivo = request.files['documento']
+        cotizacion_id = request.form.get('cotizacion')
+        
+        if archivo.filename == '':
+            flash('No se seleccionó ningún archivo', 'danger')
+            return redirect(url_for('upload_file'))
+        
+        if archivo and cotizacion_id:
+            try:
+                # Sube el archivo a Cloudinary
+                result = cloudinary.uploader.upload(archivo, secure=True)
+                
+                # Guarda la URL en la base de datos
+                nuevo_documento = Document(
+                    url=result['secure_url'],
+                    nombre=archivo.filename,
+                    cotizacion_id=cotizacion_id,
+                    fecha_subida=datetime.utcnow()  # Añade la fecha de subida
+                )
+                db.session.add(nuevo_documento)
+                db.session.commit()
+                
+                flash('Archivo subido exitosamente', 'success')
+                return redirect(url_for('listar_documentos', cotizacion_id=cotizacion_id))
+            except Exception as e:
+                db.session.rollback()  # Asegúrate de hacer rollback en caso de error
+                flash(f'Error al subir el archivo, vuélvelo a intentar: {str(e)}', 'danger')
+                return redirect(url_for('upload_file'))
+    else:
+        # Mostrar el formulario
+        cotizaciones = Cotizacion.query.all()
+        return render_template('subir_archivo.html', cotizaciones=cotizaciones)
 
 @app.route('/subir_archivo', methods=["GET",'POST'])
 def subir_archivo():
