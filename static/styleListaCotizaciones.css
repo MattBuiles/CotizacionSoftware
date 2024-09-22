@@ -1,20 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap'); /*importar fuente*/
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap'); /* Importar fuente */
+
+/* Estilos generales */
+html, body {
+    height: 100%; /* Asegúrate de que el html y el body ocupen toda la altura */
+    margin: 0; /* Elimina márgenes por defecto */
+}
 
 body {
+    display: flex; /* Usar flexbox para el diseño */
+    flex-direction: column; /* Organizar en columna */
     font-family: 'Open Sans', Arial, sans-serif;
-    margin: 0;
     padding: 0;
     box-sizing: border-box;
     background-color: #f4f4f4;
-  }
+}
+
+/* Espacio flexible que ocupa todo el espacio disponible */
+.content {
+    flex: 1; /* Esto empuja el footer hacia abajo */
+}
 
 header {
-    background-color: #f17d2f; 
+    background-color: #f17d2f;
     color: white;
-    padding: 20px;
+    padding: 30px;
     text-align: center;
     position: relative;
-  }
+}
 
 header .logobonito {
     height: 100px;
@@ -23,54 +35,84 @@ header .logobonito {
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-  }
+}
 
-  th, td {
+h1 {
+    margin: 0;
+    font-weight: 600;
+}
+
+/* Estilos para la tabla */
+table {
+    width: 85%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    border: 1px solid #a3a3a3;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px #6b4e3a80; 
+}
+
+th, td {
     padding: 8px;
     text-align: center;
     border-bottom: 1px solid #a3a3a3;
 }
 
 th {
-    background-color: #f17d2f; 
-    color: white; 
+    background-color: #f17d2f;
+    color: white;
 }
 
-#myTable {
-    border-collapse: collapse;
-    width: 85%;
-    margin: 20px auto;
-    border: 1px solid #a3a3a3;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px #6b4e3a80; 
-}
-
+/* Botón "Ver Cotización" */
 .btn-ver-cotizacion {
-    display: block; /* Ocupa todo el ancho disponible */
-    padding: 5px 2px; /* Padding para el contenido del botón */
-    background-color: #a3a3a3; /* Mismo color que el fondo de la tabla */
-    color: rgb(0, 0, 0); /* Texto blanco */
-    border: none; /* Elimina el borde predeterminado */
-    border-radius: 5px; /* Esquinas redondeadas */
-    text-decoration: none; /* Elimina el subrayado */
-    text-align: center; /* Alinea el texto al centro */
-    font-weight: 600; /* Texto seminegrita */
-    cursor: pointer; /* Indica que es un botón al pasar el mouse */
-    transition: background-color 0.3s ease; /* Efecto de transición */
-  }
-  
-.btn-ver-cotizacion:hover {
-    background-color: #d76b29; /* Oscurece un poco el color al pasar el mouse */
-  }
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #a3a3a3;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 
+.btn-ver-cotizacion:hover {
+    background-color: #d76b29;
+}
+
+/* Estilos para el formulario de búsqueda */
+.busqueda {
+    text-align: center;
+    margin: 20px;
+}
+
+input[type="text"], button {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+input[type="text"] {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #a3a3a3;
+    width: 50%; 
+    font-size: 16px;
+}
+
+button {
+    padding: 10px 15px;
+    margin-left: 10px; /* Espacio entre el input y el botón */
+}
+
+/* Footer */
 footer {
-    background-color: #f17d2f; 
+    background-color: #f17d2f;
     color: white;
     padding: 10px;
     text-align: center;
-    position: fixed;
     width: 100%;
-    bottom: 0;
 }
 
 .support-link {

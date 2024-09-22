@@ -339,6 +339,72 @@ def actualizar_cotizacion(id):
     # Redirigir a la vista de la nueva cotización
     return redirect(url_for('ver_cotizacion', id=nueva_cotizacion.id))
 
+@app.route('/lista_clientes')
+def listar_clientes():
+    clientes = Cliente.query.all()
+    return render_template('lista_clientes.html', clientes=clientes)
+
+@app.route("/añadir_cliente", methods=["GET", "POST"])
+def clienteManager():
+    if request.method == "POST":
+        # Capturar los datos del formulario
+        nombre_cliente = request.form.get("nombre")
+        celular_cliente = request.form.get("celular")
+        correo_cliente = request.form.get("correo")
+
+        # Validar que los campos no estén vacíos
+        if not nombre_cliente or not celular_cliente or not correo_cliente:
+            flash("Todos los campos son obligatorios", "error")
+            return redirect(url_for("clienteManager"))
+
+        try:
+            # Crear un nuevo cliente
+            nuevo_cliente = Cliente(nombre=nombre_cliente, celular=celular_cliente, email=correo_cliente)
+
+            # Añadirlo a la base de datos
+            db.session.add(nuevo_cliente)
+            db.session.commit()
+
+            flash("Cliente añadido exitosamente", "success")
+            return redirect(url_for("listar_clientes"))
+
+        except Exception as e:
+            # En caso de error, mostrar un mensaje
+            flash(f"Error al añadir el cliente: {str(e)}", "error")
+            db.session.rollback()
+
+    # Si el método es GET, mostrar el formulario
+    return render_template("añadir_cliente.html")
+
+# Ruta para listar clientes y mostrar el formulario de edición
+@app.route('/editar_cliente', methods=['GET', 'POST'])
+def editar_cliente():
+    if request.method == 'POST':
+        # Obtener los datos del formulario
+        cliente_id = request.form.get('cliente')
+        nuevo_numero = request.form.get('nuevo_numero')
+        nuevo_correo = request.form.get('nuevo_correo')
+
+        # Buscar el cliente en la base de datos
+        cliente = Cliente.query.get(cliente_id)
+
+        if cliente:
+            # Actualizar los datos del cliente
+            cliente.celular = nuevo_numero
+            cliente.email = nuevo_correo
+            db.session.commit()
+            flash('Cliente actualizado con éxito')
+        else:
+            flash('Cliente no encontrado')
+
+        return redirect(url_for('listar_clientes'))
+
+    # Obtener la lista de clientes para mostrar en el formulario
+    clientes = Cliente.query.all()
+    return render_template('editar_cliente.html', clientes=clientes)
+
+
+
 
 
 # Metodo para probar generación de cotización

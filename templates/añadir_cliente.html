@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Añadir Cliente - IPB SAS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Añadir Nuevo Cliente</h1>
+    </header>
+    <main>
+        <!-- Formulario para añadir un nuevo cliente -->
+        <form action="{{ url_for('clienteManager') }}" method="post" class="consignation-form">
+            <div class="form-group">
+                <label for="cliente_nombre">Nombre</label>
+                <input type="text" id="cliente_nombre" name="nombre" placeholder="Nombre del cliente" required>
+            </div>
+            <div class="form-group">
+                <label for="cliente_celular">Celular</label>
+                <input type="number" id="cliente_celular" name="celular" placeholder="Celular del cliente" required>
+            </div>
+            <div class="form-group">
+                <label for="cliente_correo">Correo</label>
+                <input type="email" id="cliente_correo" name="correo" placeholder="Correo del cliente" required>
+            </div>
+
+            <button type="submit" class="btn">Añadir Cliente</button>
+        </form>
+    </main>
+    <footer>
+        <a href="/" class="support-link">Volver al Inicio</a>
+    </footer>
+</body>
+</html>

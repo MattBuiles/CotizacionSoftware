@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Cliente</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+    <script>
+        function mostrarCampos() {
+            document.getElementById('campos-edicion').classList.remove('hidden');
+        }
+    </script>
+</head>
+<body>
+    <h1>Editar Cliente</h1>
+    <form action="/editar_cliente" method="POST">
+        <label for="cliente">Selecciona un cliente:</label>
+        <select id="cliente" name="cliente" onchange="mostrarCampos()">
+            {% for cliente in clientes %}
+                <option value="{{ cliente.id }}">{{ cliente.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <div id="campos-edicion" class="hidden">
+            <div>
+                <label for="nuevo_numero">Nuevo Número de Teléfono:</label>
+                <input type="number" id="nuevo_numero" name="nuevo_numero" placeholder="Ingrese nuevo número">
+            </div>
+            <div>
+                <label for="nuevo_correo">Nuevo Correo Electrónico:</label>
+                <input type="email" id="nuevo_correo" name="nuevo_correo" placeholder="Ingrese nuevo correo">
+            </div>
+            <button type="submit">Guardar Cambios</button>
+        </div>
+    </form>
+</body>
+</html>
