@@ -63,7 +63,7 @@ def agregar_cotizaciones_default():
 
 
     cotizaciones_default = [
-        {'ciudad': 'Bogotá', 'empresa': 'Empresa 1', 'proyecto': 'Proyecto 1', 'plazo': '30 (TREINTA)', 'entrega': '15 (QUINCE)', 'anticipo': 0.3, 'p_acta': 0.3, 'f_acta': 0.4, 'consecutivo': 1, 'cliente': 1, 'servicio': "El servicio de la cotización 1"},
+        {'ciudad': 'Bogotá', 'empresa': 'Sura', 'proyecto': 'Instalaciones Sura', 'plazo': '30 (TREINTA)', 'entrega': '15 (QUINCE)', 'anticipo': 0.3, 'p_acta': 0.3, 'f_acta': 0.4, 'consecutivo': 1, 'cliente': 1, 'servicio': "El servicio de acueducto de Sura garantiza el suministro continuo y seguro de agua potable a sus usuarios. A través de una infraestructura moderna y eficiente, se asegura la captación, tratamiento y distribución del agua, cumpliendo con los más altos estándares de calidad y sostenibilidad. Además, se implementan tecnologías de monitoreo para optimizar el uso del recurso y brindar un servicio confiable. Sura se compromete a la atención al cliente, ofreciendo soluciones rápidas y efectivas ante cualquier eventualidad."},
     ]
 
     for cotizacion in cotizaciones_default:
