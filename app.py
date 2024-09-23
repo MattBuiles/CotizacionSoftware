@@ -248,50 +248,44 @@ def mostrar_documentos():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
-        # Verifica si el archivo ha sido subido
         if 'documento' not in request.files:
-            flash('No se seleccionó ningún archivo', 'danger')
-            return redirect(url_for('upload_file'))
+            return redirect(url_for('upload_file', error=True, mensaje="No se seleccionó ningún archivo"))
         
         archivo = request.files['documento']
         cotizacion_id = request.form.get('cotizacion')
-        
+
+        # Verificar si se seleccionó un archivo vacío
         if archivo.filename == '':
-            flash('No se seleccionó ningún archivo', 'danger')
-            return redirect(url_for('upload_file'))
-        
+            return redirect(url_for('upload_file', error=True, mensaje="El archivo no es válido"))
+
+        # Limitar tamaño del archivo (ejemplo: 2 MB)
         max_size = 2 * 1024 * 1024  # 2 MB
-        if archivo and archivo.content_length > max_size:
-            flash('El archivo es demasiado grande. El tamaño máximo permitido es de 2 MB.', 'danger')
-            print("m")
-            return redirect(url_for('upload_file'))
+        if archivo.content_length > max_size:
+            return redirect(url_for('upload_file', error=True, mensaje="El archivo es demasiado grande"))
+
+        try:
+            # Sube el archivo a Cloudinary
+            result = cloudinary.uploader.upload(archivo, secure=True)
+            
+            # Guardar la URL en la base de datos
+            nuevo_documento = Document(
+                url=result['secure_url'],
+                nombre=archivo.filename,
+                fecha_subida=datetime.now(pytz.timezone('America/Bogota')),
+                cotizacion_id=cotizacion_id,
+            )
+            db.session.add(nuevo_documento)
+            db.session.commit()
+
+            return redirect(url_for('upload_file', success=True, cotizacionid=cotizacion_id))
         
-        if archivo and cotizacion_id:
-            try:
-                # Sube el archivo a Cloudinary
-                result = cloudinary.uploader.upload(archivo, secure=True)
-                
-                # Guarda la URL en la base de datos
-                nuevo_documento = Document(
-                    url=result['secure_url'],
-                    nombre=archivo.filename,
-                    fecha_subida=datetime.now(pytz.timezone('America/Bogota')),
-                    cotizacion_id=cotizacion_id,
-                )
-                db.session.add(nuevo_documento)
-                db.session.commit()
-                
-                flash('Archivo subido exitosamente', 'success')
-                
-                return redirect(url_for('listar_documentos', cotizacionid=cotizacion_id))
-            except Exception as e:
-                db.session.rollback()  # Asegúrate de hacer rollback en caso de error
-                flash(f'Error al subir el archivo, vuélvelo a intentar: {str(e)}', 'danger')
-                return redirect(url_for('upload_file'))
-    else:
-        # Mostrar el formulario
-        cotizaciones = Cotizacion.query.all()
-        return render_template('subir_archivo.html', cotizaciones=cotizaciones)
+        except Exception as e:
+            db.session.rollback()
+            return redirect(url_for('upload_file', error=True, mensaje=str(e)))
+
+    # Renderizar la plantilla con las cotizaciones (en caso de GET)
+    cotizaciones = Cotizacion.query.all()
+    return render_template('subir_archivo.html', cotizaciones=cotizaciones)
 
 @app.route('/subir_archivo', methods=["GET",'POST'])
 def subir_archivo():
