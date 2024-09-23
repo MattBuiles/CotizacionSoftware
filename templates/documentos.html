@@ -62,7 +62,7 @@
     <div class="form-container">
         <h2>Eliminar un archivo</h2>
         <form action="{{ url_for('eliminar_archivo') }}" method="post">
-            <input type="hidden" name="cotizacion_id" value="{{ proyecto }}">
+            <input type="hidden" name="cotizacion_id2" value="{{ cotizacion.id }}">
             <label for="nombreArchivoEliminar">Archivo a eliminar:</label>
             <select id="nombreArchivoEliminar" name="nombreArchivoEliminar" required>
                 <!-- Opción vacía -->

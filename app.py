@@ -200,7 +200,9 @@ def reemplazar_archivo():
 @app.route('/eliminar_archivo', methods=['POST'])
 def eliminar_archivo():
     nombreArchivoEliminar = request.form['nombreArchivoEliminar']
-    cotizacion_id = request.form['cotizacion_id']
+    cotizacion_id = request.form['cotizacion_id2']
+    print(nombreArchivoEliminar)
+    print(cotizacion_id)
     
     try:
         documento = Document.query.filter_by(nombre=nombreArchivoEliminar, cotizacion_id=cotizacion_id).first()
@@ -217,11 +219,12 @@ def eliminar_archivo():
             
             flash('Archivo eliminado exitosamente', 'success')
         else:
+            print("m")
             flash('El archivo a eliminar no existe', 'error')
     except Exception as e:
         flash(f'Error al eliminar el archivo: {str(e)}', 'error')
     
-    return redirect(url_for('listar_documentos', cotizacionid=cotizacion_id))
+    return redirect(url_for('lista_proyectos'))
 
 
 
