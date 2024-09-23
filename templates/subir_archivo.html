@@ -5,11 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subir Documento</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    function mostrarAlerta() {
+        Swal.fire({
+            title: 'Éxito!',
+            text: '¡Archivo subido exitosamente!',
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+        });
+    }
+    </script>
 </head>
 <body>
     <div class="container mt-5">
         <h2 class="mb-4">Subir Documento</h2>
-        <form action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data" onsubmit="mostrarAlerta()">
             <div class="form-group">
                 <label for="documento">Selecciona un documento:</label>
                 <input type="file" class="form-control-file" id="documento" name="documento" required>
