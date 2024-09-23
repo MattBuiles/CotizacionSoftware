@@ -460,6 +460,150 @@ footer .support-link:hover {
     }
 }
 
+/* Styling for Documentos del Proyecto page */
+
+/* Header Title Styling */
+header h1 {
+    font-size: 2.4rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 0;
+}
+
+/* Flash Messages Styling */
+.flashes {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 15px;
+    background-color: #ff8c00;
+    color: white;
+    border-radius: 8px;
+    list-style-type: none;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Styling for Filters Section */
+.filters {
+    max-width: 800px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.filters label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #f17d2f;
+}
+
+.filters select {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    transition: border-color 0.3s ease;
+}
+
+/* Form Container Styling */
+.form-container {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h2 {
+    font-size: 1.8rem;
+    color: #f17d2f;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-container label {
+    display: block;
+    font-size: 1.1rem;
+    color: #f17d2f;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.form-container select,
+.form-container input[type="file"],
+.form-container input[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-container input[type="submit"] {
+    background-color: #ff8c00;
+    color: white;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+}
+
+.form-container input[type="submit"]:hover {
+    background-color: #e67e22;
+}
+
+/* Document List Styling */
+#documentosLista {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 0;
+    list-style-type: none;
+}
+
+.documento-item {
+    background-color: #f4f4f4;
+    margin: 15px 0;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.documento-item a {
+    color: #f17d2f;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.documento-item a:hover {
+    text-decoration: underline;
+    color: #d25e1f;
+}
+
+/* Footer Styling */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #f17d2f;
+    color: white;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+footer a {
+    color: white;
+    font-size: 1.2rem;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
 
 
 
