@@ -224,7 +224,7 @@ def eliminar_archivo():
     except Exception as e:
         flash(f'Error al eliminar el archivo: {str(e)}', 'error')
     
-    return redirect(url_for('lista_proyectos'))
+    return redirect(url_for('listar_documentos', cotizacionid=documento.cotizacion_id))
 
 
 
