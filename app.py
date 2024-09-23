@@ -29,6 +29,7 @@ import pytz
 import cloudinary.uploader
 from config import *
 import re
+import time
 
 app = Flask(__name__)
 app.secret_key = 'BWvTvS8DxBkMp9Dp8p-jxYbsgWE'
@@ -265,14 +266,15 @@ def upload_file():
                 nuevo_documento = Document(
                     url=result['secure_url'],
                     nombre=archivo.filename,
+                    fecha_subida=datetime.now(pytz.timezone('America/Bogota')),
                     cotizacion_id=cotizacion_id,
-                    fecha_subida=datetime.utcnow()  # Añade la fecha de subida
                 )
                 db.session.add(nuevo_documento)
                 db.session.commit()
                 
                 flash('Archivo subido exitosamente', 'success')
-                return redirect(url_for('listar_documentos', cotizacion_id=cotizacion_id))
+                
+                return redirect(url_for('listar_documentos', cotizacionid=cotizacion_id))
             except Exception as e:
                 db.session.rollback()  # Asegúrate de hacer rollback en caso de error
                 flash(f'Error al subir el archivo, vuélvelo a intentar: {str(e)}', 'danger')
