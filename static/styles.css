@@ -377,233 +377,113 @@ button.btn:hover {
 
 /* Extra Styles for Upload Document Form */
 
-/* Center the title and make it larger and more attractive */
-.upload-container h2 {
+/* Center the entire form and ensure alignment with the rest of the page */
+.upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    font-size: 2.2rem;
-    color: #4A90E2;
-    font-weight: 600;
-    margin-bottom: 20px;
+    margin: 0 auto;
+    max-width: 600px; /* Matches other form containers on the site */
+    padding: 30px;
+    background-color: #ffffff; /* Consistent white background */
+    border-radius: 10px; /* Consistent rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for modern look */
 }
 
-/* Style the form fields */
+/* Refined title styling to be consistent with other page sections */
+/* Title styling without background box and with orange text */
+.upload-container h2 {
+    font-size: 2.2rem; /* Consistent heading size */
+    color: #f17d2f; /* Orange color for the title text */
+    font-weight: 600; /* Consistent weight */
+    margin-bottom: 20px;
+    text-shadow: none; /* Remove text shadow */
+    letter-spacing: 1px; /* Subtle letter spacing for a modern look */
+    text-transform: uppercase; /* Capitalized for consistency */
+}
+
+
+/* Consistent form field styling */
 .upload-container .form-group label {
     font-size: 1.1rem;
-    font-weight: 600;
-    color: #555;
+    font-weight: 600; /* Aligns with label styles across the site */
+    color: #f17d2f; /* Consistent label color */
+    margin-bottom: 8px;
+    display: block;
+    text-align: left;
 }
 
 .upload-container .form-control-file,
 .upload-container .form-control {
     padding: 12px;
-    border-radius: 5px;
+    border-radius: 8px;
     border: 1px solid #ced4da;
-    font-size: 1rem;
+    font-size: 1.1rem;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition on focus */
 }
 
-/* Add a focus effect on the form fields */
+/* Focus effect to align with rest of form styles */
 .upload-container .form-control-file:focus,
 .upload-container .form-control:focus {
     outline: none;
-    border-color: #4A90E2;
-    box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+    border-color: #ff8c00; /* Consistent focus border color */
+    box-shadow: 0 0 5px rgba(255, 140, 0, 0.5); /* Orange shadow on focus */
 }
 
-/* Customize the submit button */
+/* Submit button styling to match the site's buttons */
 .upload-container .btn-primary {
-    background-color: #4A90E2;
-    border-color: #4A90E2;
-    font-size: 1.2rem;
-    padding: 10px 20px;
-    font-weight: 600;
-    border-radius: 5px;
-    transition: background-color 0.3s, border-color 0.3s;
+    background-color: #ff8c00; /* Bright orange like other buttons */
+    border-color: #e67e22;
+    color: white;
+    font-size: 1.1rem;
+    padding: 12px 30px;
+    font-weight: 600; /* Consistent button font weight */
+    border-radius: 8px;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth hover transitions */
 }
 
-/* Submit button hover effect */
+/* Button hover effect for consistency */
 .upload-container .btn-primary:hover {
-    background-color: #357ABD;
-    border-color: #357ABD;
+    background-color: #e67e22; /* Slightly darker orange on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow on hover */
 }
 
-/* Flash messages (alerts) styling */
+/* Flash messages styling to match the alert style across the site */
 .upload-container .alert {
     font-size: 1rem;
-    padding: 10px;
+    padding: 14px;
     font-weight: 600;
+    background-color: #ff8c00; /* Bright orange background */
+    border-color: #e67e22;
+    color: white;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15); /* Soft shadow for consistency */
 }
 
-/* Footer customization */
-footer .support-link {
-    color: #4A90E2;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 1.1rem;
-}
-
-footer .support-link:hover {
-    text-decoration: underline;
-}
-
-/* Ensure form is responsive for smaller devices */
+/* Responsive adjustments for smaller devices */
 @media (max-width: 768px) {
     .upload-container {
-        padding: 20px;
+        max-width: 90%; /* Responsive width */
+        padding: 20px; /* Smaller padding on mobile */
     }
 
     .upload-container h2 {
-        font-size: 1.8rem;
+        font-size: 2rem; /* Adjusted title size for smaller screens */
     }
 
     .upload-container .btn-primary {
-        font-size: 1rem;
-    }
+        font-size: 1rem; /* Smaller button text size for mobile */
+    }
 }
 
-/* Styling for Documentos del Proyecto page */
 
-/* Header Title Styling */
-header h1 {
-    font-size: 2.4rem;
-    font-weight: 600;
-    color: white;
-    margin-bottom: 0;
-}
-
-/* Flash Messages Styling */
-.flashes {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 15px;
-    background-color: #ff8c00;
-    color: white;
-    border-radius: 8px;
-    list-style-type: none;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    font-weight: 600;
-}
-
-/* Styling for Filters Section */
-.filters {
-    max-width: 800px;
-    margin: 20px auto;
-    text-align: center;
-}
-
-.filters label {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #f17d2f;
-}
-
-.filters select {
-    padding: 10px;
-    font-size: 1rem;
-    border-radius: 8px;
-    border: 1px solid #ced4da;
-    transition: border-color 0.3s ease;
-}
-
-/* Form Container Styling */
-.form-container {
-    max-width: 600px;
-    margin: 30px auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.form-container h2 {
-    font-size: 1.8rem;
-    color: #f17d2f;
-    font-weight: 600;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.form-container label {
-    display: block;
-    font-size: 1.1rem;
-    color: #f17d2f;
-    margin-bottom: 10px;
-    text-align: left;
-}
-
-.form-container select,
-.form-container input[type="file"],
-.form-container input[type="submit"] {
-    width: 100%;
-    padding: 12px;
-    font-size: 1rem;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    border: 1px solid #ced4da;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.form-container input[type="submit"] {
-    background-color: #ff8c00;
-    color: white;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-}
-
-.form-container input[type="submit"]:hover {
-    background-color: #e67e22;
-}
-
-/* Document List Styling */
-#documentosLista {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 0;
-    list-style-type: none;
-}
-
-.documento-item {
-    background-color: #f4f4f4;
-    margin: 15px 0;
-    padding: 15px;
-    border-radius: 8px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.documento-item a {
-    color: #f17d2f;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 1.1rem;
-}
-
-.documento-item a:hover {
-    text-decoration: underline;
-    color: #d25e1f;
-}
-
-/* Footer Styling */
-footer {
-    text-align: center;
-    padding: 20px;
-    background-color: #f17d2f;
-    color: white;
-    position: relative;
-    bottom: 0;
-    width: 100%;
-}
-
-footer a {
-    color: white;
-    font-size: 1.2rem;
-    text-decoration: none;
-}
-
-footer a:hover {
-    text-decoration: underline;
-}
 
 
 
