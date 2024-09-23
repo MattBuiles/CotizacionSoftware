@@ -169,11 +169,11 @@ def extract_public_id(url):
 def reemplazar_archivo():
     nombreArchivoReemplazar = request.form['nombreArchivoReemplazar']
     archivoNuevo = request.files['archivoNuevo']
-    proyecto = request.form['proyecto']
+    cotizacionid = request.form['cotizacion_id']
     
     if archivoNuevo:
         try:
-            documento_existente = Document.query.filter_by(nombre=nombreArchivoReemplazar, proyecto=proyecto).first()
+            documento_existente = Document.query.filter_by(nombre=nombreArchivoReemplazar, cotizacion_id=cotizacionid).first()
             if documento_existente:
                 # Extraer el public_id de la URL existente
                 public_id = extract_public_id(documento_existente.url)
@@ -195,15 +195,15 @@ def reemplazar_archivo():
     else:
         flash('No se seleccionó ningún archivo', 'error')
     
-    return redirect(url_for('listar_documentos', proyecto=proyecto))
+    return redirect(url_for('listar_documentos', cotizacionid=documento_existente.cotizacion_id))
 
 @app.route('/eliminar_archivo', methods=['POST'])
 def eliminar_archivo():
     nombreArchivoEliminar = request.form['nombreArchivoEliminar']
-    proyecto = request.form['proyecto']
+    cotizacion_id = request.form['cotizacion_id']
     
     try:
-        documento = Document.query.filter_by(nombre=nombreArchivoEliminar, proyecto=proyecto).first()
+        documento = Document.query.filter_by(nombre=nombreArchivoEliminar, cotizacion_id=cotizacion_id).first()
         if documento:
             # Extraer el public_id de la URL
             public_id = extract_public_id(documento.url)
@@ -221,7 +221,7 @@ def eliminar_archivo():
     except Exception as e:
         flash(f'Error al eliminar el archivo: {str(e)}', 'error')
     
-    return redirect(url_for('listar_documentos', proyecto=proyecto))
+    return redirect(url_for('listar_documentos', cotizacionid=cotizacion_id))
 
 
 
@@ -255,6 +255,12 @@ def upload_file():
         
         if archivo.filename == '':
             flash('No se seleccionó ningún archivo', 'danger')
+            return redirect(url_for('upload_file'))
+        
+        max_size = 2 * 1024 * 1024  # 2 MB
+        if archivo and archivo.content_length > max_size:
+            flash('El archivo es demasiado grande. El tamaño máximo permitido es de 2 MB.', 'danger')
+            print("m")
             return redirect(url_for('upload_file'))
         
         if archivo and cotizacion_id:

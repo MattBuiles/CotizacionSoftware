@@ -44,7 +44,7 @@
     <div class="form-container">
         <h2>Reemplazar un archivo</h2>
         <form action="{{ url_for('reemplazar_archivo') }}" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="proyecto" value="{{ proyecto }}">
+            <input type="hidden" name="cotizacion_id" value="{{ cotizacion.id }}">
             <label for="nombreArchivoReemplazar">Archivo a reemplazar:</label>
             <select id="nombreArchivoReemplazar" name="nombreArchivoReemplazar" required>
                 <!-- Opción vacía -->
@@ -62,7 +62,7 @@
     <div class="form-container">
         <h2>Eliminar un archivo</h2>
         <form action="{{ url_for('eliminar_archivo') }}" method="post">
-            <input type="hidden" name="proyecto" value="{{ proyecto }}">
+            <input type="hidden" name="cotizacion_id" value="{{ proyecto }}">
             <label for="nombreArchivoEliminar">Archivo a eliminar:</label>
             <select id="nombreArchivoEliminar" name="nombreArchivoEliminar" required>
                 <!-- Opción vacía -->

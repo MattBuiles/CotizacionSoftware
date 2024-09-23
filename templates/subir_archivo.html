@@ -1,44 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subir archivo</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Subir Documento</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    function validarArchivo() {
+        const archivo = document.querySelector('input[type="file"]').files[0];
+        const maxSize = 2 * 1024 * 1024; // 2 MB
+
+        if (archivo && archivo.size > maxSize) {
+            alert('El archivo es demasiado grande. El tamaño máximo permitido es de 2 MB.');
+            return false; // Evita el envío del formulario
+        }
+            Swal.fire({
+                title: 'Éxito!',
+                text: '¡Archivo subido exitosamente!',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            });
+        return true; // Permite el envío del formulario
+    }
+    </script>
 </head>
 <body>
-    <header>
-        <h1>Seleccionar proyecto y subir archivo</h1>
-    </header>
-
-    <main class="upload-container">
-        <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data" class="upload-form">
-            <!-- Menú desplegable para seleccionar el proyecto -->
+    <div class="container mt-5">
+        <h2 class="mb-4">Subir Documento</h2>
+        <form action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data" onsubmit="return validarArchivo()">
             <div class="form-group">
-                <label for="proyecto">Selecciona el proyecto:</label>
-                <select name="proyecto" required>
-                    <option value="" disabled selected>Selecciona un proyecto</option>
-                    {% for proyecto in proyectos %}
-                        <option value="{{ proyecto }}">{{ proyecto }}</option>
+                <label for="documento">Selecciona un documento:</label>
+                <input type="file" class="form-control-file" id="documento" name="documento" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="cotizacion">Asociar a una cotización:</label>
+                <select class="form-control" id="cotizacion" name="cotizacion" required>
+                    {% for cotizacion in cotizaciones %}
+                        <option value="{{ cotizacion.id }}">{{ cotizacion.proyecto }}</option>
                     {% endfor %}
                 </select>
             </div>
-
-            <!-- Campo para seleccionar el archivo -->
-            <div class="form-group">
-                <label for="file">Seleccionar archivo:</label>
-                <input type="file" name="file" required>
-            </div>
-
-            <button type="submit" class="btn">Subir archivo</button>
+            
+            <button type="submit" class="btn btn-primary">Subir Documento</button>
         </form>
 
-        <a href="{{ url_for('lista_proyectos') }}" class="back-link">Volver a la lista de proyectos</a>
-    </main>
-
-    <footer>
-    </footer>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} mt-3" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
 </body>
 </html>
-
- 
