@@ -374,82 +374,91 @@ button.btn:hover {
     color: #d25e1f;
     text-decoration: underline;
 }
-/* Additional styles for the upload form */
-.upload-container {
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
 
-h1 {
-    color: #f17d2f;
+/* Extra Styles for Upload Document Form */
+
+/* Center the title and make it larger and more attractive */
+.upload-container h2 {
+    text-align: center;
+    font-size: 2.2rem;
+    color: #4A90E2;
+    font-weight: 600;
     margin-bottom: 20px;
 }
 
-.upload-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+/* Style the form fields */
+.upload-container .form-group label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #555;
 }
 
-.form-group {
-    text-align: left;
-}
-
-.form-group label {
-    font-size: 1rem;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-.form-group select,
-.form-group input[type="file"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
-}
-
-button.btn {
-    width: 100%;
+.upload-container .form-control-file,
+.upload-container .form-control {
     padding: 12px;
-    background-color: #f17d2f;
-    color: white;
-    border: none;
     border-radius: 5px;
+    border: 1px solid #ced4da;
     font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
-button.btn:hover {
-    background-color: #d25e1f;
+/* Add a focus effect on the form fields */
+.upload-container .form-control-file:focus,
+.upload-container .form-control:focus {
+    outline: none;
+    border-color: #4A90E2;
+    box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
 }
 
-a.back-link {
-    display: block;
-    margin-top: 20px;
-    color: #f17d2f;
-    text-decoration: none;
+/* Customize the submit button */
+.upload-container .btn-primary {
+    background-color: #4A90E2;
+    border-color: #4A90E2;
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    font-weight: 600;
+    border-radius: 5px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* Submit button hover effect */
+.upload-container .btn-primary:hover {
+    background-color: #357ABD;
+    border-color: #357ABD;
+}
+
+/* Flash messages (alerts) styling */
+.upload-container .alert {
+    font-size: 1rem;
+    padding: 10px;
     font-weight: 600;
 }
 
-a.back-link:hover {
+/* Footer customization */
+footer .support-link {
+    color: #4A90E2;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+footer .support-link:hover {
     text-decoration: underline;
 }
 
-footer {
-    background-color: #f17d2f;
-    color: white;
-    padding: 10px 0;
-    text-align: center;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    font-size: 0.9rem;
+/* Ensure form is responsive for smaller devices */
+@media (max-width: 768px) {
+    .upload-container {
+        padding: 20px;
+    }
+
+    .upload-container h2 {
+        font-size: 1.8rem;
+    }
+
+    .upload-container .btn-primary {
+        font-size: 1rem;
+    }
 }
+
+
+

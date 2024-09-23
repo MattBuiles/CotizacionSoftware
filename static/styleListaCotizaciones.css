@@ -100,11 +100,13 @@ button:hover {
 
 /* Footer */
 footer {
-    background-color: #f17d2f;
+    background-color: #f17d2f; 
     color: white;
     padding: 10px;
     text-align: center;
+    position: fixed;
     width: 100%;
+    bottom: 0;
 }
 
 .support-link {

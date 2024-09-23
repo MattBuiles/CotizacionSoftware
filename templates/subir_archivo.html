@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subir Documento</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styleListaCotizaciones.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
     function validarArchivo() {
@@ -12,22 +12,27 @@
         const maxSize = 2 * 1024 * 1024; // 2 MB
 
         if (archivo && archivo.size > maxSize) {
-            alert('El archivo es demasiado grande. El tamaño máximo permitido es de 2 MB.');
-            return false; // Evita el envío del formulario
-        }
             Swal.fire({
-                title: 'Éxito!',
-                text: '¡Archivo subido exitosamente!',
-                icon: 'success',
+                title: 'Error',
+                text: 'El archivo es demasiado grande. El tamaño máximo permitido es de 2 MB.',
+                icon: 'error',
                 confirmButtonText: 'Aceptar'
             });
-        return true; // Permite el envío del formulario
+            return false;
+        }
+        Swal.fire({
+            title: 'Éxito!',
+            text: '¡Archivo subido exitosamente!',
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+        });
+        return true;
     }
     </script>
 </head>
 <body>
-    <div class="container mt-5">
-        <h2 class="mb-4">Subir Documento</h2>
+    <div class="container mt-5 upload-container">
+        <h2 class="mb-4 text-center">Subir Documento</h2>
         <form action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data" onsubmit="return validarArchivo()">
             <div class="form-group">
                 <label for="documento">Selecciona un documento:</label>
@@ -43,7 +48,7 @@
                 </select>
             </div>
             
-            <button type="submit" class="btn btn-primary">Subir Documento</button>
+            <button type="submit" class="btn btn-primary btn-block">Subir Documento</button>
         </form>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -56,8 +61,9 @@
         {% endif %}
         {% endwith %}
     </div>
+
+    <footer class="text-center mt-5">
+        <a href="/" class="support-link">Volver al Inicio</a>
+    </footer>
 </body>
 </html>
-
-
- 
