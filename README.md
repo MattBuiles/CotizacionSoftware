@@ -36,8 +36,10 @@ Sigue estos pasos para instalar y ejecutar el proyecto localmente:
   ```bash
   python -m venv venv
   ```
-4. Activa el entorno virtual
-
+4. Activa el entorno virtual:
+  ```bash
+  .\venv\Scripts\activate
+  ```
 5. Instala las dependencias:
   ```bash
   pip install -r requirements.txt
