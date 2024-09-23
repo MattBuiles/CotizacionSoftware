@@ -18,6 +18,7 @@
             <input type="text" id="buscar" placeholder="Nombre del cliente">
             <button onclick="buscarCliente()">Buscar</button>
             <button onclick="mostrarTodosClientes()">Mostrar Todos</button> <!-- Botón alineado horizontalmente -->
+            <button onClick="editarCliente()">Editar cliente</button>
         </div>
 
         <br>
@@ -90,6 +91,10 @@
 
             document.getElementById("no-resultados").style.display = "none";
             document.getElementById("myTable").style.display = "table";
+        }
+
+        function editarCliente() {
+            window.location.href = '/editar_cliente';  
         }
     </script>
 </body>

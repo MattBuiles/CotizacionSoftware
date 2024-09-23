@@ -15,6 +15,15 @@ body {
     background-color: #f4f4f4;
 }
 
+header .logobonito {
+    height: 100px;
+    width: auto; /* Permite que el ancho de la imagen se ajuste automáticamente */
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
 /* Espacio flexible que ocupa todo el espacio disponible */
 .content {
     flex: 1; /* Esto empuja el footer hacia abajo */
