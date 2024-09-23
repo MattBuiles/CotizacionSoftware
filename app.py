@@ -140,7 +140,11 @@ def lista_proyectos():
 
     for cotizacion in cotizaciones:
         # Filtrar documentos por proyecto
-        docs_asociados = [doc for doc in documentos if doc.proyecto == cotizacion.proyecto]
+        docs_asociados = []
+        for documento in documentos:
+            if documento.cotizacion_id == cotizacion.id:
+                docs_asociados.append(documento)
+
         if docs_asociados:  # Si hay documentos asociados
             # Solo agregar una vez el proyecto, usando 'proyecto' como clave
             if cotizacion.proyecto not in proyectos_unicos:
@@ -220,12 +224,12 @@ def eliminar_archivo():
 
 
 
-@app.route('/documentos/<int:cotizacion_id>')
-def listar_documentos(cotizacion_id):
+@app.route('/documentos/<int:cotizacionid>')
+def listar_documentos(cotizacionid):
 
-    cotizacion = Cotizacion.query.get_or_404(cotizacion_id)
+    cotizacion = Cotizacion.query.get_or_404(cotizacionid)
     # Filtra los documentos por proyecto en la base de datos
-    documentos = Document.query.filter_by(cotizacio_id=cotizacion_id).all()
+    documentos = Document.query.filter_by(cotizacion_id=cotizacionid).all()
 
     # Renderiza la plantilla enviando solo los documentos filtrados
     return render_template('documentos.html', documentos=documentos, cotizacion=cotizacion)

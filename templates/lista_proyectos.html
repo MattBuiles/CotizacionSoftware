@@ -38,7 +38,7 @@
                 <td>{{ entry['cotizacion'].proyecto }}</td>
                 <td>{{ entry['cotizacion'].cliente.nombre }}</td>
                 <td>{{ entry['cotizacion'].empresa }}</td>
-                <td><a href="/documentos/{{ entry['cotizacion'].proyecto }}" class="btn-ver-cotizacion">Documentos</a></td>
+                <td><a href="/documentos/{{ entry['cotizacion'].id }}" class="btn-ver-cotizacion">Documentos</a></td>
             </tr>
             {% endfor %}
         </tbody>
