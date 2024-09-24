@@ -16,9 +16,6 @@
     <div class="filters">
         <label for="clienteFiltro">Filtrar por cliente:</label>
         <input type="text" id="clienteFiltro" placeholder="Escribe el nombre del cliente" onkeyup="filtrarCliente()">
-
-        <label for="fechaFiltro">Filtrar por fecha de creación:</label>
-        <input type="date" id="fechaFiltro" onchange="filtrarFecha()">
     </div>
 
     <table id="myTable" border="1" class="cotizaciones">
@@ -60,27 +57,6 @@
                 if (cliente) {
                     var nombreCliente = cliente.textContent || cliente.innerText;
                     if (nombreCliente.toLowerCase().indexOf(input) > -1) {
-                        filas[i].style.display = ""; // Mostrar fila
-                    } else {
-                        filas[i].style.display = "none"; // Ocultar fila
-                    }
-                }
-            }
-        }
-
-        function filtrarFecha() {
-            // Obtener el valor del filtro de fecha
-            var input = document.getElementById("fechaFiltro").value;
-            var filas = document.getElementById("myTable").getElementsByTagName("tr");
-
-            // Empezar desde 1 para evitar el encabezado
-            for (var i = 1; i < filas.length; i++) {
-                var fecha = filas[i].getElementsByTagName("td")[0]; // Columna de fecha
-                if (fecha) {
-                    var fechaTexto = fecha.textContent || fecha.innerText;
-                    // Formatear la fecha en formato YYYY-MM-DD
-                    var fechaFormateada = new Date(fechaTexto).toISOString().split('T')[0];
-                    if (fechaFormateada === input) {
                         filas[i].style.display = ""; // Mostrar fila
                     } else {
                         filas[i].style.display = "none"; // Ocultar fila
