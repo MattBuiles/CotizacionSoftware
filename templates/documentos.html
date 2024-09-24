@@ -1,90 +1,110 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documentos del Proyecto {{ cotizacion.proyecto }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
+
 <body>
     <header>
         <h1>Documentos del Proyecto {{ cotizacion.proyecto }}</h1>
     </header>
 
     {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul class="flashes">
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+    {% if messages %}
+    <div class="flash-messages">
+        <ul class="flashes">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
     {% endwith %}
 
-    <!-- Filtro por tipo de documento -->
-    <div class="filters">
-        <label for="tipoFiltro">Filtrar por tipo de documento:</label>
-        <select id="tipoFiltro" onchange="filtrarTipo()">
-            <option value="">Todos</option>
-            <option value="pdf">PDF</option>
-            <option value="png">PNG</option>
-            <option value="jpg">JPG</option>
-            <option value="docx">DOCX</option>
-        </select>
-    </div>
+    <div class="container">
+        <!-- Columnas izquierda: Formularios -->
+        <div class="form-section">
+            <!-- Formulario para reemplazar archivo -->
+            <div class="form-container">
+                <h2>Reemplazar un archivo</h2>
+                <form action="{{ url_for('reemplazar_archivo') }}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="cotizacion_id" value="{{ cotizacion.id }}">
+                    <div class="form-group">
+                        <label for="nombreArchivoReemplazar">Archivo a reemplazar:</label>
+                        <select id="nombreArchivoReemplazar" name="nombreArchivoReemplazar" required>
+                            <option value="" disabled selected>Seleccionar archivo...</option>
+                            {% for documento in documentos %}
+                            <option value="{{ documento.nombre }}">{{ documento.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="file" name="archivoNuevo" required>
+                    </div>
+                    <button type="submit" class="btn">Reemplazar archivo</button>
+                </form>
+            </div>
 
-    <!-- Formulario para reemplazar archivo -->
-    <div class="form-container">
-        <h2>Reemplazar un archivo</h2>
-        <form action="{{ url_for('reemplazar_archivo') }}" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="cotizacion_id" value="{{ cotizacion.id }}">
-            <label for="nombreArchivoReemplazar">Archivo a reemplazar:</label>
-            <select id="nombreArchivoReemplazar" name="nombreArchivoReemplazar" required>
-                <!-- Opción vacía -->
-                <option value="" disabled selected>Seleccionar archivo...</option>
-                {% for documento in documentos %}
-                    <option value="{{ documento.nombre }}">{{ documento.nombre }}</option>
-                {% endfor %}
-            </select>
-            <input type="file" name="archivoNuevo" required>
-            <input type="submit" value="Reemplazar archivo">
-        </form>
-    </div>
+            <!-- Formulario para eliminar archivo -->
+            <div class="form-container">
+                <h2>Eliminar un archivo</h2>
+                <form action="{{ url_for('eliminar_archivo') }}" method="post">
+                    <input type="hidden" name="cotizacion_id2" value="{{ cotizacion.id }}">
+                    <div class="form-group">
+                        <label for="nombreArchivoEliminar">Archivo a eliminar:</label>
+                        <select id="nombreArchivoEliminar" name="nombreArchivoEliminar" required>
+                            <option value="" disabled selected>Seleccionar archivo...</option>
+                            {% for documento in documentos %}
+                            <option value="{{ documento.nombre }}">{{ documento.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">Eliminar archivo</button>
+                </form>
+            </div>
+        </div>
 
-    <!-- Formulario para eliminar archivo -->
-    <div class="form-container">
-        <h2>Eliminar un archivo</h2>
-        <form action="{{ url_for('eliminar_archivo') }}" method="post">
-            <input type="hidden" name="cotizacion_id2" value="{{ cotizacion.id }}">
-            <label for="nombreArchivoEliminar">Archivo a eliminar:</label>
-            <select id="nombreArchivoEliminar" name="nombreArchivoEliminar" required>
-                <!-- Opción vacía -->
-                <option value="" disabled selected>Seleccionar archivo...</option>
-                {% for documento in documentos %}
-                    <option value="{{ documento.nombre }}">{{ documento.nombre }}</option>
-                {% endfor %}
-            </select>
-            <input type="submit" value="Eliminar archivo">
-        </form>
-    </div>
+        <!-- Columnas derecha: Filtrar y lista de documentos -->
+        <div class="doc-section">
+            <!-- Filtro por tipo de documento -->
+            <div class="filters">
+                <h2>Filtrar Documentos</h2>
+                <label for="tipoFiltro">Filtrar por tipo de documento:</label>
+                <select id="tipoFiltro" onchange="filtrarTipo()">
+                    <option value="">Todos</option>
+                    <option value="pdf">PDF</option>
+                    <option value="png">PNG</option>
+                    <option value="jpg">JPG</option>
+                    <option value="docx">DOCX</option>
+                </select>
+            </div>
 
-    <!-- Lista de documentos -->
-    <ul id="documentosLista">
-        {% for documento in documentos %}
-        <li class="documento-item" data-tipo="{{ documento.nombre.split('.')[-1] }}">
-            <a href="{{ documento.url }}" target="_blank">{{ documento.nombre }}</a>
-        </li>
-        {% endfor %}
-    </ul>
+            <!-- Lista de documentos -->
+            <div class="document-list-container">
+                <h2>Lista de Documentos</h2>
+                <ul id="documentosLista" class="document-list">
+                    {% for documento in documentos %}
+                    <li class="document-item" data-tipo="{{ documento.nombre.split('.')[-1] }}">
+                        <a href="{{ documento.url }}" target="_blank" class="document-link">{{ documento.nombre }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
 
     <footer>
-        <a href="{{ url_for('lista_proyectos') }}">Volver a la Lista de Proyectos</a>
+        <a href="{{ url_for('lista_proyectos') }}" class="btn">Volver a la Lista de Proyectos</a>
     </footer>
 
     <script>
         function filtrarTipo() {
             var tipoSeleccionado = document.getElementById("tipoFiltro").value;
-            var documentos = document.getElementsByClassName("documento-item");
+            var documentos = document.getElementsByClassName("document-item");
 
             for (var i = 0; i < documentos.length; i++) {
                 var tipoDocumento = documentos[i].getAttribute("data-tipo");
@@ -97,4 +117,5 @@
         }
     </script>
 </body>
+
 </html>
