@@ -201,11 +201,43 @@
     }
 
     function exportToExcel() {
-        var wb = XLSX.utils.book_new();
-        var ws = XLSX.utils.table_to_sheet(document.querySelector('table'));
-        XLSX.utils.book_append_sheet(wb, ws, "Cotización");
-        XLSX.writeFile(wb, 'cotizacion.xlsx');
+    // Crear un nuevo libro de Excel
+    var wb = XLSX.utils.book_new();
+
+    // Seleccionar la tabla que contiene los datos
+    var table = document.querySelector('table');
+
+    // Asegurarse de que la tabla contiene datos
+    if (!table) {
+        alert('No hay datos para exportar.');
+        return;
     }
+
+    // Crear un array para almacenar los datos de la tabla
+    var data = [];
+
+    // Recorrer todas las filas de la tabla
+    var rows = table.querySelectorAll('tr');
+    rows.forEach(row => {
+        var rowData = [];
+        // Recorrer todas las celdas de la fila
+        var cells = row.querySelectorAll('th, td');
+        cells.forEach(cell => {
+            rowData.push(cell.innerText.trim()); // Obtener el texto de la celda y eliminar espacios en blanco
+        });
+        data.push(rowData);
+    });
+
+    // Convertir el array de datos a una hoja de Excel
+    var ws = XLSX.utils.aoa_to_sheet(data);
+
+    // Agregar la hoja de Excel al libro
+    XLSX.utils.book_append_sheet(wb, ws, "Cotización");
+
+    // Guardar el archivo Excel
+    XLSX.writeFile(wb, 'cotizacion.xlsx');
+}
+
 
     function exportToPNG() {
         html2canvas(document.body).then(function(canvas) {
