@@ -392,8 +392,12 @@ def crear_cotizacion():
 
 @app.route('/lista_cotizaciones')
 def listar_cotizaciones():
-    cotizaciones = Cotizacion.query.all()
-    return render_template('lista_cotizaciones.html', cotizaciones=cotizaciones)
+    # Obtener las cotizaciones que no tienen versiones hijas
+    cotizaciones_sin_hijas = db.session.query(Cotizacion).filter(
+        ~Cotizacion.versiones.any()
+    ).all()
+
+    return render_template('lista_cotizaciones.html', cotizaciones=cotizaciones_sin_hijas)
 
 @app.route('/versiones_cotizacion/<int:id>')
 def listar_versiones(id):
