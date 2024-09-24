@@ -9,3 +9,4 @@ cloudinary.config(
   api_secret = 'BWvTvS8DxBkMp9Dp8p-jxYbsgWE'
 )
 
+api_secret = 'BWvTvS8DxBkMp9Dp8p-jxYbsgWE'

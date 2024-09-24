@@ -30,9 +30,10 @@ import cloudinary.uploader
 from config import *
 import re
 import time
+from config import api_secret
 
 app = Flask(__name__)
-app.secret_key = 'BWvTvS8DxBkMp9Dp8p-jxYbsgWE'
+app.secret_key = api_secret
 
 # Ruta Absoluta para evitar problemas de acceso
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -219,7 +220,6 @@ def eliminar_archivo():
             
             flash('Archivo eliminado exitosamente', 'success')
         else:
-            print("m")
             flash('El archivo a eliminar no existe', 'error')
     except Exception as e:
         flash(f'Error al eliminar el archivo: {str(e)}', 'error')
