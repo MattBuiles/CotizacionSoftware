@@ -431,7 +431,6 @@ def actualizar_cotizacion(id):
     
     # Crear la nueva cotización basada en la original, pero con los cambios
     nueva_cotizacion = Cotizacion(
-        fecha=cotizacion_padre.fecha,
         ciudad=request.form['ciudad'],
         empresa=request.form['empresa_cliente_nombre'],
         proyecto=request.form['nombre_proyecto'],
