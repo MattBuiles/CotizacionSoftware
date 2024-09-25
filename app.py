@@ -425,16 +425,14 @@ def modificar_cotizacion(id):
     cotizacion = Cotizacion.query.get_or_404(id)
     return render_template('modificar_cotizacion.html', cotizacion=cotizacion)
 
-
-@app.route('/actualizar_cotizacion/<int:id>', methods=['POST'])
 @app.route('/actualizar_cotizacion/<int:id>', methods=['POST'])
 def actualizar_cotizacion(id):
     # Obtener la cotización original
-    cotizacion = Cotizacion.query.get_or_404(id)
+    cotizacion_padre = Cotizacion.query.get_or_404(id)
     
-    # Crear una nueva cotización basada en la original, pero con los cambios
+    # Crear la nueva cotización basada en la original, pero con los cambios
     nueva_cotizacion = Cotizacion(
-        fecha=cotizacion.fecha,
+        fecha=cotizacion_padre.fecha,
         ciudad=request.form['ciudad'],
         empresa=request.form['empresa_cliente_nombre'],
         proyecto=request.form['nombre_proyecto'],
@@ -443,18 +441,33 @@ def actualizar_cotizacion(id):
         anticipo=request.form['porcentaje_anticipo'],
         p_acta=request.form['porcentaje_primera_acta'],
         f_acta=request.form['porcentaje_acta_final'],
-        consecutivo=cotizacion.consecutivo + 1,  # Aumentar el consecutivo para crear una nueva versión
-        cliente=cotizacion.cliente,
-        servicio=cotizacion.servicio,  # Mantener el servicio original o permitir su modificación
-        version_padre_id=cotizacion.id  # Establecer que esta nueva cotización es una versión de la anterior
+        consecutivo=cotizacion_padre.consecutivo + 1,  # Aumentar el consecutivo
+        cliente=cotizacion_padre.cliente,
+        servicio=cotizacion_padre.servicio,
+        version_padre_id=cotizacion_padre.id  # Establecer que es una versión de la anterior
     )
     
-    # Guardar la nueva cotización en la base de datos
+    # Guardar la nueva cotización en la base de datos para obtener un ID
     db.session.add(nueva_cotizacion)
+    db.session.flush()  # Esto asigna un ID a nueva_cotizacion sin hacer commit todavía
+    
+    # Copiar los detalles de productos del padre a la nueva cotización
+    for detalle in cotizacion_padre.productos_detalle:
+        nuevo_detalle = CotizacionProducto(
+            cotizacion_id=nueva_cotizacion.id,
+            producto_id=detalle.producto_id,
+            cantidad=detalle.cantidad,
+            tamano=detalle.tamano
+        )
+        db.session.add(nuevo_detalle)
+    
+    # Guardar todos los cambios en la base de datos
     db.session.commit()
     
     # Redirigir a la vista de la nueva cotización
     return redirect(url_for('ver_cotizacion', id=nueva_cotizacion.id))
+
+
 
 @app.route('/lista_clientes')
 def listar_clientes():

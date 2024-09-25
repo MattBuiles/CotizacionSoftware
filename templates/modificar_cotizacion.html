@@ -16,11 +16,11 @@
             const anticipo = document.getElementById('porcentaje_anticipo').value;
             const primeraActa = document.getElementById('porcentaje_primera_acta').value;
             const actaFinal = document.getElementById('porcentaje_acta_final').value;
-
+    
             // Validar que ciudad y empresa sean strings
             if (!isNaN(ciudad)) {
                 alert("El campo Ciudad debe ser texto.");
-                event.preventDefault(); // Evitar que se envíe el formulario
+                event.preventDefault();
                 return;
             }
             if (!isNaN(empresa)) {
@@ -28,17 +28,30 @@
                 event.preventDefault();
                 return;
             }
-
-            // Validar que los demás campos sean números enteros
-            if (isNaN(plazo) || isNaN(entrega) || isNaN(anticipo) || isNaN(primeraActa) || isNaN(actaFinal)) {
-                alert("Plazo de la Oferta, Tiempo de Entrega y Porcentajes deben ser números enteros.");
+    
+            // Validar que los campos "Plazo de la Oferta" y "Tiempo de Entrega" sean cadenas de texto no vacías
+            if (!plazo.trim()) {
+                alert("El campo Plazo de la Oferta no puede estar vacío y debe ser texto.");
                 event.preventDefault();
                 return;
             }
-
+            if (!entrega.trim()) {
+                alert("El campo Tiempo de Entrega no puede estar vacío y debe ser texto.");
+                event.preventDefault();
+                return;
+            }
+    
+            // Validar que los campos de porcentajes sean números enteros
+            if (isNaN(anticipo) || isNaN(primeraActa) || isNaN(actaFinal)) {
+                alert("Los campos Porcentaje de Anticipo, Primera Acta y Acta Final deben ser números enteros.");
+                event.preventDefault();
+                return;
+            }
+    
             // Si todo es válido, permitir el envío del formulario
         }
     </script>
+    
 </head>
 <body>
     <div class="modify-quote-container">
