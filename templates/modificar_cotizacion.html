@@ -58,37 +58,38 @@
         <h1>Modificar Cotización {{ cotizacion.id }}</h1>
 
         <form action="{{ url_for('actualizar_cotizacion', id=cotizacion.id) }}" method="POST" onsubmit="validarFormulario(event)">
+<!-- Campos comunes que siempre se muestran -->
             <div class="form-group">
                 <label for="ciudad">Ciudad</label>
-                <input type="text" id="ciudad" name="ciudad" required>
+                <input type="text" id="ciudad" name="ciudad" value="{{ cotizacion.ciudad }}" required>
             </div>
             <div class="form-group">
                 <label for="empresa_cliente_nombre">Nombre de la Empresa Cliente</label>
-                <input type="text" id="empresa_cliente_nombre" name="empresa_cliente_nombre" required>
+                <input type="text" id="empresa_cliente_nombre" name="empresa_cliente_nombre" value="{{ cotizacion.cliente.nombre }}" required>
             </div>
             <div class="form-group">
                 <label for="nombre_proyecto">Nombre del Proyecto</label>
-                <input type="text" id="nombre_proyecto" name="nombre_proyecto" required>
+                <input type="text" id="nombre_proyecto" name="nombre_proyecto" value="{{ cotizacion.proyecto }}" required>
             </div>
             <div class="form-group">
                 <label for="plazo_oferta">Plazo de la Oferta</label>
-                <input type="text" id="plazo_oferta" name="plazo_oferta" required>
+                <input type="number" id="plazo_oferta" name="plazo_oferta" value="{{ cotizacion.plazo }}" required>
             </div>
             <div class="form-group">
                 <label for="tiempo_entrega">Tiempo de Entrega</label>
-                <input type="text" id="tiempo_entrega" name="tiempo_entrega" required>
+                <input type="text" id="tiempo_entrega" name="tiempo_entrega" value="{{ cotizacion.entrega }}" required>
             </div>
             <div class="form-group">
                 <label for="porcentaje_anticipo">Porcentaje de Anticipo</label>
-                <input type="number" id="porcentaje_anticipo" name="porcentaje_anticipo" required>
+                <input type="number" id="porcentaje_anticipo" name="porcentaje_anticipo" value="{{ cotizacion.anticipo }}" required>
             </div>
             <div class="form-group">
                 <label for="porcentaje_primera_acta">Porcentaje Primera Acta</label>
-                <input type="number" id="porcentaje_primera_acta" name="porcentaje_primera_acta" required>
+                <input type="number" id="porcentaje_primera_acta" name="porcentaje_primera_acta" value="{{ cotizacion.p_acta }}" required>
             </div>
             <div class="form-group">
                 <label for="porcentaje_acta_final">Porcentaje Acta Final</label>
-                <input type="number" id="porcentaje_acta_final" name="porcentaje_acta_final" required>
+                <input type="number" id="porcentaje_acta_final" name="porcentaje_acta_final" value="{{ cotizacion.f_acta }}" required>
             </div>
 
             <button type="submit" class="btn">Continuar</button>
