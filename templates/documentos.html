@@ -93,7 +93,7 @@
                 <ul id="documentosLista" class="document-list">
                     {% for documento in documentos %}
                     <li class="document-item" data-tipo="{{ documento.nombre.split('.')[-1] }}" data-fecha="{{ documento.fecha_subida }}">
-                        <a href="{{ documento.url }}" target="_blank" class="document-link">{{ documento.nombre }}</a> - {{ documento.fecha_subida }}
+                        <a href="{{ documento.url }}" target="_blank" class="document-link">{{ documento.nombre }}</a> - <script>document.write("{{ documento.fecha_subida }}".substring(0, 10));</script>
                     </li>
                     {% endfor %}
                 </ul>
