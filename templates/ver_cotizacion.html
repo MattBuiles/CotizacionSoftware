@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="static/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -30,11 +31,7 @@
             text-align: left;
             margin-top: 60px;
         }
-        .footer {
-            text-align: center;
-            margin-top: 40px;
-            font-size: 0.9em;
-        }
+        
         table {
             width: 100%;
             border-collapse: collapse;
@@ -67,20 +64,17 @@
             background-color: #45a049; /* Color al pasar el mouse */
         }
 
-        /* Estilo para el enlace de volver */
-        a {
-            color: #fff;
-            background-color: #008CBA; /* Azul */
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            display: inline-block;
-            transition: background-color 0.3s ease;
+
+        footer {
+            background-color: #f17d2f; 
+            color: white;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
         }
 
-        a:hover {
-            background-color: #005f73; /* Color al pasar el mouse */
-        }
     </style>
 </head>
 <body>
@@ -161,18 +155,22 @@
     <p>www.productosipb.com</p>
 </div>
 
-<!-- Botón para editar la cotización -->
+
 <form action="{{ url_for('modificar_cotizacion', id=cotizacion.id) }}" method="POST">
+    <!-- Botón para editar la cotización -->
     <button type="submit">Editar Cotización</button>
+    <!-- Botones de exportación -->
+    <button onclick="exportToPDF()">Exportar a PDF</button>
+    <button onclick="exportToExcel()">Exportar a Excel</button>
+    <button onclick="exportToPNG()">Exportar a PNG</button>
+
 </form>
 
-<!-- Botones de exportación -->
-<button onclick="exportToPDF()">Exportar a PDF</button>
-<button onclick="exportToExcel()">Exportar a Excel</button>
-<button onclick="exportToPNG()">Exportar a PNG</button>
 
 <!-- Enlace para volver a la lista de cotizaciones -->
-<a href="/lista_cotizaciones">Volver a la lista de cotizaciones</a>
+<footer>
+    <a href="{{ url_for('listar_cotizaciones') }}" class="btn">Volver a cotizaciones</a>
+</footer>
 
 <script>
     function exportToPDF() {
