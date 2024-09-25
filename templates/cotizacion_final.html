@@ -45,11 +45,16 @@ Este archivo se utiliza como plantilla para generar una propuesta económica de 
             text-align: left;
             margin-top: 60px;
         }
-        .footer {
+        footer {
+            background-color: #f17d2f; 
+            color: white;
+            padding: 10px;
             text-align: center;
-            margin-top: 40px;
-            font-size: 0.9em;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
         }
+        
         table {
             width: 100%;
             border-collapse: collapse;
@@ -160,7 +165,7 @@ Este archivo se utiliza como plantilla para generar una propuesta económica de 
 
 <footer>
     <center>
-        <a href="{{ url_for('index') }}">Volver al Inicio</a>
+        <a href="/" class="support-link">Volver al Inicio</a>
     </center>
 </footer>
 
