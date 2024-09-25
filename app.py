@@ -29,7 +29,6 @@ import pytz
 import cloudinary.uploader
 from config import *
 import re
-import time
 from config import api_secret
 
 app = Flask(__name__)
@@ -271,7 +270,7 @@ def upload_file():
             nuevo_documento = Document(
                 url=result['secure_url'],
                 nombre=archivo.filename,
-                fecha_subida=datetime.now(pytz.timezone('America/Bogota')),
+                fecha_subida=datetime.now(pytz.timezone('America/Bogota')).date(),
                 cotizacion_id=cotizacion_id,
             )
             db.session.add(nuevo_documento)
